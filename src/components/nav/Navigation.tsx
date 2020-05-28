@@ -45,6 +45,10 @@ export default class Navigation extends React.Component<IProps, IState> {
                             <Link className="nav-link" to="/admin/weeks">
                                 Weeks</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/admin/mailingList">
+                                Mailing List</Link>
+                        </li>
                     </ul>
                 </div>
                 <span className="navbar-text">
