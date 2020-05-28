@@ -1,0 +1,10 @@
+.week-listing {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.week-listing:hover {
+    cursor: pointer;
+    background-color: rgba(57, 214, 36, 0.9);
+    color: black;
+}

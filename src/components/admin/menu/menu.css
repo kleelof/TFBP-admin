@@ -1,0 +1,181 @@
+
+.menu-item {
+    display: inline-block;
+    position: relative;
+    width: 95vw;
+    border: 2px solid rgba(0, 0, 0, .7);
+    padding-bottom: 5px;
+    font-size: 1.4em; 
+}
+
+.menu-item textarea, .menu-item input {
+    resize: none;
+    font-size: 1.1em;
+}
+
+.menu-item-unsaved-updates {
+    border-color: yellow;
+}
+
+.menu-item .area {
+    display: inline-block;
+    width: 95%;
+    margin-left: 5px;
+    margin-top: 7px;
+}
+
+.menu-item .controls-area {
+    height: 40px;
+}
+
+.menu-item .header {
+    text-align: center;
+    color: rgba(255, 255, 255, .9);
+}
+
+.menu-item .header span {
+    color: rgba(255, 255, 255, .7);
+    cursor: pointer;
+}
+
+.menu-item .header span:hover {
+    color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+}
+
+.menu-item .header .header-add {
+    background-color: rgb(53, 163, 163);
+}
+
+.menu-item .header .header-edit {
+    background-color: green;
+}
+
+.menu-item .header .header-view {
+    background-color: blue;
+}
+
+.menu-item .header .header-view-deactivated {
+    background-color: red;
+}
+
+.menu-item .header .header-edit a{
+    text-decoration: none;
+    color: rgba(255, 255, 255, .7);
+    margin: 0, 3px;
+}
+
+.menu-item .header .header-edit a:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.menu-item .image-area {
+    display: block;
+    width: 97%;
+    height: 200px;
+    border: 2px solid rgba(0, 0, 0, .7);
+}
+
+.menu-item .overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, .5);
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.menu-item .checker {
+    display: inline-block;
+    margin-right: 11px;
+}
+
+.menu-item .checker input {
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    transform: scale(2);
+    padding: 10px;
+    margin: 0 7px;
+}
+
+.menu-item .checker-week {
+    display: inline;
+    margin: 0 7px;
+}
+
+.servings {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 1);
+    margin-top: 15px;
+    border: 2px solid rgba(0, 0, 0, .7);
+    padding: 5px;
+}
+
+.servings .header {
+    position: relative;
+    text-align: center;
+    color: black
+}
+
+.servings .header .close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: red;
+}
+
+.servings .btn {
+    font-size: .5em;
+}
+
+.servings .list {
+    height: 250px;
+    overflow-y: auto;
+}
+
+.serving {
+    position: relative;
+    width: 90%;
+    height: 40px;
+    margin: auto;
+    margin-bottom: 5px;
+    padding: 2px;
+    border: 1px solid rgba(0, 0, 0, 9);
+}
+
+.serving .controls {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding-right: 5px;
+    padding-top: 3px;
+}
+
+.serving .controls button {
+    margin-left: 3px;
+}
+
+.serving .quantity {
+    width: 50px;
+}
+
+.serving .price {
+    width: 100px;
+}
+
+.serving input, select {
+    margin-right: 5px;
+}
+
+@media (min-width: 576px) {
+  .menu-item {
+      width: 44%;
+      margin: 2vw;
+  }
+} 
