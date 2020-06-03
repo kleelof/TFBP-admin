@@ -45,6 +45,7 @@ export default class Service {
     }
 
     public add<T>(DTO: T, useFormData: boolean = false): Promise<T> {
+        //return new Promise<T>(() => {})
         if (useFormData){
             return this.multipartFormPost<T>(DTO);
         } else {

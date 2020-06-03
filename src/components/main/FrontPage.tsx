@@ -30,7 +30,7 @@ export default class FrontPage extends React.Component<any, IState> {
         mailingListService.add(new MailingListDTO(this.state.emailAddress))
             .then( resp => this.setState({savingEmail: false, emailSaved: true}))
             .catch( resp => {
-                window.alert("That email address is already registered");
+                window.alert("That email address is an incorrect format or is already registered");
                 this.setState({savingEmail: false})
             })
     }

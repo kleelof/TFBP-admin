@@ -8,3 +8,12 @@
     background-color: rgba(57, 214, 36, 0.9);
     color: black;
 }
+
+.week-options {
+    color: black;
+    padding: 5px;
+}
+
+.week-options-panel-text {
+    color: black !important;
+}

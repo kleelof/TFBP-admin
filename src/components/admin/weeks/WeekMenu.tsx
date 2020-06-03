@@ -21,6 +21,7 @@ export default class WeekMenu extends React.Component<IProps, IState> {
                 <div className="col-12">
                     <MenuItems
                         menuItems={this.props.menuItems}
+                        week={this.props.week} 
                         mode={ItemsModes.week} /> 
                 </div>
             </div>

@@ -75,7 +75,7 @@ export default class ImageUploader extends React.Component<IProps, IState> {
         this.props.newImageLoaded(null);
     }
 
-    private loadImage = (url: string): void => {console.log(url);
+    private loadImage = (url: string): void => {
         this.toDataURL(url)
             .then( (data: string) => {
                 (window.document.getElementById(this.props.id) as HTMLImageElement).src=data;

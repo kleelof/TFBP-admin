@@ -43,7 +43,7 @@ export default class Menu extends React.Component<any, IState> {
                 </div>
                 <div className="row mt-4">
                     <div className="col-12">
-                        <MenuItems 
+                        <MenuItems
                             menuItems={this.state.menuItems}
                             mode={ItemsModes.menu}/>
                     </div>

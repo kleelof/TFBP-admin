@@ -11,10 +11,10 @@ class AuthService extends Service {
         return new Promise<AuthenticateDTO>((resolve, reject) => {
             this._post("admin_app/authenticate/", {username, password})
             .then( (resp: any) => {
-                localStorage.setItem('access_token', resp.access);
-                localStorage.setItem('refresh_token', resp.refresh);
-                localStorage.setItem('user_id', resp.id);
-                localStorage.setItem('username', resp.username);
+                window.localStorage.setItem('access_token', resp.access);
+                window.localStorage.setItem('refresh_token', resp.refresh);
+                window.localStorage.setItem('user_id', resp.id);
+                window.localStorage.setItem('username', resp.username);
                 resolve(resp);
             })
             .catch((resp)=> {
@@ -24,10 +24,10 @@ class AuthService extends Service {
     }
 
     public logout = (): void => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('user_id');
-        localStorage.removeItem('username');
+        window.localStorage.removeItem('access_token');
+        window.localStorage.removeItem('refresh_token');
+        window.localStorage.removeItem('user_id');
+        window.localStorage.removeItem('username');
     }
 
     public validateToken = (refreshToken: string): Promise<boolean> => {

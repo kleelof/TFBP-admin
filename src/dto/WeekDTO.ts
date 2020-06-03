@@ -1,10 +1,10 @@
-import MenuItemDTO from "./MenuItemDTO";
+import WeekMenuItemDTO from "./WeekMenuItemDTO";
 
 export default class WeekDTO {
 
     public id!: number;
     public date!: string;
-    public menu_items!: MenuItemDTO[]
+    public menu_items!: WeekMenuItemDTO[]
 
     constructor(date: string){
         this.date = date;

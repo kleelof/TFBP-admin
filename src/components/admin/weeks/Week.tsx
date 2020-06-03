@@ -40,7 +40,7 @@ export default class Week extends React.Component<any, IState> {
     public render() {
         if (!this.state.loaded)
             return <div>Loading...</div>
-            
+        
         return(
             <WeekMenu week={this.state.week} menuItems={this.state.menuItems} />
         )

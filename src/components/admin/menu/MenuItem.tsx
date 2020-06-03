@@ -6,19 +6,23 @@ import menuItemService from '../../../services/AdminMenuItemService';
 import ImageUploader from '../../widgets/imageUploader/ImageUploader';
 
 import {config} from '../../../config';
+import WeekMenuItemDTO from '../../../dto/WeekMenuItemDTO';
+import WeekMenuItemOptions from '../weeks/WeekMenuItemOptions';
 
 interface IProps {
     mode: ItemModes,
     menuItem: MenuItemDTO,
-    itemAdded?(menuItemDTO: MenuItemDTO): void
-    itemSelected?(menuItemDTO: MenuItemDTO): void
+    itemAdded?(menuItemDTO: MenuItemDTO): void,
+    itemSelected?(menuItemDTO: MenuItemDTO): void,
+    weekMenuItem: WeekMenuItemDTO
 }
 
 interface IState {
     menuItem: MenuItemDTO,
     saving: boolean,
     viewingServings: boolean,
-    hasBeenUpdated: boolean
+    hasBeenUpdated: boolean,
+    weekMenuItem: WeekMenuItemDTO
 }
 
 export enum ItemModes {
@@ -39,7 +43,8 @@ export default class MenuItem extends React.Component<IProps, IState> {
             menuItem: props.menuItem,
             saving: false,
             viewingServings: false,
-            hasBeenUpdated: false
+            hasBeenUpdated: false,
+            weekMenuItem: props.weekMenuItem
         }
     }
 
@@ -90,17 +95,9 @@ export default class MenuItem extends React.Component<IProps, IState> {
         }
     }
 
-    private onActivateClicked = (): void => {
-        let action: string = this.state.menuItem.active ? "deactivate" : "activate";
-        if (window.confirm(`Are you sure you want to ${action} this menu item?`)) {
-            let menuItem: MenuItemDTO = this.state.menuItem;
-            menuItem.active = !menuItem.active;
-            this.setState({menuItem}, () => this.save()); 
-        }
-    }
-
     private onClickMe = (): void => {
-        if (this.props.mode !== ItemModes.view) return;
+        if (this.props.mode === ItemModes.edit || this.props.mode === ItemModes.week) return;
+        
         if (this.props.itemSelected) this.props.itemSelected(this.state.menuItem);
     }
     
@@ -154,18 +151,39 @@ export default class MenuItem extends React.Component<IProps, IState> {
         this.setState({menuItem});
     }
 
+
     public render() {//TODO: fix saveBtnDisabled
+
         const saveBtnDisabled: boolean = this.state.saving || this.props.mode === ItemModes.view
+        const disabled: boolean = this.props.mode === ItemModes.view || this.props.mode === ItemModes.week
+
+        let header: any = null
+
+        switch(this.props.mode) {
+            case ItemModes.add:
+                header = <div className="header-add">Add New Menu Item</div>
+                break;
+            case ItemModes.edit:
+                header = <div className="header-edit">Editing</div>
+                break;
+            case ItemModes.view:
+                header = <div className={this.state.menuItem.active ? "header-view" : "header-view-deactivated"}>
+                            <div>Click To Edit</div>
+                        </div>
+                break;
+        }
+
         const allergens: any[] = [
             { name: 'Milk', code: 'milk' },
             { name: 'Soy', code: 'soy'},
             { name: 'Shellfish', code: 'shell'},
             { name: 'Egg', code: 'egg'},
             { name: 'Fish', code: 'fish'},
-            { name: 'Nuts', code: 'nut'},
+            { name: 'Nuts', code: 'nuts'},
             { name: 'Peanuts', code: 'peanut'},
             { name: 'Wheat', code: 'wheat'}
         ]
+
         const proteins: any[] = [
             { name: 'Pork', code: 'pork'},
             { name: 'Chicken', code: 'chicken'},
@@ -178,19 +196,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                 onClick={this.onClickMe}
                 >
                 <div className="header">
-                    {this.props.mode === ItemModes.add &&
-                        <div className="header-add">Add New Menu Item</div>
-                    }
-                    {this.props.mode === ItemModes.edit &&
-                        <div className="header-edit">
-                            Editing
-                        </div>
-                    }
-                    {this.props.mode === ItemModes.view &&
-                        <div className={this.state.menuItem.active ? "header-view" : "header-view-deactivated"}>
-                            <div>Click To Edit</div>
-                        </div>
-                    }
+                    {header}
                 </div>
                 <div className="inner">
                     <div className="name-area area">
@@ -201,7 +207,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             name="name"
                             value={this.state.menuItem.name}
                             onChange={this.updateMenuItem}
-                            disabled={this.props.mode === ItemModes.view}
+                            disabled={disabled}
                             />
                     </div>
                     <div className="image-area area">
@@ -213,7 +219,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             newImageLoaded={this.onNewImageLoaded}
                             maximumSizeInMb={100}
                             allowedFileTypes=".jpg,.png,.jpeg"
-                            disabled={this.props.mode === ItemModes.view}
+                            disabled={disabled}
                             />
                     </div>
                     <div className="description-area area">
@@ -224,7 +230,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             name="description"
                             value={this.state.menuItem.description}
                             onChange={this.updateMenuItem}
-                            disabled={this.props.mode === ItemModes.view}
+                            disabled={disabled}
                             ></textarea>
                     </div>
                     <div className="ingredients-area area">
@@ -233,11 +239,11 @@ export default class MenuItem extends React.Component<IProps, IState> {
                                 proteins.map((protein: any) => {
                                     if (this.props.mode === ItemModes.week){
                                         if (this.state.menuItem.proteins.length === 0)
-                                            return <div className="checker-week">&nbsp;</div>
+                                            return <div className="checker-week" key={`proteins_${protein.code}`}>&nbsp;</div>
 
                                         if(this.state.menuItem.proteins.indexOf(protein.code) !== -1){
                                             return (
-                                                <div className="checker-week">
+                                                <div className="checker-week" key={`proteins_${protein.code}`}>
                                                     {protein.name}
                                                 </div>
                                             )
@@ -268,11 +274,11 @@ export default class MenuItem extends React.Component<IProps, IState> {
                                     {
                                         if (this.props.mode === ItemModes.week){
                                             if (this.state.menuItem.allergens.length === 0)
-                                                return <div className="checker-week">&nbsp;</div>
+                                                return <div className="checker-week" key={`allergens_${allergen.code}`}>&nbsp;</div>
 
                                             if(this.state.menuItem.allergens.indexOf(allergen.code) !== -1){
                                                 return (
-                                                    <div className="checker-week">
+                                                    <div className="checker-week" key={`allergens_${allergen.code}`}>
                                                         {allergen.name}
                                                     </div>
                                                 )
@@ -295,25 +301,33 @@ export default class MenuItem extends React.Component<IProps, IState> {
                                 )
                             }
                     </div>
-                    <div className="controls-area area text-center">
-                        {
-                        }
-                        {
-                            this.props.mode === ItemModes.week ?
-                                <div>&nbsp;</div> :
-                                this.props.mode === ItemModes.add ?
-                                <button 
-                                    className="btn btn-info ml-2"
-                                    disabled={saveBtnDisabled}
-                                    onClick={this.addNewMenuItem}
-                                    >Add</button> :
-                                <button 
-                                    className="btn btn-success"
-                                    disabled={saveBtnDisabled} 
-                                    onClick={this.save}
-                                    >Save</button>
-                        }
-                    </div>
+                    {
+                        this.props.mode === ItemModes.week ?
+                            <div className="week-options">
+                                <WeekMenuItemOptions weekMenuItem={this.state.weekMenuItem} />
+                            </div>
+                            :
+                            <div className="controls-area area text-center mt-2">
+                                {
+                                    this.props.mode === ItemModes.add ?
+                                        <button 
+                                            className="btn btn-info ml-2"
+                                            disabled={saveBtnDisabled}
+                                            onClick={this.addNewMenuItem}
+                                            >Add</button>
+                                        :
+                                        this.props.mode === ItemModes.edit ?
+                                            <button 
+                                                className="btn btn-success"
+                                                disabled={saveBtnDisabled} 
+                                                onClick={this.save}
+                                                >Save</button>
+                                            :
+                                            <div></div>
+                                }
+                            </div> 
+                    }
+                    
                 </div>
             </div>
         )

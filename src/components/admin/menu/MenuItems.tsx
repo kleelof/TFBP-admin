@@ -2,17 +2,20 @@ import React from 'react';
 
 import MenuItem, { ItemModes } from './MenuItem';
 import MenuItemDTO from '../../../dto/MenuItemDTO';
-import menuItemService from '../../../services/AdminMenuItemService';
-import Service from '../../../services/Service';
+import WeekMenuItemDTO from '../../../dto/WeekMenuItemDTO';
+import WeekDTO from '../../../dto/WeekDTO';
+import weekService from '../../../services/WeekService';
 
 interface IProps { 
     mode: ItemsModes
-    menuItems: MenuItemDTO[]
+    menuItems: MenuItemDTO[],
+    week?: WeekDTO
 }
 
 interface IState {
     menuItems: MenuItemDTO[],
-    selectedItemId: number
+    selectedItemId: number,
+    week: WeekDTO
 }
 
 export enum ItemsModes {
@@ -22,14 +25,13 @@ export enum ItemsModes {
 
 export default class MenuItems extends React.Component<IProps, IState> {
 
-    private service: Service = menuItemService;
-
     constructor(props: IProps) { 
         super(props);
 
         this.state = {
-            menuItems: this.props.menuItems,
-            selectedItemId: -1
+            menuItems: props.menuItems,
+            selectedItemId: -1,
+            week: props.week || new WeekDTO("")
         }
     }
 
@@ -43,16 +45,31 @@ export default class MenuItems extends React.Component<IProps, IState> {
     }
 
     private itemSelected = (menuItemDTO: MenuItemDTO): void => {
-        if (this.props.mode === ItemsModes.menu) this.setState({selectedItemId: menuItemDTO.id}); 
+        if (this.props.mode === ItemsModes.week) {
+            if (this.props.week) {
+                let week: WeekDTO = this.state.week;
+                let menuItems: WeekMenuItemDTO[] = week.menu_items.filter((dto: WeekMenuItemDTO) => dto.id !== menuItemDTO.id);;
+                const removed: boolean = menuItems.length !== week.menu_items.length;
+
+                weekService.attachWeekMenuItem(week.id, menuItemDTO.id)
+                    .then( resp => {
+                        if (!removed)
+                            //menuItems.push
+                        this.setState({week})
+                    })
+                    .catch( resp => window.alert("Unable to update"))
+            }
+        } else {
+            this.setState({selectedItemId: menuItemDTO.id});
+        } 
     }
     
     public render() {
-        const mode: ItemModes = this.props.mode === ItemsModes.week ?
-                                                        ItemModes.week :
-                                                        this.state.selectedItemId ? ItemModes.edit : ItemModes.view
-
-        if (this.props.menuItems.length === 0)
+        if (this.props.menuItems.length === 0 && this.props.mode === ItemsModes.week)
             return <h3>No Menu Items. Go to Menu to add some.</h3>
+
+        const activeMenuItems: {[key: number]: any} = {};
+        if (this.state.week.menu_items) this.state.week.menu_items.forEach((dto: WeekMenuItemDTO) => activeMenuItems[dto.menu_item as any] = dto)
         return(
             <div className="row">
                 <div className="col-12">
@@ -61,17 +78,27 @@ export default class MenuItems extends React.Component<IProps, IState> {
                             menuItem={new MenuItemDTO()}
                             mode={ItemModes.add}
                             itemAdded={this.itemAdded}
+                            weekMenuItem={new WeekMenuItemDTO(this.state.week, new MenuItemDTO(), false, "0", false)}
                             />
                     }
                     {
                         this.state.menuItems.map((menuItemDTO: MenuItemDTO) => {
+                            const mode: ItemModes = this.props.mode === ItemsModes.week ?
+                                                        ItemModes.week :
+                                                        this.state.selectedItemId === menuItemDTO.id ? ItemModes.edit : ItemModes.view
+                            
+                            const weekMenuItem: WeekMenuItemDTO = activeMenuItems[menuItemDTO.id] !== undefined ?
+                                                                    activeMenuItems[menuItemDTO.id]
+                                                                    :
+                                                                    new WeekMenuItemDTO(this.state.week, menuItemDTO, false, "0", false)
+
                             return(
                                 <MenuItem
                                     key={`mi_${menuItemDTO.id}`}
                                     mode={mode}
                                     menuItem={menuItemDTO} 
                                     itemSelected={this.itemSelected}
-                                    />
+                                    weekMenuItem={weekMenuItem}/> 
                             )
                         })
                     }

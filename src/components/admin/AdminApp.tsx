@@ -24,21 +24,21 @@ export default class AdminApp extends React.Component<any, IState> {
     }
 
     public componentDidMount = () => {
-        const refresh_token: string | null = localStorage.getItem('refresh_token');
+        const refresh_token: string | null = window.localStorage.getItem('refresh_token');
         if(refresh_token !== null) {
             authService.validateToken(refresh_token)
-                .then((valid: boolean) => {console.log("OK")
+                .then((valid: boolean) => {
                     this.setState({connecting: false, loggedIn: true});
                 })
                 .catch((err: any) => {console.log(err)
-                    localStorage.removeItem('refresh_token');
-                    localStorage.removeItem('access_token');
+                    //window.localStorage.removeItem('refresh_token');
+                    //window.localStorage.removeItem('access_token');
                     this.setState({connecting: false});
                 })
         } else {
             this.setState({connecting: false});
         }
-      }
+    }
 
     public render() {
         if (this.state.connecting)
