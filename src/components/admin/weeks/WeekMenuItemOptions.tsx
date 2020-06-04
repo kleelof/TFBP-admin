@@ -38,7 +38,7 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
         this.setState({saving: true});
         weekMenuItemService.delete(this.state.weekMenuItem.id)
             .then( resp => this.setState({
-                weekMenuItem: new WeekMenuItemDTO(this.state.weekMenuItem.to_week, this.state.weekMenuItem.menu_item, false, "0", false),
+                weekMenuItem: new WeekMenuItemDTO(this.state.weekMenuItem.to_week, this.state.weekMenuItem.menu_item, false, "0"),
                 active: false,
                 saving: false
             }))
@@ -57,7 +57,6 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
         let weekMenuItem: WeekMenuItemDTO = this.state.weekMenuItem
         switch (e.target.id) {
             case 'active': this.setState({active: !this.state.active}); break;
-            case 'spicy': weekMenuItem.spicy = !weekMenuItem.spicy; break;
             case 'sold_out': weekMenuItem.sold_out = !weekMenuItem.sold_out; break;
             case 'price': weekMenuItem.price = e.target.value
         }
@@ -101,15 +100,6 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
                         onChange={this.updateData}
                         disabled={this.state.saving || !this.state.active}
                         type="checkbox"/> 
-                </div>
-                <div className="col-6 mt-3">
-                    <span className="week-options-panel-text">Spicy:&nbsp;&nbsp;</span>
-                    <input
-                        id="spicy"
-                        checked={this.state.weekMenuItem.spicy}
-                        onChange={this.updateData}
-                        disabled={this.state.saving || !this.state.active}
-                        type="checkbox"/>
                 </div>
                 <div className="col-12 text-center mt-3">
                     <button 

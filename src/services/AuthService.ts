@@ -1,25 +1,25 @@
 import Service from "./Service";
 
 import AuthenticateDTO from "../dto/AuthenticateDTO";
-import UserDTO from "../dto/UserDTO";
+import User from "../models/User";
 
 class AuthService extends Service {
+    appName = 'core';
+    view = 'auth';
 
-    public authenticate = (username: string, password: string): Promise<AuthenticateDTO> => {
+    public authenticate = (email: string, password: string): Promise<AuthenticateDTO> => {
         this.logout();
         
         return new Promise<AuthenticateDTO>((resolve, reject) => {
-            this._post("admin_app/authenticate/", {username, password})
+            this._post(`${this.viewPath}/authenticate/`, {email, password})
             .then( (resp: any) => {
                 window.localStorage.setItem('access_token', resp.access);
                 window.localStorage.setItem('refresh_token', resp.refresh);
-                window.localStorage.setItem('user_id', resp.id);
-                window.localStorage.setItem('username', resp.username);
+                window.localStorage.setItem('user_id', resp.id.toString());
+                window.localStorage.setItem('username', resp.email);
                 resolve(resp);
             })
-            .catch((resp)=> {
-                reject(resp)
-            })
+            .catch( (resp: any) => reject(resp))
         })
     }
 
@@ -31,10 +31,9 @@ class AuthService extends Service {
     }
 
     public validateToken = (refreshToken: string): Promise<boolean> => {
-        
         return new Promise<boolean>((resolve, reject) => {
-            this._get<UserDTO>("admin_app/user/")
-            .then((userDTO: UserDTO) => {
+            this._get<User>(`${this.viewPath}/user`)
+            .then((user: User) => {
                 resolve(true);
             })
             .catch((err: any) => {

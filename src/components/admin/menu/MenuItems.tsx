@@ -78,7 +78,7 @@ export default class MenuItems extends React.Component<IProps, IState> {
                             menuItem={new MenuItemDTO()}
                             mode={ItemModes.add}
                             itemAdded={this.itemAdded}
-                            weekMenuItem={new WeekMenuItemDTO(this.state.week, new MenuItemDTO(), false, "0", false)}
+                            weekMenuItem={new WeekMenuItemDTO(this.state.week, new MenuItemDTO(), false, "0")}
                             />
                     }
                     {
@@ -90,7 +90,7 @@ export default class MenuItems extends React.Component<IProps, IState> {
                             const weekMenuItem: WeekMenuItemDTO = activeMenuItems[menuItemDTO.id] !== undefined ?
                                                                     activeMenuItems[menuItemDTO.id]
                                                                     :
-                                                                    new WeekMenuItemDTO(this.state.week, menuItemDTO, false, "0", false)
+                                                                    new WeekMenuItemDTO(this.state.week, menuItemDTO, false, "0")
 
                             return(
                                 <MenuItem

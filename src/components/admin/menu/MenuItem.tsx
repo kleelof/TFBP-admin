@@ -131,10 +131,10 @@ export default class MenuItem extends React.Component<IProps, IState> {
 
         if (this.temporaryImage){
             menuItem.image = this.temporaryImage;
-        } else {
-            menuItem.image = null
+        } else if (typeof menuItem.image === 'string') {
+            delete menuItem.image;
         }
-         menuItemService.update<MenuItemDTO>(menuItem.id, menuItem, menuItem.image !== null)
+         menuItemService.update<MenuItemDTO>(menuItem.id, menuItem, menuItem.image !== null && typeof menuItem.image !== 'string')
                 .then((menuItemDTO: MenuItemDTO) => {
                     this.setState({
                         menuItem: menuItem,
@@ -149,6 +149,17 @@ export default class MenuItem extends React.Component<IProps, IState> {
         let menuItem: any = this.state.menuItem;
         menuItem[e.target.name] = e.target.value;
         this.setState({menuItem});
+    }
+
+    private updateOptions = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        let menuItem: MenuItemDTO = this.state.menuItem;
+        switch(e.target.id) {
+            case 'spicy':
+                menuItem.spicy = !menuItem.spicy
+                this.setState({menuItem})
+                break;
+
+        }
     }
 
 
@@ -301,6 +312,28 @@ export default class MenuItem extends React.Component<IProps, IState> {
                                 )
                             }
                     </div>
+                    <div className="options-area area">
+                        <hr/>
+                        {
+                            this.props.mode === ItemModes.week ?
+                                this.state.menuItem.spicy ?
+                                    <div className="checker-week">Spicy</div>
+                                    :
+                                    <div className="checker-week">Not Spicy</div>
+                                :
+                                    <div className="checker">
+                                        <input
+                                            type="checkbox"
+                                            id="spicy"
+                                            checked={this.state.menuItem.spicy}
+                                            disabled={this.props.mode === ItemModes.view}
+                                            onChange={this.updateOptions}
+                                            />
+                                            <span>Spicy</span>
+                                    </div>
+
+                        }
+                    </div>
                     {
                         this.props.mode === ItemModes.week ?
                             <div className="week-options">
@@ -327,7 +360,6 @@ export default class MenuItem extends React.Component<IProps, IState> {
                                 }
                             </div> 
                     }
-                    
                 </div>
             </div>
         )

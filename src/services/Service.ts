@@ -10,6 +10,10 @@ export default class Service {
     protected appName: string = "";
     protected view: string = "";
 
+    public get viewPath(): string {
+        return `${this.appName}/${this.view}`;
+    }
+    
     public _get<T>(path: string): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             axiosInstance.get(`${this._service_url}/${path}`)

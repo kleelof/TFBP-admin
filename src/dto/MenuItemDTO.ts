@@ -8,4 +8,5 @@ export default class MenuItemDTO {
     public price: number = 0;
     public image!: File | string | null;
     public active!: boolean;
+    public spicy!: boolean;
 }
