@@ -1,4 +1,4 @@
-import Service from "./Service";
+import Service from './Service';
 
 class MailingListService extends Service {
     appName = 'app';

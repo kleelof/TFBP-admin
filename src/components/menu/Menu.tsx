@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import MenuItemDTO from '../../../dto/MenuItemDTO';
-import menuItemService from '../../../services/AdminMenuItemService';
+import MenuItemDTO from '../../dto/MenuItemDTO';
+import menuItemService from '../../services/AdminMenuItemService';
 import MenuItems, { ItemsModes } from './MenuItems';
 
 interface IState {

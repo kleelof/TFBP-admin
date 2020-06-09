@@ -1,26 +1,26 @@
 import React from 'react';
 
 import MenuItem, { ItemModes } from './MenuItem';
-import MenuItemDTO from '../../../dto/MenuItemDTO';
-import WeekMenuItemDTO from '../../../dto/WeekMenuItemDTO';
-import WeekDTO from '../../../dto/WeekDTO';
-import weekService from '../../../services/WeekService';
+import MenuItemDTO from '../../dto/MenuItemDTO';
+import deliveryDayService from '../../services/DeliveryDayService';
+import DeliveryDay from '../../models/DeliveryDayModel';
+import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 
 interface IProps { 
     mode: ItemsModes
     menuItems: MenuItemDTO[],
-    week?: WeekDTO
+    deliveryDay?: DeliveryDay
 }
 
 interface IState {
     menuItems: MenuItemDTO[],
     selectedItemId: number,
-    week: WeekDTO
+    deliveryDay: DeliveryDay
 }
 
 export enum ItemsModes {
     menu,
-    week
+    deliveryDay
 }
 
 export default class MenuItems extends React.Component<IProps, IState> {
@@ -31,7 +31,7 @@ export default class MenuItems extends React.Component<IProps, IState> {
         this.state = {
             menuItems: props.menuItems,
             selectedItemId: -1,
-            week: props.week || new WeekDTO("")
+            deliveryDay: props.deliveryDay || new DeliveryDay("")
         }
     }
 
@@ -45,17 +45,17 @@ export default class MenuItems extends React.Component<IProps, IState> {
     }
 
     private itemSelected = (menuItemDTO: MenuItemDTO): void => {
-        if (this.props.mode === ItemsModes.week) {
-            if (this.props.week) {
-                let week: WeekDTO = this.state.week;
-                let menuItems: WeekMenuItemDTO[] = week.menu_items.filter((dto: WeekMenuItemDTO) => dto.id !== menuItemDTO.id);;
-                const removed: boolean = menuItems.length !== week.menu_items.length;
+        if (this.props.mode === ItemsModes.deliveryDay) {
+            if (this.props.deliveryDay) {
+                let deliveryDay: DeliveryDay = this.state.deliveryDay;
+                let menuItems: DeliveryDayItem[] = deliveryDay.day_items.filter((item: DeliveryDayItem) => item.id !== menuItemDTO.id);;
+                const removed: boolean = menuItems.length !== deliveryDay.day_items.length;
 
-                weekService.attachWeekMenuItem(week.id, menuItemDTO.id)
+                deliveryDayService.attachWeekMenuItem(deliveryDay.id, menuItemDTO.id)
                     .then( resp => {
                         if (!removed)
                             //menuItems.push
-                        this.setState({week})
+                        this.setState({deliveryDay})
                     })
                     .catch( resp => window.alert("Unable to update"))
             }
@@ -65,11 +65,11 @@ export default class MenuItems extends React.Component<IProps, IState> {
     }
     
     public render() {
-        if (this.props.menuItems.length === 0 && this.props.mode === ItemsModes.week)
+        if (this.props.menuItems.length === 0 && this.props.mode === ItemsModes.deliveryDay)
             return <h3>No Menu Items. Go to Menu to add some.</h3>
 
         const activeMenuItems: {[key: number]: any} = {};
-        if (this.state.week.menu_items) this.state.week.menu_items.forEach((dto: WeekMenuItemDTO) => activeMenuItems[dto.menu_item as any] = dto)
+        if (this.state.deliveryDay.day_items) this.state.deliveryDay.day_items.forEach((item: DeliveryDayItem) => activeMenuItems[item.menu_item as any] = item)
         return(
             <div className="row">
                 <div className="col-12">
@@ -78,19 +78,19 @@ export default class MenuItems extends React.Component<IProps, IState> {
                             menuItem={new MenuItemDTO()}
                             mode={ItemModes.add}
                             itemAdded={this.itemAdded}
-                            weekMenuItem={new WeekMenuItemDTO(this.state.week, new MenuItemDTO(), false, "0")}
+                            deliveryDayItem={new DeliveryDayItem(this.state.deliveryDay, new MenuItemDTO(), false, 0)}
                             />
                     }
                     {
                         this.state.menuItems.map((menuItemDTO: MenuItemDTO) => {
-                            const mode: ItemModes = this.props.mode === ItemsModes.week ?
-                                                        ItemModes.week :
+                            const mode: ItemModes = this.props.mode === ItemsModes.deliveryDay ?
+                                                        ItemModes.deliveryDay :
                                                         this.state.selectedItemId === menuItemDTO.id ? ItemModes.edit : ItemModes.view
                             
-                            const weekMenuItem: WeekMenuItemDTO = activeMenuItems[menuItemDTO.id] !== undefined ?
-                                                                    activeMenuItems[menuItemDTO.id]
-                                                                    :
-                                                                    new WeekMenuItemDTO(this.state.week, menuItemDTO, false, "0")
+                            const deliveryDayItem: DeliveryDayItem = activeMenuItems[menuItemDTO.id] !== undefined ?
+                                                                        activeMenuItems[menuItemDTO.id]
+                                                                        :
+                                                                        new DeliveryDayItem(this.state.deliveryDay, menuItemDTO, false, 0)
 
                             return(
                                 <MenuItem
@@ -98,7 +98,7 @@ export default class MenuItems extends React.Component<IProps, IState> {
                                     mode={mode}
                                     menuItem={menuItemDTO} 
                                     itemSelected={this.itemSelected}
-                                    weekMenuItem={weekMenuItem}/> 
+                                    deliveryDayItem={deliveryDayItem}/> 
                             )
                         })
                     }

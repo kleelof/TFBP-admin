@@ -1,10 +1,11 @@
 import React from 'react';
+
 import MenuItems, { ItemsModes } from '../menu/MenuItems';
-import MenuItemDTO from '../../../dto/MenuItemDTO';
-import WeekDTO from '../../../dto/WeekDTO';
+import MenuItemDTO from '../../dto/MenuItemDTO';
+import DeliveryDay from '../../models/DeliveryDayModel';
 
 interface IProps {
-    week: WeekDTO,
+    deliveryDay: DeliveryDay,
     menuItems: MenuItemDTO[]
 }
 
@@ -13,7 +14,7 @@ interface IState {
     menuItems: MenuItemDTO[]
 }
 
-export default class WeekMenu extends React.Component<IProps, IState> {
+export default class DeliveryMenuComponent extends React.Component<IProps, IState> {
 
     public render() {
         return(
@@ -21,8 +22,8 @@ export default class WeekMenu extends React.Component<IProps, IState> {
                 <div className="col-12">
                     <MenuItems
                         menuItems={this.props.menuItems}
-                        week={this.props.week} 
-                        mode={ItemsModes.week} /> 
+                        deliveryDay={this.props.deliveryDay} 
+                        mode={ItemsModes.deliveryDay} /> 
                 </div>
             </div>
         )

@@ -1,23 +1,42 @@
 import React from 'react';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+
 import './authentication.css';
 import authService from '../../services/AuthService';
 import { Redirect } from 'react-router-dom';
+import User from '../../models/UserModel';
+import AuthenticateDTO from '../../dto/AuthenticateDTO';
+import { AppActions, AppState } from '../../store/store';
+import { dispatchLogin } from '../../store/auth/authActions';
+import { AuthState } from '../../store/auth/authReducer';
+
+interface LinkStateProps {
+    auth: AuthState
+}
+
+interface LinkDispatchProps {
+    login: (user: User) => void
+}
+
+type Props = LinkStateProps & LinkDispatchProps
 
 interface IState {
-    username: string,
+    email: string,
     password: string,
     loggingIn: boolean,
     loggedIn: boolean
 }
 
-export default class Login extends React.Component<any, IState> {
+class Login extends React.Component<Props, IState> {
 
     constructor(props: any) {
         super(props);
 
         this.state = {
-            username: "",
+            email: "",
             password: "",
             loggingIn: false,
             loggedIn: false
@@ -31,10 +50,14 @@ export default class Login extends React.Component<any, IState> {
     }
 
     private login = (): void => {
-        if (this.state.username === "" || this.state.password === "") return;
+        if (this.state.email === "" || this.state.password === "") return;
 
-        authService.authenticate(this.state.username, this.state.password)
-            .then( err => {this.setState({loggedIn: true})})
+        authService.authenticate(this.state.email, this.state.password)
+            .then( (dto: AuthenticateDTO) => {
+                console.log(dto.user);
+                this.props.login(dto.user);
+                this.setState({loggedIn: true});
+            })
             .catch((err: any) => {
                 console.log(err);
                 window.alert("Invalid Credentials");
@@ -42,8 +65,8 @@ export default class Login extends React.Component<any, IState> {
     }
 
     public render() {
-        if (this.state.loggedIn)
-            return <Redirect to="/admin/menu" />
+        if (this.props.auth.loggedIn) 
+            return <Redirect to="/menu" />
 
         return(
             <div className="row justify-content-center" id="login-panel">
@@ -58,9 +81,9 @@ export default class Login extends React.Component<any, IState> {
                                 <input
                                     type="text"
                                     className="fadeIn second"
-                                    id="username"
-                                    placeholder="username"
-                                    value={this.state.username}
+                                    id="email"
+                                    placeholder="email"
+                                    value={this.state.email}
                                     onChange={this.updateData}
                                     />
                                 <input
@@ -90,3 +113,10 @@ export default class Login extends React.Component<any, IState> {
         )
     }
 }
+
+const mapStateToProps = (state: AppState): LinkStateProps => ({auth: state.authReducer})
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
+    login: bindActionCreators(dispatchLogin, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

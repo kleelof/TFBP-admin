@@ -1,5 +1,10 @@
+import User from "../models/UserModel";
+
 export default class AuthenticateDTO {
 
-    refresh!: string;
-    access!: string;
+    public refresh!: string;
+    public access!: string;
+    public id!: number;
+    public email!: string;
+    public user!: User
 }

@@ -20,7 +20,7 @@ axiosInstance.interceptors.response.use(
             const refresh_token = window.localStorage.getItem('refresh_token');
             try {
                 const response = await axiosInstance
-                    .post('/admin_app/token/refresh/', { refresh: refresh_token });
+                    .post('/core/auth/token/refresh/', { refresh: refresh_token });
                 window.localStorage.setItem('access_token', response.data.access);
                 window.localStorage.setItem('refresh_token', response.data.refresh);
                 axiosInstance.defaults.headers['Authorization'] = "JWT " + response.data.access;

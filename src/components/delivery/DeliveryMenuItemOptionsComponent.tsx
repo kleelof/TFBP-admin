@@ -1,17 +1,15 @@
 import React from 'react';
-import WeekMenuItemDTO from '../../../dto/WeekMenuItemDTO';
-import weekMenuItemService from '../../../services/WeekMenuItemService';
-import WeekDTO from '../../../dto/WeekDTO';
-import WeekMenuItemOutDTO from '../../../dto/WeekMenuItemOutDTO';
+import deliveryDayItemService from '../../services/DeliveryDayItemService';
+import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 
 interface IProps {
-    weekMenuItem: WeekMenuItemDTO
+    delivryDayItem: DeliveryDayItem
 }
 
 interface IState {
-    weekMenuItem: WeekMenuItemDTO,
+    deliveryDayItem: DeliveryDayItem,
     saving: boolean,
-    active: boolean 
+    active: boolean
 }
 
 export default class WeekMenuItemOptions extends React.Component<IProps, IState> {
@@ -19,16 +17,16 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
     constructor(props: IProps) {
         super(props);
         this.state = {
-            weekMenuItem: props.weekMenuItem,
+            deliveryDayItem: props.delivryDayItem,
             saving: false,
-            active: props.weekMenuItem.id ? true : false 
+            active: props.delivryDayItem.id ? true : false 
         }
     }
 
     private activate = (): void => {
         this.setState({saving: true});
-        weekMenuItemService.add<WeekMenuItemOutDTO>(this.state.weekMenuItem.getSubmitDTO())
-            .then((dto: WeekMenuItemOutDTO) => {this.setState({weekMenuItem: dto as any, saving: false, active: true})})
+        deliveryDayItemService.add<DeliveryDayItemDTO>(this.state.deliveryDayItem.getDTO())
+            .then((dto: DeliveryDayItemDTO) => {this.setState({deliveryDayItem: dto as any, saving: false, active: true})})
             .catch( resp => window.alert("Unable to activate"));
     }
 
@@ -36,9 +34,9 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
         if (!window.confirm("Are you sure you want to deactivate this menu item?")) return;
 
         this.setState({saving: true});
-        weekMenuItemService.delete(this.state.weekMenuItem.id)
+        deliveryDayItemService.delete(this.state.deliveryDayItem.id)
             .then( resp => this.setState({
-                weekMenuItem: new WeekMenuItemDTO(this.state.weekMenuItem.to_week, this.state.weekMenuItem.menu_item, false, "0"),
+                deliveryDayItem: new DeliveryDayItem(this.state.deliveryDayItem.delivery_day, this.state.deliveryDayItem.menu_item, false, 0),
                 active: false,
                 saving: false
             }))
@@ -47,20 +45,19 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
 
     private save = (): void => {
         this.setState({saving: true});
-        console.log(this.state.weekMenuItem);
-        weekMenuItemService.update<WeekMenuItemOutDTO>(this.state.weekMenuItem.id, this.state.weekMenuItem as any)
-            .then((dto: WeekMenuItemOutDTO) => this.setState({weekMenuItem: dto as any, saving: false}))
+        deliveryDayItemService.update<DeliveryDayItem>(this.state.deliveryDayItem.id, this.state.deliveryDayItem)
+            .then((item: DeliveryDayItem) => this.setState({deliveryDayItem: item, saving: false}))
             .catch( resp => window.alert("Unable to update"))
     }
 
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        let weekMenuItem: WeekMenuItemDTO = this.state.weekMenuItem
+        let deliveryDayItem: DeliveryDayItem = this.state.deliveryDayItem
         switch (e.target.id) {
             case 'active': this.setState({active: !this.state.active}); break;
-            case 'sold_out': weekMenuItem.sold_out = !weekMenuItem.sold_out; break;
-            case 'price': weekMenuItem.price = e.target.value
+            case 'sold_out': deliveryDayItem.sold_out = !deliveryDayItem.sold_out; break;
+            case 'price': deliveryDayItem.price = parseFloat(e.target.value)
         }
-        this.setState({weekMenuItem});
+        this.setState({deliveryDayItem});
     }
 
     public render() {
@@ -87,7 +84,7 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
                     <input
                         type="number"
                         id="price"
-                        value={this.state.weekMenuItem.price}
+                        value={this.state.deliveryDayItem.price}
                         onChange={this.updateData}
                         disabled={this.state.saving || !this.state.active}
                         className="form-control"/>
@@ -96,7 +93,7 @@ export default class WeekMenuItemOptions extends React.Component<IProps, IState>
                     <span className="week-options-panel-text">Sold Out:&nbsp;&nbsp;</span>
                     <input
                         id="sold_out"
-                        checked={this.state.weekMenuItem.sold_out} 
+                        checked={this.state.deliveryDayItem.sold_out} 
                         onChange={this.updateData}
                         disabled={this.state.saving || !this.state.active}
                         type="checkbox"/> 

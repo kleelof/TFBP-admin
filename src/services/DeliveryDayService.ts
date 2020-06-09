@@ -1,9 +1,9 @@
 import Service from './Service';
 import WeekMenuItemDTO from '../dto/WeekMenuItemDTO';
 
-class WeekService extends Service {
+class DeliveryDayService extends Service {
     appName = "admin_app";
-    view = "week";
+    view = "delivery_day";
 
     public attachWeekMenuItem(weekID: number, menuItemID: number, attach: boolean = true): Promise<WeekMenuItemDTO> {
         console.log(weekID, menuItemID);
@@ -11,4 +11,4 @@ class WeekService extends Service {
     }
 }
 
-export default new WeekService();
+export default new DeliveryDayService();

@@ -1,6 +1,6 @@
 import React from 'react';
-import MailingListDTO from '../../../dto/MailingListDTO';
-import mailingListService from '../../../services/AdminMailingListService';
+import MailingListDTO from '../../dto/MailingListDTO';
+import mailingListService from '../../services/AdminMailingListService';
 
 interface IState {
     mailingList: MailingListDTO[],

@@ -1,20 +1,20 @@
 import React from 'react';
 
 import './menu.css';
-import MenuItemDTO from '../../../dto/MenuItemDTO';
-import menuItemService from '../../../services/AdminMenuItemService';
-import ImageUploader from '../../widgets/imageUploader/ImageUploader';
+import MenuItemDTO from '../../dto/MenuItemDTO';
+import menuItemService from '../../services/AdminMenuItemService';
+import ImageUploader from '../widgets/imageUploader/ImageUploader';
 
-import {config} from '../../../config';
-import WeekMenuItemDTO from '../../../dto/WeekMenuItemDTO';
-import WeekMenuItemOptions from '../weeks/WeekMenuItemOptions';
+import {config} from '../../config';
+import DeliveryDayItem from '../../models/DeliveryDayItemModel';
+import DeliveryMenuItemOptions from '../delivery/DeliveryMenuItemOptionsComponent';
 
 interface IProps {
     mode: ItemModes,
     menuItem: MenuItemDTO,
     itemAdded?(menuItemDTO: MenuItemDTO): void,
     itemSelected?(menuItemDTO: MenuItemDTO): void,
-    weekMenuItem: WeekMenuItemDTO
+    deliveryDayItem: DeliveryDayItem
 }
 
 interface IState {
@@ -22,14 +22,14 @@ interface IState {
     saving: boolean,
     viewingServings: boolean,
     hasBeenUpdated: boolean,
-    weekMenuItem: WeekMenuItemDTO
+    deliveryDayItem: DeliveryDayItem
 }
 
 export enum ItemModes {
     add,
     edit,
     view,
-    week
+    deliveryDay
 }
 
 export default class MenuItem extends React.Component<IProps, IState> {
@@ -44,7 +44,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
             saving: false,
             viewingServings: false,
             hasBeenUpdated: false,
-            weekMenuItem: props.weekMenuItem
+            deliveryDayItem: props.deliveryDayItem
         }
     }
 
@@ -96,7 +96,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
     }
 
     private onClickMe = (): void => {
-        if (this.props.mode === ItemModes.edit || this.props.mode === ItemModes.week) return;
+        if (this.props.mode === ItemModes.edit || this.props.mode === ItemModes.deliveryDay) return;
         
         if (this.props.itemSelected) this.props.itemSelected(this.state.menuItem);
     }
@@ -166,7 +166,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
     public render() {//TODO: fix saveBtnDisabled
 
         const saveBtnDisabled: boolean = this.state.saving || this.props.mode === ItemModes.view
-        const disabled: boolean = this.props.mode === ItemModes.view || this.props.mode === ItemModes.week
+        const disabled: boolean = this.props.mode === ItemModes.view || this.props.mode === ItemModes.deliveryDay
 
         let header: any = null
 
@@ -201,6 +201,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
             { name: 'Beef', code: 'beef' },
             { name: 'Tofu', code: 'tofu'}
         ]
+        
         return (
             <div 
                 className="menu-item mt-2"
@@ -248,7 +249,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                         <h3>Proteins:</h3>
                             {
                                 proteins.map((protein: any) => {
-                                    if (this.props.mode === ItemModes.week){
+                                    if (this.props.mode === ItemModes.deliveryDay){
                                         if (this.state.menuItem.proteins.length === 0)
                                             return <div className="checker-week" key={`proteins_${protein.code}`}>&nbsp;</div>
 
@@ -283,7 +284,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             {
                                 allergens.map((allergen: any) => 
                                     {
-                                        if (this.props.mode === ItemModes.week){
+                                        if (this.props.mode === ItemModes.deliveryDay){
                                             if (this.state.menuItem.allergens.length === 0)
                                                 return <div className="checker-week" key={`allergens_${allergen.code}`}>&nbsp;</div>
 
@@ -315,7 +316,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                     <div className="options-area area">
                         <hr/>
                         {
-                            this.props.mode === ItemModes.week ?
+                            this.props.mode === ItemModes.deliveryDay ?
                                 this.state.menuItem.spicy ?
                                     <div className="checker-week">Spicy</div>
                                     :
@@ -335,9 +336,9 @@ export default class MenuItem extends React.Component<IProps, IState> {
                         }
                     </div>
                     {
-                        this.props.mode === ItemModes.week ?
+                        this.props.mode === ItemModes.deliveryDay ?
                             <div className="week-options">
-                                <WeekMenuItemOptions weekMenuItem={this.state.weekMenuItem} />
+                                <DeliveryMenuItemOptions delivryDayItem={this.state.deliveryDayItem} />
                             </div>
                             :
                             <div className="controls-area area text-center mt-2">

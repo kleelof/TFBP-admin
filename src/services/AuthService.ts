@@ -1,7 +1,7 @@
 import Service from "./Service";
 
 import AuthenticateDTO from "../dto/AuthenticateDTO";
-import User from "../models/User";
+import User from "../models/UserModel";
 
 class AuthService extends Service {
     appName = 'core';
@@ -15,8 +15,6 @@ class AuthService extends Service {
             .then( (resp: any) => {
                 window.localStorage.setItem('access_token', resp.access);
                 window.localStorage.setItem('refresh_token', resp.refresh);
-                window.localStorage.setItem('user_id', resp.id.toString());
-                window.localStorage.setItem('username', resp.email);
                 resolve(resp);
             })
             .catch( (resp: any) => reject(resp))
@@ -30,15 +28,13 @@ class AuthService extends Service {
         window.localStorage.removeItem('username');
     }
 
-    public validateToken = (refreshToken: string): Promise<boolean> => {
-        return new Promise<boolean>((resolve, reject) => {
+    public validateToken = (refreshToken: string): Promise<User> => {
+        return new Promise<User>((resolve, reject) => {
             this._get<User>(`${this.viewPath}/user`)
             .then((user: User) => {
-                resolve(true);
+                resolve(user);
             })
-            .catch((err: any) => {
-                reject(false);
-            })
+            .catch( err => reject(err))
         })
     }
 }

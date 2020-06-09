@@ -13,7 +13,7 @@ export default class Service {
     public get viewPath(): string {
         return `${this.appName}/${this.view}`;
     }
-    
+
     public _get<T>(path: string): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             axiosInstance.get(`${this._service_url}/${path}`)
