@@ -30,6 +30,7 @@ export default class DeliveryDayItem extends ModelBase {
         this.menu_item = menu_item;
         this.sold_out = sold_out;
         this.price = price;
+        
     }
 
     public getDTO = (): DeliveryDayItemDTO => {

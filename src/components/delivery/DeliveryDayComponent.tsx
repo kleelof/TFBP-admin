@@ -1,24 +1,28 @@
 import React from 'react';
 
-import deliveryDayService from '../../services/DeliveryDayService';
+import MenuItems, { ItemsModes } from '../menu/MenuItems';
+import MenuItemDTO from '../../dto/MenuItemDTO';
 import DeliveryDay from '../../models/DeliveryDayModel';
-import DeliveryMenu from './DeliveryMenuComponent';
-import DeliveryDayItem from '../../models/DeliveryDayItemModel';
-import menuItemService from '../../services/AdminMenuItemService';
 import MenuItem from '../../models/MenuItemModel';
+import menuItemService from '../../services/AdminMenuItemService';
+import deliveryDayService from '../../services/DeliveryDayService';
 
 interface IState {
-    loaded: boolean,
-    deliveryDay: DeliveryDay,
-    deliveryDayItems: DeliveryDayItem[]
+    loading: boolean,   //TODO: FINISH ADDING LOAD ALL MENU ITEMS, have MenuItems confirm if 
+    menuItems: MenuItemDTO[],
+    deliveryDay: DeliveryDay
 }
 
 export default class DeliveryDayComponent extends React.Component<any, IState> {
 
-    state = {
-        loaded: false,
-        deliveryDay: new DeliveryDay(""),
-        deliveryDayItems: []
+    constructor(props: any) {
+        super(props);
+
+        this.state ={
+            loading: true,
+            menuItems: [],
+            deliveryDay: new DeliveryDay("")
+        }
     }
 
     public componentDidMount = (): void => {
@@ -29,17 +33,25 @@ export default class DeliveryDayComponent extends React.Component<any, IState> {
 
         Promise.all([deliveryDay, menuItems])
             .then((values: any) => {
-                this.setState({deliveryDay: values[0], deliveryDayItems: values[1], loaded: true})
+                this.setState({deliveryDay: values[0], menuItems: values[1], loading: false})
             })
             .catch( err => window.alert("Unable to load week"))
-    } 
-
+    }
+    
     public render() {
-        if (!this.state.loaded)
+        if (this.state.loading)
             return <div>Loading...</div>
-        
+
         return(
-            <DeliveryMenu deliveryDay={this.state.deliveryDay} menuItems={this.state.deliveryDayItems} />
+            <div className="row">
+                <div className="col-12">
+                    <h3>Menu for {this.state.deliveryDay.date}</h3>
+                    <MenuItems
+                        menuItems={this.state.menuItems}
+                        deliveryDay={this.state.deliveryDay} 
+                        mode={ItemsModes.deliveryDay} /> 
+                </div>
+            </div>
         )
     }
 }

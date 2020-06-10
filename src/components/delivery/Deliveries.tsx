@@ -5,6 +5,7 @@ import deliveryDayService from '../../services/DeliveryDayService';
 import './delivery.css';
 import { Redirect } from 'react-router-dom';
 import DeliveryDay from '../../models/DeliveryDayModel';
+import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 
 interface IState {
     loaded: boolean,
@@ -55,7 +56,7 @@ export default class Deliveries extends React.Component<any, IState> {
             return <Redirect to={`delivery/edit/${this.state.editId}`} />
         
         const deliveries: DeliveryDay[] = this.state.deliveryDays;
-        deliveries.sort((a,b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0));
+        deliveries.sort((a,b) => (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0));
 
         return(
             <div className="row weeks">
@@ -73,18 +74,29 @@ export default class Deliveries extends React.Component<any, IState> {
                         >Add</button> 
                     <hr/>
                 </div>
-                {
-                    deliveries.map((deliveryDay: DeliveryDay) => {
-                        return(
-                            <div 
-                                className="col-12 week-listing"
-                                key={`week_${deliveryDay.id}`}
-                                onClick={()=> this.setState({editId: deliveryDay.id})}>
-                                    {deliveryDay.date}
-                            </div>
-                        )
-                    })
-                }
+                <div className="col-12">
+                    {
+                        deliveries.map((deliveryDay: DeliveryDay) => {
+                            return(
+                                <div className="row deliveries-day" key={`week_${deliveryDay.id}`}>
+                                    <div className="col-12 deliveries-day-date" onClick={()=> this.setState({editId: deliveryDay.id})}>
+                                        {deliveryDay.date}
+                                    </div>
+                                    {
+                                        deliveryDay.day_items.map((item: DeliveryDayItem) =>
+                                            <div className="col-3 deliveries-day-item" key={`ddi_${item.id}`}>
+                                                <div>
+                                                    <img src={`${item.menu_item.image}`} alt={item.menu_item.name} />
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                    <div className="col-12"><hr/></div>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </div>
         )
     }

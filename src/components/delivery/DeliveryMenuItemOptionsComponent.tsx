@@ -3,7 +3,7 @@ import deliveryDayItemService from '../../services/DeliveryDayItemService';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 
 interface IProps {
-    delivryDayItem: DeliveryDayItem
+    deliveryDayItem: DeliveryDayItem
 }
 
 interface IState {
@@ -12,21 +12,27 @@ interface IState {
     active: boolean
 }
 
-export default class WeekMenuItemOptions extends React.Component<IProps, IState> {
+export default class DeliveryMenuItemOptions extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
         this.state = {
-            deliveryDayItem: props.delivryDayItem,
+            deliveryDayItem: props.deliveryDayItem,
             saving: false,
-            active: props.delivryDayItem.id ? true : false 
+            active: props.deliveryDayItem.id ? true : false 
         }
     }
 
     private activate = (): void => {
         this.setState({saving: true});
-        deliveryDayItemService.add<DeliveryDayItemDTO>(this.state.deliveryDayItem.getDTO())
-            .then((dto: DeliveryDayItemDTO) => {this.setState({deliveryDayItem: dto as any, saving: false, active: true})})
+        let deliveryDayItem: DeliveryDayItem = this.state.deliveryDayItem;
+        deliveryDayItem.price = deliveryDayItem.menu_item.price;
+        deliveryDayItemService.add<any>(this.state.deliveryDayItem.getDTO())
+            .then((dto: DeliveryDayItem) => {this.setState({
+                deliveryDayItem: dto as any,
+                saving: false,
+                active: true
+            })})
             .catch( resp => window.alert("Unable to activate"));
     }
 

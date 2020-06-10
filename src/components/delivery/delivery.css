@@ -1,12 +1,15 @@
-.week-listing {
+.deliveries-day-item img {
+    height: 100px;
+}
+
+.deliveries-day {
     font-size: 1.5em;
     font-weight: bold;
 }
 
-.week-listing:hover {
+.deliveries-day-date:hover {
     cursor: pointer;
-    background-color: rgba(57, 214, 36, 0.9);
-    color: black;
+    background-color: rgba(24, 128, 20, 0.7);
 }
 
 .week-options {

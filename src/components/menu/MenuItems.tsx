@@ -27,7 +27,7 @@ export default class MenuItems extends React.Component<IProps, IState> {
 
     constructor(props: IProps) { 
         super(props);
-
+        
         this.state = {
             menuItems: props.menuItems,
             selectedItemId: -1,
@@ -69,7 +69,8 @@ export default class MenuItems extends React.Component<IProps, IState> {
             return <h3>No Menu Items. Go to Menu to add some.</h3>
 
         const activeMenuItems: {[key: number]: any} = {};
-        if (this.state.deliveryDay.day_items) this.state.deliveryDay.day_items.forEach((item: DeliveryDayItem) => activeMenuItems[item.menu_item as any] = item)
+        if (this.state.deliveryDay.day_items) this.state.deliveryDay.day_items.forEach((item: DeliveryDayItem) => activeMenuItems[item.menu_item.id as any] = item)
+        
         return(
             <div className="row">
                 <div className="col-12">
@@ -84,8 +85,10 @@ export default class MenuItems extends React.Component<IProps, IState> {
                     {
                         this.state.menuItems.map((menuItemDTO: MenuItemDTO) => {
                             const mode: ItemModes = this.props.mode === ItemsModes.deliveryDay ?
-                                                        ItemModes.deliveryDay :
-                                                        this.state.selectedItemId === menuItemDTO.id ? ItemModes.edit : ItemModes.view
+                                                        ItemModes.deliveryDay
+                                                        :
+                                                        this.state.selectedItemId === menuItemDTO.id ? 
+                                                            ItemModes.edit : ItemModes.view
                             
                             const deliveryDayItem: DeliveryDayItem = activeMenuItems[menuItemDTO.id] !== undefined ?
                                                                         activeMenuItems[menuItemDTO.id]

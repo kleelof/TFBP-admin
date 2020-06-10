@@ -21,8 +21,7 @@ interface IState {
     menuItem: MenuItemDTO,
     saving: boolean,
     viewingServings: boolean,
-    hasBeenUpdated: boolean,
-    deliveryDayItem: DeliveryDayItem
+    hasBeenUpdated: boolean
 }
 
 export enum ItemModes {
@@ -38,13 +37,11 @@ export default class MenuItem extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        
         this.state = {
             menuItem: props.menuItem,
             saving: false,
             viewingServings: false,
-            hasBeenUpdated: false,
-            deliveryDayItem: props.deliveryDayItem
+            hasBeenUpdated: false
         }
     }
 
@@ -158,10 +155,12 @@ export default class MenuItem extends React.Component<IProps, IState> {
                 menuItem.spicy = !menuItem.spicy
                 this.setState({menuItem})
                 break;
-
+            case 'price':
+                menuItem.price = parseFloat(e.target.value);
+                this.setState({menuItem});
+                break;
         }
     }
-
 
     public render() {//TODO: fix saveBtnDisabled
 
@@ -244,6 +243,16 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             onChange={this.updateMenuItem}
                             disabled={disabled}
                             ></textarea>
+                    </div>
+                    <div className="area">
+                        Price:
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="price"
+                            value={this.state.menuItem.price}
+                            onChange={this.updateOptions}/>
+                        <hr/>
                     </div>
                     <div className="ingredients-area area">
                         <h3>Proteins:</h3>
@@ -338,7 +347,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                     {
                         this.props.mode === ItemModes.deliveryDay ?
                             <div className="week-options">
-                                <DeliveryMenuItemOptions delivryDayItem={this.state.deliveryDayItem} />
+                                <DeliveryMenuItemOptions deliveryDayItem={this.props.deliveryDayItem} />
                             </div>
                             :
                             <div className="controls-area area text-center mt-2">
