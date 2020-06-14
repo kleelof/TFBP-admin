@@ -198,7 +198,8 @@ export default class MenuItem extends React.Component<IProps, IState> {
             { name: 'Pork', code: 'pork'},
             { name: 'Chicken', code: 'chicken'},
             { name: 'Beef', code: 'beef' },
-            { name: 'Tofu', code: 'tofu'}
+            { name: 'Tofu', code: 'tofu'},
+            { name: 'Veggie', code: 'veg'}
         ]
         
         return (

@@ -64,10 +64,10 @@ class Login extends React.Component<Props, IState> {
             });
     }
 
-    public render() {
+    public render() {console.log("login");
         if (this.props.auth.loggedIn) 
             return <Redirect to="/menu" />
-
+        
         return(
             <div className="row justify-content-center" id="login-panel">
                 <div className="class-12 class-md-6">

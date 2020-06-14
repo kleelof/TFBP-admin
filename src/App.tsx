@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { bindActionCreators } from 'redux';
@@ -19,6 +19,9 @@ import DeliveryDay from './components/delivery/DeliveryDayComponent';
 import Menu from './components/menu/Menu';
 import MailingList from './components/mailing_list/MailingList';
 import Login from './components/authentication/Login';
+import MainApp from './components/MainApp';
+import Orders from './components/order/Orders';
+import Export from './components/order/Export';
 
 interface LinkStateProps {
   auth: AuthState
@@ -31,13 +34,15 @@ interface LinkDispatchProps {
 type Props = LinkStateProps & LinkDispatchProps;
 
 interface IState {
-  connecting: boolean
+  connecting: boolean,
+  loggedIn: boolean // temporary flag while auth login is completed
 }
 
 class App extends React.Component<Props, IState> {
 
   state = {
-    connecting: true
+    connecting: true,
+    loggedIn: false
   }
 
   public componentDidMount = () => { 
@@ -45,51 +50,47 @@ class App extends React.Component<Props, IState> {
     if(refresh_token !== null) {
         authService.validateToken(refresh_token)
               .then((user: User) => {
-                this.setState({connecting: false});
+                this.setState({connecting: false, loggedIn: true});
                 this.props.login(user);
               })
               .catch((err: any) => {
-                this.setState({connecting: false});
+                this.setState({connecting: false, loggedIn: false});
               })
-    } else {
-        this.setState({connecting: false});
+    } else { console.log("unable to login")
+        this.setState({connecting: false, loggedIn: false});
     }
   }
 
-  
-
   public render() {
+    if (this.state.connecting)
+      return <div>Connecting...</div>
+
     const PrivateRoute = ({component, ...rest}: any) => {
       const routeComponent = (props: any) => (
-          this.props.auth.loggedIn
+          this.props.auth.loggedIn || this.state.loggedIn
               ? React.createElement(component, props)
               : <Redirect to={{pathname: '/login'}}/>
       );
       return <Route {...rest} render={routeComponent}/>;
-  };
-
+    };
+    
     return (
       <div className="container-fluid">
-        <div className="col-12">
-          <Fragment>
+          <div className="col-12">
             {this.props.auth.loggedIn &&
               <Navigation/>
             }
-            {
-              this.state.connecting ?
-                <div>Connecting...</div>
-                :
-                <Switch>
-                  <PrivateRoute path="/menu" component={Menu} />
-                  <PrivateRoute path="/deliveries" component={Deliveries} />
-                  <PrivateRoute path="/delivery/edit/:id" component={DeliveryDay} />
-                  <PrivateRoute path="/mailingList" component={MailingList} />
-                  <Route path="/login" component={Login} />
-                </Switch>
-            }
-          </Fragment>
-        </div>
-      </div> 
+              
+            <Switch>
+              <PrivateRoute path="/menu" component={Menu} />
+              <PrivateRoute path="/deliveries" component={Deliveries} />
+              <PrivateRoute path="/delivery/edit/:id" component={DeliveryDay} />
+              <PrivateRoute path="/mailingList" component={MailingList} />
+              <PrivateRoute path="/orders/export" component={Export} />
+              <Route path="/login" component={Login} />
+            </Switch>
+          </div>
+      </div>
     );
   }
 }

@@ -32,7 +32,7 @@ export default class DeliveryMenuItemOptions extends React.Component<IProps, ISt
                 deliveryDayItem: dto as any,
                 saving: false,
                 active: true
-            })})
+            })}) 
             .catch( resp => window.alert("Unable to activate"));
     }
 

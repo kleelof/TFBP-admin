@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import authService from '../../services/AuthService';
 import { AuthState } from '../../store/auth/authReducer';
 import { AppState, AppActions } from '../../store/store';
 import { dispatchLogout } from '../../store/auth/authActions';
@@ -51,6 +50,15 @@ class Navigation extends React.Component<Props, IState> {
                         <li className="nav-item">
                             <Link className="nav-link" to="/deliveries">
                                 Deliveries</Link>
+                        </li>
+                        <li className="nav-item dropdown">
+                            <button className="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Orders
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <Link className="dropdown-item" to='/orders/export'>Printouts and Router</Link>
+                                <Link className="dropdown-item" to='/orders/manage'>Manage Orders</Link>
+                            </div> 
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/mailingList">

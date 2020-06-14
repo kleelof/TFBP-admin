@@ -69,6 +69,10 @@ export default class Service {
         }
     }
 
+    public getByDate<T>(date: string): Promise<T> {
+        return this._get<T>(`${this.appName}/${this.view}/get_by_date/?date=${date}`);
+    }
+
     public multipartFormPost<T>(content: any): Promise<T> {
         const formData: FormData = new FormData();
         Object.keys(content).forEach( key => {

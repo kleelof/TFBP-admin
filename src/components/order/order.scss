@@ -1,0 +1,70 @@
+.delivery-tags-print .contact-info {
+    font-size: 1.5em;
+}
+
+.delivery-tags-print .street-address {
+    font-size: 1.5em;
+    font-weight: bold;
+} 
+
+.delivery-tags-print span {
+    display: block;
+}
+
+.delivery-tag-item {
+    display: inline;
+    font-size: 1.5em;
+    width: 90%;
+    float: left;
+}
+
+.export-panel {
+    margin-bottom: 10px;
+}
+
+.quarter-page {
+    display: inline-block;
+    width: 50%;
+    height: 500px;
+    border: 1px solid rgba(0 ,0 ,0 , .3);
+    padding: 15px;
+}
+
+.prep-sheet {
+    font-size: 4em;
+}
+
+.print-sheet {
+    visibility: hidden;
+}
+
+.print-sheet td {
+    padding: 0 20px;
+    border: 1px solid rgba(0, 0, 0, .9)
+}
+
+.print-row-dark {
+    font-weight: bold;
+}
+
+@page {
+    margin: 1px;
+}
+
+@media print {
+    body * {
+      visibility: hidden;
+    }
+    .print-sheet, .print-sheet * {
+      visibility: visible;
+    }
+    .print-sheet {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .quarter-page {
+        page-break-after: always;
+    }
+  }
