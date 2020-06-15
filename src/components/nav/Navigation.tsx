@@ -57,7 +57,7 @@ class Navigation extends React.Component<Props, IState> {
                             </button>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <Link className="dropdown-item" to='/orders/export'>Printouts and Router</Link>
-                                <Link className="dropdown-item" to='/orders/manage'>Manage Orders</Link>
+                                <Link className="dropdown-item" to='/orders'>Manage Orders</Link>
                             </div> 
                         </li>
                         <li className="nav-item">

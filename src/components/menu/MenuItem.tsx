@@ -70,16 +70,18 @@ export default class MenuItem extends React.Component<IProps, IState> {
         if (items === null) items= "";
 
         let parts: string[] = items.split(':')
-        if (parts.indexOf(code) !== -1) {
+        console.log(parts, items);
+        if (parts.indexOf(code) !== -1) {// delete if it exists
             parts.splice(parts.indexOf(code), 1);
         } else {
             parts.push(code);
         }
-        console.log(parts.join(':'));
-        return parts.join(':');
+
+        const final: string = parts.join(':');
+        return (final.substr(0, 1)) === ':' ? final.substr(1) : final;
     }
 
-    public componentWillUpdate = (props: IProps): void => {
+    public componentDidUpdate = (props: IProps): void => {
         if(props.mode !== this.props.mode) {
             switch (props.mode) {
                 case ItemModes.view:
@@ -112,7 +114,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
 
     private proteinSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         let menuItem: MenuItemDTO = this.state.menuItem;
-        menuItem.proteins = this.checkboxesToString(menuItem.proteins, e.target.id)
+        menuItem.proteins = this.checkboxesToString(menuItem.proteins, e.target.id);
         this.setState({menuItem});
     } 
 
@@ -251,6 +253,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             type="number"
                             className="form-control"
                             id="price"
+                            disabled={this.props.mode === ItemModes.view}
                             value={this.state.menuItem.price}
                             onChange={this.updateOptions}/>
                         <hr/>
@@ -279,7 +282,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
                                             <input
                                                 type="checkbox"
                                                 id={protein.code}
-                                                checked={this.state.menuItem.proteins.indexOf(protein.code) !== -1}
+                                                checked={this.state.menuItem.proteins.indexOf(protein.code) > -1}
                                                 disabled={this.props.mode === ItemModes.view}
                                                 onChange={this.proteinSelected}/>
                                             <span>{protein.name}</span>

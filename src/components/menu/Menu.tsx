@@ -7,6 +7,7 @@ interface IState {
     menuItems: MenuItemDTO[],
     loaded: boolean
 }
+
 export default class Menu extends React.Component<any, IState> {
 
     constructor(props: any) {

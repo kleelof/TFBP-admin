@@ -169,7 +169,27 @@ function DeliveryTagsDisplay(props: any) {
 
 function PrepDisplay(props: any) {
 
+    type CondenensedListItem = {count: number, dish: string, protein: string, spicy_text:string};
+
     const spicy: string[] = ['No', 'mild', 'spicy'];
+    let condensedList: {[key: string]: CondenensedListItem} = {};
+    let key: string = "";
+    let dish: string = "";
+    let protein: string = "";
+    let spicy_text: string = "";
+
+    props.orderItems.forEach((orderItem: OrderItem) => {
+        dish = orderItem.cart_item.menu_item.name;
+        protein = (orderItem.cart_item.menu_item.proteins.split(':').length > 1 && orderItem.cart_item.protein !== "") ?
+                    orderItem.cart_item.protein : "";
+        spicy_text = (orderItem.cart_item.menu_item.spicy) ? spicy[orderItem.cart_item.spicy] : "";
+
+        key = `${dish}:${protein}:${spicy_text}`;
+        if (!(key in condensedList))
+            condensedList[key] = {count: 0, dish, protein, spicy_text};
+
+        condensedList[key].count += orderItem.cart_item.quantity;
+    });
 
     return (
         <table className='prep-sheet'>
@@ -183,21 +203,16 @@ function PrepDisplay(props: any) {
             </thead>
             <tbody>
                 {
-                    props.orderItems.map((orderItem: OrderItem, index: number) => 
-                    <tr className={`${index % 2 ? '' : 'print-row-dark'}`} key={`oi_${orderItem.id}`}>
-                        <td>{orderItem.cart_item.quantity}</td>
-                        <td>{orderItem.cart_item.menu_item.name}</td>
-                        <td>{orderItem.cart_item.protein}</td>
-                        <td>
-                            {
-                                orderItem.cart_item.menu_item.spicy ?
-                                    spicy[orderItem.cart_item.spicy]
-                                    :
-                                    ""
-                            }
-                        </td>
-                    </tr> 
-                )
+                    Object.keys(condensedList).map((key: string, index: number) => {
+                        return (
+                            <tr className={`${index % 2 ? '' : 'print-row-dark'}`} key={key}>
+                                <td>{condensedList[key].count}</td>
+                                <td>{condensedList[key].dish}</td>
+                                <td>{condensedList[key].protein}</td>
+                                <td>{condensedList[key].spicy_text}</td>
+                            </tr> 
+                        )
+                    })
                 }
             </tbody>
         </table>

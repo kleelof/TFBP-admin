@@ -35,7 +35,7 @@ export default class MenuItems extends React.Component<IProps, IState> {
         }
     }
 
-    public componentWillUpdate = (props: IProps): void => {
+    public componentDidUpdate = (props: IProps): void => {
         if (props.menuItems !== this.state.menuItems)
             this.setState({menuItems: props.menuItems});
     }

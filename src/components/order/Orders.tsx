@@ -1,12 +1,27 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import Export from './Export';
+import Order from '../../models/OrderModel';
 
-export default class Orders extends React.Component<any, any> {
+// import orderService from '../../services/OrderService';
+
+interface IState {
+    loading: boolean,
+    orders: Order[]
+}
+
+export default class Orders extends React.Component<any, IState> {
+
+    state = {
+        loading: true,
+        orders: []
+    }
+
+    public componentDidMount = (): void => {
+
+    }
 
     public render() {
         return(
-            <Route path='/export' component={Export} />
+            <div>Orders</div>
         )
     }
 }

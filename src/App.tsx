@@ -87,6 +87,7 @@ class App extends React.Component<Props, IState> {
               <PrivateRoute path="/delivery/edit/:id" component={DeliveryDay} />
               <PrivateRoute path="/mailingList" component={MailingList} />
               <PrivateRoute path="/orders/export" component={Export} />
+              <PrivateRoute path="/orders" component={Orders} />
               <Route path="/login" component={Login} />
             </Switch>
           </div>
