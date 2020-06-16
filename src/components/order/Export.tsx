@@ -115,7 +115,7 @@ export default class Export extends React.Component<any, IState> {
                     <div className="col-12 print-sheet">
                         {
                             this.state.pullType === 'prep' ?
-                                <PrepDisplay orderItems={this.state.orderItems} />
+                                <PrepDisplay orderItems={this.state.orderItems} date={this.state.pullDate} />
                                 :
                                 <DeliveryTagsDisplay orders={this.state.orders} date={this.state.pullDate} />
                                     
@@ -147,11 +147,11 @@ function DeliveryTagsDisplay(props: any) {
                                 <div className="delivery-tag-items">
                                     {
                                         orderItems.map((orderItem: OrderItem) => {
-                                            let item: string = orderItem.cart_item.menu_item.name;
+                                            let item: string = orderItem.cart_item.quantity.toString() + " " + orderItem.cart_item.menu_item.name;
                                             if (orderItem.cart_item.protein !== "" && orderItem.cart_item.menu_item.proteins.split(':').length > 2) item += ` with ${orderItem.cart_item.protein}`
                                             if (orderItem.cart_item.menu_item.spicy) item += `, ${spicy[orderItem.cart_item.spicy]}`
                                             return(
-                                                <div className="delivery-tag-item" key={`oi_${orderItem.id}`}>
+                                                <div className="delivery-tag-item" key={`oi_${orderItem.id}`}> 
                                                     {item}
                                                 </div>
                                             )
@@ -177,6 +177,7 @@ function PrepDisplay(props: any) {
     let dish: string = "";
     let protein: string = "";
     let spicy_text: string = "";
+    let dishCount: number = 0;
 
     props.orderItems.forEach((orderItem: OrderItem) => {
         dish = orderItem.cart_item.menu_item.name;
@@ -189,32 +190,36 @@ function PrepDisplay(props: any) {
             condensedList[key] = {count: 0, dish, protein, spicy_text};
 
         condensedList[key].count += orderItem.cart_item.quantity;
+        dishCount += orderItem.cart_item.quantity; 
     });
 
-    return (
-        <table className='prep-sheet'>
-            <thead>
-                <tr>
-                    <td>#</td>
-                    <td>Dish</td>
-                    <td>Protein</td>
-                    <td>Spicy</td>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    Object.keys(condensedList).map((key: string, index: number) => {
-                        return (
-                            <tr className={`${index % 2 ? '' : 'print-row-dark'}`} key={key}>
-                                <td>{condensedList[key].count}</td>
-                                <td>{condensedList[key].dish}</td>
-                                <td>{condensedList[key].protein}</td>
-                                <td>{condensedList[key].spicy_text}</td>
-                            </tr> 
-                        )
-                    })
-                }
-            </tbody>
-        </table>
+    return ( 
+        <Fragment>
+            <span className='print-sheet-header'>{props.date} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
+            <table className='prep-sheet'> 
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Dish</td>
+                        <td>Protein</td>
+                        <td>Spicy</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        Object.keys(condensedList).sort().map((key: string, index: number) => {
+                            return (
+                                <tr className={`${index % 2 ? '' : 'print-row-dark'}`} key={key}>
+                                    <td>{condensedList[key].count}</td>
+                                    <td>{condensedList[key].dish}</td>
+                                    <td>{condensedList[key].protein}</td>
+                                    <td>{condensedList[key].spicy_text}</td>
+                                </tr> 
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
+        </Fragment>
     )
 }

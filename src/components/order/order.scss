@@ -22,12 +22,14 @@
     margin-bottom: 10px;
 }
 
-.quarter-page {
-    display: inline-block;
-    width: 50%;
-    height: 500px;
-    border: 1px solid rgba(0 ,0 ,0 , .3);
-    padding: 15px;
+.order-row {
+    padding: 3px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid rgba(0, 0, 0, .9);
+}
+
+.order-row-header:hover {
+    background-color: rgba(36, 128, 51, 0.7);
 }
 
 .prep-sheet {
@@ -43,8 +45,20 @@
     border: 1px solid rgba(0, 0, 0, .9)
 }
 
+.print-sheet-header {
+    font-size: 3.5em;
+}
+
 .print-row-dark {
     font-weight: bold;
+}
+
+.quarter-page {
+    display: inline-block;
+    width: 50%;
+    height: 500px;
+    border: 1px solid rgba(0 ,0 ,0 , .3);
+    padding: 15px;
 }
 
 @page {

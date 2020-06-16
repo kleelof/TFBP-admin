@@ -11,6 +11,7 @@ export default class Order extends ModelBase {
     public city!: string;
     public zip!: string;
     public items!: OrderItem[];
+    public status!: number;
 }
 
 export class OrderDTO extends ModelBase {

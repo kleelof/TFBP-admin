@@ -73,6 +73,10 @@ export default class Service {
         return this._get<T>(`${this.appName}/${this.view}/get_by_date/?date=${date}`);
     }
 
+    public getByDateRange<T>(startDate: string, endDate: string): Promise<T> {
+        return this._get<T>(`${this.appName}/${this.view}/get_by_date_range/?start_date=${startDate}&end_date=${endDate}`);
+    }
+
     public multipartFormPost<T>(content: any): Promise<T> {
         const formData: FormData = new FormData();
         Object.keys(content).forEach( key => {
