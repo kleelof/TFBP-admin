@@ -139,9 +139,9 @@ function DeliveryTagsDisplay(props: any) {
                     return (
                         <Fragment key={`order_${order.id}`}>
                             <div className='quarter-page'>
+                                <span className="contact-info">{order.contact_name}</span>
                                 <span className="street-address">{order.street_address} {order.unit}</span>
                                 <span className="street-address">{order.city} {order.zip}</span>
-                                <span className="contact-info">{order.contact_name}</span>
                                 <span className="contact-info">{order.phone_number}</span>
                                 <b>Items:</b>
                                 <div className="delivery-tag-items">

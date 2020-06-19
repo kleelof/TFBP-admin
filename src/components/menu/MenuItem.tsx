@@ -201,10 +201,12 @@ export default class MenuItem extends React.Component<IProps, IState> {
             { name: 'Chicken', code: 'chicken'},
             { name: 'Beef', code: 'beef' },
             { name: 'Tofu', code: 'tofu'},
-            { name: 'Veggie', code: 'veg'}
+            { name: 'Veggie', code: 'veg'},
+            { name: 'Vegan', code: 'vekan'},
+            { name: 'Shrimp', code: 'shrimp'}
         ]
         
-        return (
+        return ( 
             <div 
                 className="menu-item mt-2"
                 onClick={this.onClickMe}
