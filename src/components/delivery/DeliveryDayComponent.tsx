@@ -1,7 +1,7 @@
 import React from 'react';
 
 import MenuItems, { ItemsModes } from '../menu/MenuItems';
-import MenuItemDTO from '../../dto/MenuItemDTO';
+import {MenuItemDTO} from '../../models/MenuItemModel';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import MenuItem from '../../models/MenuItemModel';
 import menuItemService from '../../services/AdminMenuItemService';

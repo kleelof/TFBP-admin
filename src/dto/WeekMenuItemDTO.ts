@@ -1,8 +1,8 @@
-import MenuItemDTO from "./MenuItemDTO";
+import {MenuItemDTO} from "../models/MenuItemModel";
 import WeekDTO from "./WeekDTO";
 import WeekMenuItemOutDTO from "./WeekMenuItemOutDTO";
 
-export default class WeekMenuItemDTO {
+export default class WeekMenuItemDTO { 
 
     public id!: number;
     public sold_out: boolean = false;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Order from '../../models/OrderModel';
 
-import helpers from '../../helpers';
+import helpers from '../../helpers/helpers';
 
 interface IProps {
     order: Order

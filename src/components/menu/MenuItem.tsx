@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './menu.css';
-import MenuItemDTO from '../../dto/MenuItemDTO';
+import {MenuItemDTO} from '../../models/MenuItemModel';
 import menuItemService from '../../services/AdminMenuItemService';
 import ImageUploader from '../widgets/imageUploader/ImageUploader';
 
@@ -47,7 +47,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
 
     private addNewMenuItem = (): void => {
         this.setState({saving: true});
-        let menuItem: MenuItemDTO = this.props.menuItem;
+        let menuItem: MenuItemDTO = this.state.menuItem;
 
         if (this.temporaryImage){
             menuItem.image = this.temporaryImage;
@@ -144,10 +144,10 @@ export default class MenuItem extends React.Component<IProps, IState> {
                 })
     }
 
-    private updateMenuItem = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    private updateMenuItem = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
         let menuItem: any = this.state.menuItem;
         menuItem[e.target.name] = e.target.value;
-        this.setState({menuItem});
+        this.setState({menuItem}, ()=> console.log(this.state.menuItem));
     }
 
     private updateOptions = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -205,7 +205,7 @@ export default class MenuItem extends React.Component<IProps, IState> {
             { name: 'Vegan', code: 'vekan'},
             { name: 'Shrimp', code: 'shrimp'}
         ]
-        
+
         return ( 
             <div 
                 className="menu-item mt-2"
@@ -250,15 +250,18 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             ></textarea>
                     </div>
                     <div className="area">
-                        Price:
-                        <input
-                            type="number"
+                        Category:
+                        <select
+                            name="category"
                             className="form-control"
-                            id="price"
-                            disabled={this.props.mode === ItemModes.view}
-                            value={this.state.menuItem.price}
-                            onChange={this.updateOptions}/>
-                        <hr/>
+                            defaultValue={this.state.menuItem.category}
+                            disabled={disabled}
+                            onChange={this.updateMenuItem}> 
+                            <option value="en">Entree</option>
+                            <option value="ap">Apetizer</option>
+                            <option value="si">Side Item</option>
+                            <option value="de">Desert</option>
+                        </select>
                     </div>
                     <div className="ingredients-area area">
                         <h3>Proteins:</h3>

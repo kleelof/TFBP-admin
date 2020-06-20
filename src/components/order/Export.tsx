@@ -158,6 +158,17 @@ function DeliveryTagsDisplay(props: any) {
                                         })
                                     }
                                 </div>
+                                {order.notes &&
+                                    <div className="delivery-instructions">
+                                        <br/>
+                                        _____________________________________________
+                                        <h4>Delivery Instructions:</h4>
+                                        <span className="delivery-instructions-text">
+                                            {order.notes}
+                                        </span>
+                                    </div>
+
+                                }
                             </div>
                         </Fragment>
                     )

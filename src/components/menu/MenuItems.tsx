@@ -1,7 +1,7 @@
 import React from 'react';
 
 import MenuItem, { ItemModes } from './MenuItem';
-import MenuItemDTO from '../../dto/MenuItemDTO';
+import {MenuItemDTO} from '../../models/MenuItemModel';
 import deliveryDayService from '../../services/DeliveryDayService';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
@@ -36,11 +36,11 @@ export default class MenuItems extends React.Component<IProps, IState> {
     }
 
     public componentDidUpdate = (props: IProps): void => {
-        if (props.menuItems !== this.state.menuItems)
-            this.setState({menuItems: props.menuItems});
+        //if (props.menuItems !== this.state.menuItems)
+            //this.setState({menuItems: props.menuItems});
     }
 
-    private itemAdded = (menuItem: MenuItemDTO): void => {
+    private itemAdded = (menuItem: MenuItemDTO): void => {console.log(menuItem);
         this.setState({menuItems: [menuItem, ...this.state.menuItems]});
     }
 

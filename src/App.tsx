@@ -19,7 +19,6 @@ import DeliveryDay from './components/delivery/DeliveryDayComponent';
 import Menu from './components/menu/Menu';
 import MailingList from './components/mailing_list/MailingList';
 import Login from './components/authentication/Login';
-import MainApp from './components/MainApp';
 import Orders from './components/order/Orders';
 import Export from './components/order/Export';
 
