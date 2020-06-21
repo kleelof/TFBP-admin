@@ -1,0 +1,143 @@
+import React from 'react';
+import Order, { OrderDTO } from '../../models/OrderModel';
+
+import orderService from '../../services/OrderService';
+import OrderItem from '../../models/OrderItemModel';
+import helpers, {OrderedItems} from '../../helpers/helpers';
+import { Link } from 'react-router-dom';
+
+interface IState {
+    loading: boolean,
+    order: Order,
+    updating: boolean,
+    updatesPending: boolean
+}
+
+export default class EditOrder extends React.Component<any, IState> {
+
+    state = {
+        loading: true,
+        order: new Order(),
+        updating: false,
+        updatesPending: false
+    }
+
+    public componentDidMount = (): void => {
+        const { match: { params } } = this.props;
+
+        orderService.get<Order>(params.id)
+            .then((order: Order) => this.setState({order, loading: false}))
+            .catch( err => window.alert(err))
+    }
+
+    private saveUpdates = (): void => {
+        this.setState({updating: true});
+
+        orderService.update<any>(this.state.order.id, new OrderDTO(this.state.order))
+            .then((order: Order) => this.setState({order, updating: false, updatesPending: false}))
+            .catch ( err => window.alert(err))
+    }
+
+    private updateData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
+        let order: any = this.state.order;
+        order[e.target.id] = e.target.value;
+        this.setState({order, updatesPending: true})
+    }
+
+    public render() {
+        if (this.state.loading)
+            return <div>Loading...</div>
+
+        const orderedItems: OrderedItems = helpers.sortOrderItemsByDate(this.state.order.items);
+
+        return (
+            <div className="row edit-order">
+                <div className="col-12">
+                    <Link to={'/orders'}>{`<<< Return to Orders`}</Link>
+                    <br/><br/>
+                </div>
+                <div className="col-12">
+                    <h5>Order ID: {this.state.order.id}</h5>
+                    <select id="order_status" defaultValue={this.state.order.order_status}
+                            className={`order-status-${this.state.order.order_status}`}
+                            onChange={this.updateData} disabled={this.state.updating}>
+                        <option value="0">Canceled</option>
+                        <option value="1">Pending</option>
+                        <option value="2">Paid</option>
+                    </select>
+                </div>
+                <div className="col-12 col-md-6 form-group mt-2">
+                    <label htmlFor="contact_name">contact name</label>
+                    <input id="contact_name" type="text" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.contact_name} onChange={this.updateData}/>
+                </div>
+                <div className="col-12 col-md-6 form-group">
+                    <label htmlFor="email">email</label>
+                    <input id="email" type="email" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.email} onChange={this.updateData}/>
+                </div>
+                <div className="col-12 col-md-6 form-group">
+                    <label htmlFor="phone_number">phone number</label>
+                    <input id="phone_number" type="text" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.phone_number} onChange={this.updateData}/>
+                </div>
+                <div className="col-12 col-md-6 form-group">
+                    <label htmlFor="street_address">Street Address</label>
+                    <input id="street_address" type="text" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.street_address} onChange={this.updateData}/>
+                </div>
+                <div className="col-12 col-md-6 form-group">
+                    <label htmlFor="unit">unit</label>
+                    <input id="unit" type="text" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.unit} onChange={this.updateData}/>
+                </div>
+                <div className="col-12 col-md-6 form-group">
+                    <label htmlFor="city">city</label>
+                    <input id="city" type="text" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.city} onChange={this.updateData}/>
+                </div>
+                <div className="col-12 col-md-6 form-group">
+                    <label htmlFor="zip">zip</label>
+                    <input id="zip" type="text" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.zip} onChange={this.updateData}/>
+                </div>
+                <div className="col-12 col-md-6 form-group">
+                    <label htmlFor="notes">delivery notes</label>
+                    <textarea id="notes" className="form-control" disabled={this.state.updating}
+                            value={this.state.order.notes} onChange={this.updateData}/>
+                </div>
+                <div className="col-12">
+                    <button className="btn btn-success" onClick={this.saveUpdates}
+                            disabled={!this.state.updatesPending || this.state.updating}>Save Updates</button>
+                </div>
+                <div className="col-12 edit-order-deliveries">
+                    <hr/>
+                    <h5>Deliveries:</h5>
+                    {
+                        Object.keys(orderedItems).sort().map((key: string) => {
+                            return (
+                                <div className="row mt-3">
+                                    <div className="col-12">
+                                        <b>{helpers.formatDate(key)}</b>
+                                        {
+                                            orderedItems[key].map((orderItem: OrderItem) =>
+                                                <div className="row">
+                                                    <div className="col-12">
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        {orderItem.cart_item.quantity}
+                                                        &nbsp;
+                                                        {helpers.extractCartItemDescription(orderItem.cart_item)}
+                                                    </div>
+                                                </div>
+                                            ) 
+                                        }
+                                    </div> 
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            </div> 
+        )
+    }
+}

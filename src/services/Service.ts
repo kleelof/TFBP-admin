@@ -73,8 +73,11 @@ export default class Service {
         return this._get<T>(`${this.appName}/${this.view}/get_by_date/?date=${date}`);
     }
 
-    public getByDateRange<T>(startDate: string, endDate: string): Promise<T> {
-        return this._get<T>(`${this.appName}/${this.view}/get_by_date_range/?start_date=${startDate}&end_date=${endDate}`);
+    public getByDateRange<T>(startDate?: string, endDate?: string): Promise<T> {
+        let path: string = `${this.appName}/${this.view}/get_by_date_range/?`;
+        if (startDate) path += `start_date=${startDate}&`;
+        if (endDate) path += `end_date=${endDate}`; 
+        return this._get<T>(path);
     }
 
     public multipartFormPost<T>(content: any): Promise<T> {

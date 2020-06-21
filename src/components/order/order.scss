@@ -1,6 +1,7 @@
 .delivery-instructions-text {
+    display: block;
     font-size: 1.2em;
-}
+} 
 
 .delivery-tags-print .contact-info {
     font-size: 1.25em;
@@ -22,18 +23,34 @@
     float: left;
 }
 
+.edit-order select {
+    padding: 5px;
+    font-size: 1.3em;
+}
+
+.edit-order select option[value="0"], .order-status-0 {
+    background-color: rgba(247, 4, 4, 0.7);
+    color: rgba(255, 255, 255, .9);
+}
+
+.edit-order select option[value="1"], .order-status-1 {
+    background-color: rgba(247, 243, 4, 0.7);
+}
+
+.edit-order select option[value="2"], .order-status-2 {
+    background-color: rgba(81, 247, 4, 0.7);
+}
+
+.edit-order-deliveries {
+    font-size: 1.5em;
+}
+
 .export-panel {
     margin-bottom: 10px;
 }
 
-.order-row {
-    padding: 3px;
-    margin-bottom: 5px;
-    border-bottom: 2px solid rgba(0, 0, 0, .9);
-}
-
-.order-row-header:hover {
-    background-color: rgba(36, 128, 51, 0.7);
+.order-status {
+    font-weight: bold;
 }
 
 .prep-sheet {
@@ -57,11 +74,30 @@
     font-weight: bold;
 }
 
+.orders table {
+    border-collapse: separate;
+    font-size: 1.5em;
+}
+
+.orders td {
+    vertical-align: top;
+    padding: 9px;
+}
+
+.orders tbody tr:hover {
+    background-color: rgba(85, 224, 92, 0.3);
+    cursor: pointer;
+}
+
+.orders-line-highlight {
+    background-color: rgba(0, 0, 0, .3);
+}
+
 .quarter-page {
     display: inline-block;
     width: 50%;
     height: 500px;
-    border: 1px solid rgba(0 ,0 ,0 , .3);
+    border: 2px solid rgba(0 ,0 ,0 , .3);
     padding: 15px;
 }
 
@@ -73,9 +109,11 @@
     body * {
       visibility: hidden;
     }
+
     .print-sheet, .print-sheet * {
       visibility: visible;
     }
+
     .print-sheet {
       position: absolute;
       left: 0;

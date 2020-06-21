@@ -11,7 +11,7 @@ export default class Order extends ModelBase {
     public city!: string;
     public zip!: string;
     public items!: OrderItem[];
-    public status!: number;
+    public order_status!: number;
     public notes!: string;
 }
 
@@ -24,17 +24,20 @@ export class OrderDTO extends ModelBase {
     public street_address!: string;
     public city!: string;
     public zip!: string;
+    public order_status!: number;
+    public notes!: string;
 
-    constructor(contact_name: string, phone_number: string, email: string, unit: string,
-                street_address: string, city: string, zip: string) {
-                    super();
+    constructor(order: Order) {
+        super();
 
-                    this.contact_name = contact_name;
-                    this.phone_number = phone_number;
-                    this.email = email;
-                    this.unit = unit;
-                    this.street_address = street_address;
-                    this.city = city;
-                    this.zip = zip;
-                }
+        this.contact_name = order.contact_name;
+        this.phone_number = order.phone_number;
+        this.email = order.email;
+        this.unit = order.unit;
+        this.street_address = order.street_address;
+        this.city = order.city;
+        this.zip = order.zip;
+        this.order_status = order.order_status;
+        this.notes = order.notes;
+    }
 }

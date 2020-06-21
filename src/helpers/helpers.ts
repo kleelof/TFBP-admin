@@ -1,5 +1,6 @@
 import OrderItem from "../models/OrderItemModel";
 import DeliveryDayItem from "../models/DeliveryDayItemModel";
+import CartItem from "../models/CartItemModel";
 
 export type OrderedItems = {[key: string]: any[]};
 
@@ -8,8 +9,34 @@ class Helpers {
     private days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     private months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     private spicy: string[] = ["not spicy", "mild spicy", "spicy"];
+    private proteins: {[key: string]: string} = {
+        'pork': 'Pork',
+        'chicken': 'Chicken',
+        'beef' : ' Beef',
+        'tofu' : ' Tofu',
+        'veg' : 'Vegetable',
+        'vekan' : 'Vegan',
+        'shrimp' : 'Shrimp'
+    };
 
-    public formatDate = (rawDate: string): string => {console.log(rawDate)
+    /*
+        Returns a string ex; Pad-Tai with Chicken, mild spicy
+    */
+   public extractCartItemDescription = (cartItem: CartItem): string => {
+        let description: string = cartItem.menu_item.name;
+        description += cartItem.protein === null || cartItem.protein === "" ?
+                    "" : 
+                    cartItem.protein === 'vekan' ?
+                    ' vegan' : ` with ${this.proteins[cartItem.protein]}`
+
+        description += cartItem.menu_item.spicy === true ?
+        `, ${this.spicy[cartItem.spicy]}` : ""
+
+        return description;
+    }
+
+    public formatDate = (rawDate: string): string => {
+        if (rawDate.indexOf('T') === -1) rawDate += 'T16:57:53.762237-07:00';// the leading 0 in some formats cause miscalculation. Adding this prevents that
         const date: Date = new Date(rawDate);
         return `${this.days[date.getDay()]} ${this.months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
     }

@@ -23,7 +23,6 @@ export default class Export extends React.Component<any, IState> {
         orders: []
     }
     
-
     public componentDidMount = (): void => {
         /*
         orderItemService.getByDate('2020-06-16')
@@ -59,7 +58,7 @@ export default class Export extends React.Component<any, IState> {
     }
 
     private loadOrders = (): void => {
-        orderService.getByDate<Order[]>(this.state.pullDate)
+        orderService.getCompletedOrders(this.state.pullDate)
             .then((orders: Order[]) => {
                 if (orders.length === 0) {
                     window.alert('There are not items for this day');
@@ -86,7 +85,7 @@ export default class Export extends React.Component<any, IState> {
                     this.setState({orders},()=> window.print())
                 }
             })
-            .catch( err => window.alert('Unable to display'));
+            .catch( err => window.alert(err));
     }
 
     private updateData = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -96,7 +95,6 @@ export default class Export extends React.Component<any, IState> {
     }
 
     public render() {
-
         return(
             <div className="row">
                 <div className="col-12 col-md-6 export-panel">
@@ -161,11 +159,11 @@ function DeliveryTagsDisplay(props: any) {
                                 {order.notes &&
                                     <div className="delivery-instructions">
                                         <br/>
-                                        _____________________________________________
+                                        _______________________________
                                         <h4>Delivery Instructions:</h4>
-                                        <span className="delivery-instructions-text">
+                                        <div className="delivery-instructions-text">
                                             {order.notes}
-                                        </span>
+                                        </div>
                                     </div>
 
                                 }

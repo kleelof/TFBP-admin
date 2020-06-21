@@ -1,48 +1,135 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Order from '../../models/OrderModel';
-import OrderRow from './OrderRow';
 
 import orderService from '../../services/OrderService';
+import OrderItem from '../../models/OrderItemModel';
+import helpers from '../../helpers/helpers';
+import { Redirect } from 'react-router-dom';
 
 interface IState {
     loading: boolean,
-    orders: Order[]
+    orders: Order[],
+    editId: number,
+    startDate: string,
+    endDate: string
 }
 
 export default class Orders extends React.Component<any, IState> {
 
     state = {
         loading: false,
-        orders: []
+        orders: [],
+        editId: 0,
+        startDate: '',
+        endDate: ''
     }
+
+    private orderStatuses: string[] = ['canceled', 'pending', 'paid'];
 
     public componentDidMount = (): void => {
         this.getByDateRange();
     }
 
-    private getByDateRange = (): void => {
+    private getByDateRange = (startDate?: string, endDate?: string): void => {
         this.setState({loading: true});
 
-        orderService.getByDateRange<Order[]>('2020-06-16', '2020-06-19')
+        orderService.getByDateRange<Order[]>(startDate, endDate)
             .then((orders: Order[]) => {
                 this.setState({orders, loading: false})
             })
+    }
+
+    private searchByOrderDateRange = (): void => {
+        this.getByDateRange(this.state.startDate !== "" ? this.state.startDate : undefined, 
+                                    this.state.endDate !== "" ? this.state.endDate : undefined)
+    }
+    
+    private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        this.setState({
+            [e.target.id]: e.target.value as any,
+         }  as Pick<IState, keyof IState>);
     }
 
     public render() {
         if (this.state.loading)
             return <div>Loading...</div>
 
-        if (this.state.orders.length === 0)
-            return <div></div>
+        if (this.state.editId > 0)
+            return <Redirect to={`/orders/edit/${this.state.editId}`} /> 
 
         return(
-            <div className="row">
+            <div className="row orders">
                 <div className="col-12">
+                    <div className="row">
+                        <div className="col-12">
+                            Start Date: <input type="date" id="startDate" value={this.state.startDate} onChange={this.updateData}/>
+                            &nbsp;&nbsp;
+                            End Date: <input type="date" id="endDate" value={this.state.endDate} onChange={this.updateData} />
+                            &nbsp;&nbsp;
+                            <button className="btn btn-success" onClick={this.searchByOrderDateRange}>Search</button>
+                        </div>
+                    </div>
                     {
-                        this.state.orders.map((order: Order) => <OrderRow order={order} key={order.id} />)
+                        this.state.orders.length === 0 ?
+                            <div>No Orders Found</div>
+                            :
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Date</th>
+                                        <th>Delivery Dates</th>
+                                        <th>Items Delivered</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        this.state.orders.map((order: Order, index: number) => {
+                                            let menuItemCount: number = 0;
+                                            let total: number = 0;
+                                            let deliveryDates: string[] = [];
+        
+                                            order.items.forEach((orderItem: OrderItem) => {
+                                                menuItemCount += orderItem.cart_item.quantity;
+                                                total += orderItem.cart_item.quantity * orderItem.cart_item.price;
+                                                if (deliveryDates.indexOf(orderItem.cart_item.delivery_date) === -1)
+                                                    deliveryDates.push(orderItem.cart_item.delivery_date);
+                                            })
+        
+                                            return (
+                                                <tr key={order.id} className={index % 2 ? '' : 'orders-line-highlight'}
+                                                    onClick={()=> this.setState({editId: order.id})}>
+                                                    <td>{order.contact_name}</td>
+                                                    <td>{order.email}<br/>{order.phone_number}</td>
+                                                    <td>{helpers.formatDate(order.created_at)}</td>
+                                                    <td>
+                                                        {
+                                                            deliveryDates.map((date: string) => {
+                                                                return (
+                                                                    <Fragment>
+                                                                        {helpers.formatDate(date)}
+                                                                        <br/>
+                                                                    </Fragment>
+                                                                )
+                                                            })
+                                                        }
+                                                    </td>
+                                                    <td>{menuItemCount}</td>
+                                                    <td>${total.toFixed(2)}</td>
+                                                    <td className={`order-status-${order.order_status}`}>
+                                                        {this.orderStatuses[order.order_status]}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </table>
                     }
-                </div>
+                </div> 
             </div>
         )
     }

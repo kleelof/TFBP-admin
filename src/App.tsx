@@ -21,6 +21,7 @@ import MailingList from './components/mailing_list/MailingList';
 import Login from './components/authentication/Login';
 import Orders from './components/order/Orders';
 import Export from './components/order/Export';
+import EditOrder from './components/order/EditOrder';
 
 interface LinkStateProps {
   auth: AuthState
@@ -79,13 +80,14 @@ class App extends React.Component<Props, IState> {
             {this.props.auth.loggedIn &&
               <Navigation/>
             }
-              
+            <br/>
             <Switch>
               <PrivateRoute path="/menu" component={Menu} />
               <PrivateRoute path="/deliveries" component={Deliveries} />
               <PrivateRoute path="/delivery/edit/:id" component={DeliveryDay} />
               <PrivateRoute path="/mailingList" component={MailingList} />
               <PrivateRoute path="/orders/export" component={Export} />
+              <PrivateRoute path="/orders/edit/:id" component={EditOrder} />
               <PrivateRoute path="/orders" component={Orders} />
               <Route path="/login" component={Login} />
             </Switch>
