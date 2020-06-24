@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postbuild": "rm -r ~/Documents/thaiFoodByPla/website/project/templates/app/index.html; mv build/index.html ~/Documents/thaiFoodByPla/website/project/templates/app/index.html;rm -r ~/Documents/thaiFoodByPla/website/project/app/static; mv build/static ~/Documents/thaiFoodByPla/website/project/app/static"
+    "postbuild": "rm -r ~/Documents/thaiFoodByPla/website/project/templates/admin_app/index.html; mv build/index.html ~/Documents/thaiFoodByPla/website/project/templates/admin_app/index.html;rm -r ~/Documents/thaiFoodByPla/website/project/apps/admin_app/static; mv build/static ~/Documents/thaiFoodByPla/website/project/apps/admin_app/static"
   },
   "eslintConfig": {
     "extends": "react-app"

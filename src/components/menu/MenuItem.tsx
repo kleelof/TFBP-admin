@@ -260,8 +260,13 @@ export default class MenuItem extends React.Component<IProps, IState> {
                             <option value="en">Entree</option>
                             <option value="ap">Apetizer</option>
                             <option value="si">Side Item</option>
-                            <option value="de">Desert</option>
+                            <option value="de">Dessert</option>
                         </select>
+                    </div>
+                    <div className="area">
+                        Price:
+                        <input type="text" name="price" className="form-control" value={this.state.menuItem.price}
+                            disabled={disabled} onChange={this.updateMenuItem} />
                     </div>
                     <div className="ingredients-area area">
                         <h3>Proteins:</h3>

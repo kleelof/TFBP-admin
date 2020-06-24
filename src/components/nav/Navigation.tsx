@@ -34,7 +34,7 @@ class Navigation extends React.Component<Props, IState> {
     }
 
     public render() {
-        if (this.state.doLogin) return <Redirect to="/login" />
+        if (this.state.doLogin) return <Redirect to="/dashboard/login" />
 
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -44,11 +44,11 @@ class Navigation extends React.Component<Props, IState> {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item active">
-                            <Link className="nav-link" to="/menu">
+                            <Link className="nav-link" to="/dashboard/menu">
                                 Menu</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/deliveries">
+                            <Link className="nav-link" to="/dashboard/deliveries">
                                 Deliveries</Link>
                         </li>
                         <li className="nav-item dropdown">
@@ -56,12 +56,12 @@ class Navigation extends React.Component<Props, IState> {
                                 Orders
                             </button>
                             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <Link className="dropdown-item" to='/orders/export'>Printouts and Router</Link>
-                                <Link className="dropdown-item" to='/orders'>Manage Orders</Link>
+                                <Link className="dropdown-item" to='/dashboard/orders/export'>Printouts and Router</Link>
+                                <Link className="dropdown-item" to='/dashboard/orders'>Manage Orders</Link>
                             </div> 
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/mailingList">
+                            <Link className="nav-link" to="/dashboard/mailingList">
                                 Mailing List</Link>
                         </li>
                     </ul>

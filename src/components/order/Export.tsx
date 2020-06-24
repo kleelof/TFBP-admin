@@ -6,6 +6,7 @@ import OrderItem from '../../models/OrderItemModel';
 
 import './order.scss';
 import Order from '../../models/OrderModel';
+import helpers from '../../helpers/helpers';
 
 interface IState {
     pullDate: string,
@@ -22,7 +23,7 @@ export default class Export extends React.Component<any, IState> {
         pullType: "route",
         orders: []
     }
-    
+
     public componentDidMount = (): void => {
         /*
         orderItemService.getByDate('2020-06-16')
@@ -126,8 +127,6 @@ export default class Export extends React.Component<any, IState> {
 }
 
 function DeliveryTagsDisplay(props: any) {
-    const spicy: string[] = ['Not Spicy', 'Mild', 'Spicy'];
-
     return (
         <div className='delivery-tags-print'>
             {
@@ -145,12 +144,9 @@ function DeliveryTagsDisplay(props: any) {
                                 <div className="delivery-tag-items">
                                     {
                                         orderItems.map((orderItem: OrderItem) => {
-                                            let item: string = orderItem.cart_item.quantity.toString() + " " + orderItem.cart_item.menu_item.name;
-                                            if (orderItem.cart_item.protein !== "" && orderItem.cart_item.menu_item.proteins.split(':').length > 2) item += ` with ${orderItem.cart_item.protein}`
-                                            if (orderItem.cart_item.menu_item.spicy) item += `, ${spicy[orderItem.cart_item.spicy]}`
                                             return(
                                                 <div className="delivery-tag-item" key={`oi_${orderItem.id}`}> 
-                                                    {item}
+                                                    {orderItem.cart_item.quantity.toString() + " " + helpers.extractCartItemDescription(orderItem.cart_item)}
                                                 </div>
                                             )
                                         })

@@ -65,11 +65,14 @@ class App extends React.Component<Props, IState> {
     if (this.state.connecting)
       return <div>Connecting...</div>
 
+    if (!this.state.loggedIn)
+      return <Login />
+
     const PrivateRoute = ({component, ...rest}: any) => {
       const routeComponent = (props: any) => (
           this.props.auth.loggedIn || this.state.loggedIn
               ? React.createElement(component, props)
-              : <Redirect to={{pathname: '/login'}}/>
+              : <Redirect to={{pathname: '/dashboard/login'}}/>
       );
       return <Route {...rest} render={routeComponent}/>;
     };
@@ -82,14 +85,14 @@ class App extends React.Component<Props, IState> {
             }
             <br/>
             <Switch>
-              <PrivateRoute path="/menu" component={Menu} />
-              <PrivateRoute path="/deliveries" component={Deliveries} />
-              <PrivateRoute path="/delivery/edit/:id" component={DeliveryDay} />
-              <PrivateRoute path="/mailingList" component={MailingList} />
-              <PrivateRoute path="/orders/export" component={Export} />
-              <PrivateRoute path="/orders/edit/:id" component={EditOrder} />
-              <PrivateRoute path="/orders" component={Orders} />
-              <Route path="/login" component={Login} />
+              <PrivateRoute path="/dashboard/menu" component={Menu} />
+              <PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
+              <PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
+              <PrivateRoute path="/dashboard/mailingList" component={MailingList} />
+              <PrivateRoute path="/dashboard/orders/export" component={Export} />
+              <PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
+              <PrivateRoute path="/dashboard/orders" component={Orders} />
+              <Route path="/dashboard/login" component={Login} />
             </Switch>
           </div>
       </div>

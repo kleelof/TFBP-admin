@@ -64,9 +64,9 @@ class Login extends React.Component<Props, IState> {
             });
     }
 
-    public render() {console.log("login");
+    public render() {
         if (this.props.auth.loggedIn) 
-            return <Redirect to="/menu" />
+            return <Redirect to="/dashboard/menu" />
         
         return(
             <div className="row justify-content-center" id="login-panel">

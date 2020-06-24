@@ -55,7 +55,7 @@ export default class Orders extends React.Component<any, IState> {
             return <div>Loading...</div>
 
         if (this.state.editId > 0)
-            return <Redirect to={`/orders/edit/${this.state.editId}`} /> 
+            return <Redirect to={`/dashboard/orders/edit/${this.state.editId}`} /> 
 
         return(
             <div className="row orders">
