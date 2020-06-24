@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import MenuItem, { ItemModes } from './MenuItem';
 import {MenuItemDTO} from '../../models/MenuItemModel';
 import deliveryDayService from '../../services/DeliveryDayService';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
+import helpers, { OrderedItems } from '../../helpers/helpers';
 
 interface IProps { 
     mode: ItemsModes
@@ -15,7 +16,8 @@ interface IProps {
 interface IState {
     menuItems: MenuItemDTO[],
     selectedItemId: number,
-    deliveryDay: DeliveryDay
+    deliveryDay: DeliveryDay,
+    toggleState: {[key: string]: boolean}
 }
 
 export enum ItemsModes {
@@ -25,13 +27,27 @@ export enum ItemsModes {
 
 export default class MenuItems extends React.Component<IProps, IState> {
 
+    private categories: any = {
+        en: 'Entrees',
+        ap: 'Appetizers',
+        si: 'Sides',
+        de: 'Desserts'
+    }
+
     constructor(props: IProps) { 
         super(props);
         
         this.state = {
             menuItems: props.menuItems,
             selectedItemId: -1,
-            deliveryDay: props.deliveryDay || new DeliveryDay("")
+            deliveryDay: props.deliveryDay || new DeliveryDay(""),
+            toggleState: {
+                en: false,
+                ap: false,
+                si: false,
+                de: false,
+                add: false
+            }
         }
     }
 
@@ -63,6 +79,18 @@ export default class MenuItems extends React.Component<IProps, IState> {
             this.setState({selectedItemId: menuItemDTO.id});
         } 
     }
+
+    private toggleCategory = (category: string): void => {
+        let toggleState: any = {
+            en: false,
+            ap: false,
+            si: false,
+            de: false,
+            add: false
+        }; 
+        toggleState[category] = !this.state.toggleState[category];
+        this.setState({toggleState, selectedItemId: -1})
+    }
     
     public render() {
         if (this.props.menuItems.length === 0 && this.props.mode === ItemsModes.deliveryDay)
@@ -71,37 +99,64 @@ export default class MenuItems extends React.Component<IProps, IState> {
         const activeMenuItems: {[key: number]: any} = {};
         if (this.state.deliveryDay.day_items) this.state.deliveryDay.day_items.forEach((item: DeliveryDayItem) => activeMenuItems[item.menu_item.id as any] = item)
         
+        // sort into categories
+        const groupedMenuItems: OrderedItems = helpers.groupMenuItemsByCategory(this.state.menuItems)
         return(
             <div className="row">
                 <div className="col-12">
-                    {this.props.mode === ItemsModes.menu &&
-                        <MenuItem
-                            menuItem={new MenuItemDTO()}
-                            mode={ItemModes.add}
-                            itemAdded={this.itemAdded}
-                            deliveryDayItem={new DeliveryDayItem(this.state.deliveryDay, new MenuItemDTO(), false, 0)}
-                            />
-                    }
+                    <button className="btn toggle-category"
+                        onClick={() => this.toggleCategory('add')}>
+                            {this.state.toggleState['add'] ? '-' : '+'}
+                        </button>
+                    <span className="category-name">Add</span>
+                    <br/><br/>
+                    <div className={`row category-items-area toggle-state-${this.state.toggleState['add'].toString()}`}> 
+                        {this.props.mode === ItemsModes.menu &&
+                            <MenuItem
+                                menuItem={new MenuItemDTO()}
+                                mode={ItemModes.add}
+                                itemAdded={this.itemAdded}
+                                deliveryDayItem={new DeliveryDayItem(this.state.deliveryDay, new MenuItemDTO(), false, 0)}
+                                />
+                        }
+                    </div> 
                     {
-                        this.state.menuItems.map((menuItemDTO: MenuItemDTO) => {
-                            const mode: ItemModes = this.props.mode === ItemsModes.deliveryDay ?
-                                                        ItemModes.deliveryDay
-                                                        :
-                                                        this.state.selectedItemId === menuItemDTO.id ? 
-                                                            ItemModes.edit : ItemModes.view
-                            
-                            const deliveryDayItem: DeliveryDayItem = activeMenuItems[menuItemDTO.id] !== undefined ?
-                                                                        activeMenuItems[menuItemDTO.id]
-                                                                        :
-                                                                        new DeliveryDayItem(this.state.deliveryDay, menuItemDTO, false, 0)
+                        Object.keys(groupedMenuItems).map((key: string) => {
+                            return (
+                                <Fragment>
+                                    <button className="btn toggle-category"
+                                                onClick={() => this.toggleCategory(key)}>
+                                                    {this.state.toggleState[key] ? '-' : '+'}
+                                                </button>
+                                    <span className="category-name">{this.categories[key]} ({groupedMenuItems[key].length})</span>
+                                    <br/><br/>
+                                    <div className={`row category-items-area toggle-state-${this.state.toggleState[key].toString()}`}>
+                                        {
+                                            groupedMenuItems[key].map((menuItemDTO: MenuItemDTO) => {
+                                                const mode: ItemModes = this.props.mode === ItemsModes.deliveryDay ?
+                                                                            ItemModes.deliveryDay
+                                                                            :
+                                                                            this.state.selectedItemId === menuItemDTO.id ? 
+                                                                                ItemModes.edit : ItemModes.view
+                                                
+                                                const deliveryDayItem: DeliveryDayItem = activeMenuItems[menuItemDTO.id] !== undefined ?
+                                                                                            activeMenuItems[menuItemDTO.id]
+                                                                                            :
+                                                                                            new DeliveryDayItem(this.state.deliveryDay, menuItemDTO, false, 0)
+                    
+                                                return(
+                                                    <MenuItem
+                                                        key={`mi_${menuItemDTO.id}`}
+                                                        mode={mode}
+                                                        menuItem={menuItemDTO} 
+                                                        itemSelected={this.itemSelected}
+                                                        deliveryDayItem={deliveryDayItem}/> 
+                                                )
+                                            })
 
-                            return(
-                                <MenuItem
-                                    key={`mi_${menuItemDTO.id}`}
-                                    mode={mode}
-                                    menuItem={menuItemDTO} 
-                                    itemSelected={this.itemSelected}
-                                    deliveryDayItem={deliveryDayItem}/> 
+                                        }
+                                    </div>
+                                </Fragment>
                             )
                         })
                     }

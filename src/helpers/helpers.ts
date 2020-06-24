@@ -1,6 +1,8 @@
 import OrderItem from "../models/OrderItemModel";
 import DeliveryDayItem from "../models/DeliveryDayItemModel";
 import CartItem from "../models/CartItemModel";
+import MenuItem from "../models/MenuItemModel";
+import { group } from "console";
 
 export type OrderedItems = {[key: string]: any[]};
 
@@ -66,7 +68,28 @@ class Helpers {
             de: [],
         };
         items.forEach((item: DeliveryDayItem) => sortedItems[item.menu_item.category].push(item))
-        return [...sortedItems['en'], ...sortedItems['ap'], ...sortedItems['si'], ...sortedItems['de']] 
+        return [...sortedItems['en'], ...sortedItems['ap'], ...sortedItems['si'], ...sortedItems['de']];
+    }
+
+    public groupMenuItemsByCategory = (items: MenuItem[], sort: boolean = true): OrderedItems => {
+        let groupedItems: OrderedItems = {
+            en: [],
+            ap: [],
+            si: [],
+            de: [],
+        };
+        items.forEach((item: MenuItem) => groupedItems[item.category].push(item));
+
+        if (sort) {//TODO: Add sorting
+            groupedItems['en'].sort(this.compareMenuItemsByName)
+        }
+        return groupedItems;
+    }
+
+    private compareMenuItemsByName(ia: MenuItem, ib: MenuItem) {
+        if (ia.name < ib.name) return -1;
+        if (ib.name < ia.name) return 1;
+        return 0
     }
 }
 

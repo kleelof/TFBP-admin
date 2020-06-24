@@ -1,27 +1,21 @@
 
-.menu-item {
-    display: inline-block;
-    position: relative;
-    width: 95vw;
-    border: 2px solid rgba(0, 0, 0, .7);
-    padding-bottom: 5px;
-    font-size: 1.4em; 
+.category-name {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
-.menu-item textarea, .menu-item input {
+.menu-item {
+    border: 2px solid rgba(0, 0, 0, .7);
+    padding-bottom: 5px;
+}
+
+.menu-item textarea {
     resize: none;
-    font-size: 1.1em;
+    height: 100px;
 }
 
 .menu-item-unsaved-updates {
     border-color: yellow;
-}
-
-.menu-item .area {
-    display: inline-block;
-    width: 95%;
-    margin-left: 5px;
-    margin-top: 7px;
 }
 
 .menu-item .controls-area {
@@ -173,9 +167,10 @@
     margin-right: 5px;
 }
 
-@media (min-width: 576px) {
-  .menu-item {
-      width: 28%;
-      margin: 2vw;
-  }
-} 
+.toggle-state-false {
+    display: none;
+}
+
+.toggle-state-true {
+    display: block;
+}
