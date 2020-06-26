@@ -13,6 +13,7 @@ export default class Order extends ModelBase {
     public items!: OrderItem[];
     public order_status!: number;
     public notes!: string;
+    public public_id!: string;
 }
 
 export class OrderDTO extends ModelBase {

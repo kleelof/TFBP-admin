@@ -18,7 +18,7 @@ interface IState {
 export default class Export extends React.Component<any, IState> {
 
     state = {
-        pullDate: "2020-06-16",
+        pullDate: "",
         orderItems: [],
         pullType: "route",
         orders: []
@@ -73,7 +73,7 @@ export default class Export extends React.Component<any, IState> {
                     orders.forEach((order: Order) => {
                         orderItems = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === this.state.pullDate);
                         if (orderItems.length > 0) {
-                            fileContent += `${order.street_address}\t${order.unit}\t${order.city}\tCA\t${order.zip}\t${order.contact_name}\t${order.email}\t${order.phone_number}\t${order.id}\t${orderItems.length}\tLee\n`;
+                            fileContent += `${order.street_address}\t${order.unit}\t${order.city}\tCA\t${order.zip}\t${order.contact_name}\t${order.email}\t${order.phone_number}\t${order.public_id}\t${orderItems.length}\tLee\n`;
                         }
                     })
                     
@@ -208,6 +208,8 @@ function PrepDisplay(props: any) {
                         <td>Dish</td>
                         <td>Protein</td>
                         <td>Spicy</td>
+                        <td>Labels</td>
+                        <td>Packed</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -219,6 +221,8 @@ function PrepDisplay(props: any) {
                                     <td>{condensedList[key].dish}</td>
                                     <td>{condensedList[key].protein}</td>
                                     <td>{condensedList[key].spicy_text}</td>
+                                    <td></td>
+                                    <td></td>
                                 </tr> 
                             )
                         })

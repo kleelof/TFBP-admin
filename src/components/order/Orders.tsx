@@ -77,6 +77,7 @@ export default class Orders extends React.Component<any, IState> {
                                 <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Order ID</th>
                                         <th>Contact</th>
                                         <th>Date</th>
                                         <th>Delivery Dates</th>
@@ -103,6 +104,7 @@ export default class Orders extends React.Component<any, IState> {
                                                 <tr key={order.id} className={index % 2 ? '' : 'orders-line-highlight'}
                                                     onClick={()=> this.setState({editId: order.id})}>
                                                     <td>{order.contact_name}</td>
+                                                    <td>{order.public_id}</td>
                                                     <td>{order.email}<br/>{order.phone_number}</td>
                                                     <td>{helpers.formatDate(order.created_at)}</td>
                                                     <td>
