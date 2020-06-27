@@ -52,17 +52,22 @@ class Navigation extends React.Component<Props, IState> {
                                 Deliveries</Link>
                         </li>
                         <li className="nav-item dropdown">
-                            <button className="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button className="nav-link dropdown-toggle" id="orderDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Orders
                             </button>
-                            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div className="dropdown-menu" aria-labelledby="orderDropdown">
                                 <Link className="dropdown-item" to='/dashboard/orders/export'>Printouts and Router</Link>
                                 <Link className="dropdown-item" to='/dashboard/orders'>Manage Orders</Link>
                             </div> 
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/dashboard/mailingList">
-                                Mailing List</Link>
+                        <li className="nav-item dropdown">
+                            <button className="nav-link dropdown-toggle" id="emailDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Email
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="emailDropdown">
+                                <Link className="dropdown-item" to='/dashboard/mailingList'>Mailing List</Link>
+                                <Link className="dropdown-item" to='/dashboard/mailUtilities'>Mail Utilities</Link>
+                            </div>
                         </li>
                     </ul>
                 </div>

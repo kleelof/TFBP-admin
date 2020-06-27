@@ -17,11 +17,12 @@ import Navigation from './components/nav/Navigation';
 import Deliveries from './components/delivery/Deliveries';
 import DeliveryDay from './components/delivery/DeliveryDayComponent';
 import Menu from './components/menu/Menu';
-import MailingList from './components/mailing_list/MailingList';
+import MailingList from './components/mail/MailingList';
 import Login from './components/authentication/Login';
 import Orders from './components/order/Orders';
 import Export from './components/order/Export';
 import EditOrder from './components/order/EditOrder';
+import MailUtilities from './components/mail/MailUtilities';
 
 interface LinkStateProps {
   auth: AuthState
@@ -89,6 +90,7 @@ class App extends React.Component<Props, IState> {
               <PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
               <PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
               <PrivateRoute path="/dashboard/mailingList" component={MailingList} />
+              <PrivateRoute path="/dashboard/mailUtilities" component={MailUtilities} />
               <PrivateRoute path="/dashboard/orders/export" component={Export} />
               <PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
               <PrivateRoute path="/dashboard/orders" component={Orders} />

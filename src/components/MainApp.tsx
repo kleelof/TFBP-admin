@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Menu from './menu/Menu';
 import Deliveries from './delivery/Deliveries';
 import DeliveryDay from '../models/DeliveryDayModel';
-import MailingList from './mailing_list/MailingList';
+import MailingList from './mail/MailingList';
 import Login from './authentication/Login';
 
 export default class MainApp extends React.Component<any, any> {

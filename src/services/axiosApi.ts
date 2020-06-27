@@ -3,7 +3,7 @@ import { config } from '../config';
 
 const axiosInstance = axios.create({
     baseURL: config.API_URL,
-    timeout: 5000,
+    timeout: 10000,
     headers: {
         'Authorization': "JWT " + window.localStorage.getItem('access_token'),
         'Content-Type': 'application/json',
