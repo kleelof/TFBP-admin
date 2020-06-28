@@ -104,26 +104,30 @@ export default class MenuItems extends React.Component<IProps, IState> {
         return(
             <div className="row">
                 <div className="col-12">
-                    <button className="btn toggle-category"
-                        onClick={() => this.toggleCategory('add')}>
-                            {this.state.toggleState['add'] ? '-' : '+'}
-                        </button>
-                    <span className="category-name">Add</span>
-                    <br/><br/>
-                    <div className={`row category-items-area toggle-state-${this.state.toggleState['add'].toString()}`}> 
-                        {this.props.mode === ItemsModes.menu &&
-                            <MenuItem
-                                menuItem={new MenuItemDTO()}
-                                mode={ItemModes.add}
-                                itemAdded={this.itemAdded}
-                                deliveryDayItem={new DeliveryDayItem(this.state.deliveryDay, new MenuItemDTO(), false, 0)}
-                                />
-                        }
-                    </div> 
+                    {this.props.mode === ItemsModes.menu && 
+                        <Fragment>
+                            <button className="btn toggle-category"
+                                onClick={() => this.toggleCategory('add')}>
+                                    {this.state.toggleState['add'] ? '-' : '+'}
+                                </button>
+                            <span className="category-name">Add</span>
+                            <br/><br/>
+                            <div className={`row category-items-area toggle-state-${this.state.toggleState['add'].toString()}`}> 
+                                {this.props.mode === ItemsModes.menu &&
+                                    <MenuItem
+                                        menuItem={new MenuItemDTO()}
+                                        mode={ItemModes.add}
+                                        itemAdded={this.itemAdded}
+                                        deliveryDayItem={new DeliveryDayItem(this.state.deliveryDay, new MenuItemDTO(), false, 0)}
+                                        />
+                                }
+                            </div> 
+                        </Fragment>
+                    }
                     {
                         Object.keys(groupedMenuItems).map((key: string) => {
                             return (
-                                <Fragment>
+                                <Fragment key={key}>
                                     <button className="btn toggle-category"
                                                 onClick={() => this.toggleCategory(key)}>
                                                     {this.state.toggleState[key] ? '-' : '+'}

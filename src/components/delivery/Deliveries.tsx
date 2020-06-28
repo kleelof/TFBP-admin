@@ -41,10 +41,6 @@ export default class Deliveries extends React.Component<any, IState> {
             .catch( err => window.alert("Unable to create week"))
     }
 
-    private deleteDeliveryDay = (deliveryDay: DeliveryDay): void => {
-         
-    }
-
     private duplicateDeliveryDay = (deliveryDay: DeliveryDay): void => {
         if (this.state.newDate === ""){
             window.alert("Selecte a date to duplicate to.");
@@ -77,7 +73,6 @@ export default class Deliveries extends React.Component<any, IState> {
         deliveries.sort((a,b) => (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0));
 
         return(
-            
             <div className="row weeks">
                 <div className="col-12">
                     <h5>Add A Delivery Day:</h5>
@@ -96,11 +91,10 @@ export default class Deliveries extends React.Component<any, IState> {
                 </div>
                 <div className="col-12">
                     {
-                        
                         deliveries.map((deliveryDay: DeliveryDay) => 
                             <div className="row deliveries-day" key={`week_${deliveryDay.id}`}>
                                 <div className="col-4">
-                                    {deliveryDay.date}
+                                    {helpers.formatDate(deliveryDay.date)}
                                 </div>
                                 <div className="col-8">
                                     <button
