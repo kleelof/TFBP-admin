@@ -66,7 +66,7 @@ class App extends React.Component<Props, IState> {
     if (this.state.connecting)
       return <div>Connecting...</div>
 
-    if (!this.state.loggedIn)
+    if (!this.props.auth.loggedIn)
       return <Login />
 
     const PrivateRoute = ({component, ...rest}: any) => {

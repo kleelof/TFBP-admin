@@ -26,21 +26,15 @@ type Props = LinkStateProps & LinkDispatchProps
 interface IState {
     email: string,
     password: string,
-    loggingIn: boolean,
-    loggedIn: boolean
+    loggingIn: boolean
 }
 
 class Login extends React.Component<Props, IState> {
 
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            email: "",
-            password: "",
-            loggingIn: false,
-            loggedIn: false
-        }
+    state = {
+        email: "",
+        password: "",
+        loggingIn: false
     }
 
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -54,9 +48,7 @@ class Login extends React.Component<Props, IState> {
 
         authService.authenticate(this.state.email, this.state.password)
             .then( (dto: AuthenticateDTO) => {
-                console.log(dto.user);
                 this.props.login(dto.user);
-                this.setState({loggedIn: true});
             })
             .catch((err: any) => {
                 console.log(err);
@@ -66,7 +58,7 @@ class Login extends React.Component<Props, IState> {
 
     public render() {
         if (this.props.auth.loggedIn) 
-            return <Redirect to="/dashboard/menu" />
+            return <Redirect to="/dashboard/asfd" />
         
         return(
             <div className="row justify-content-center" id="login-panel">
