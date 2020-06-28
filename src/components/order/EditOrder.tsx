@@ -53,11 +53,11 @@ export default class EditOrder extends React.Component<any, IState> {
         return (
             <div className="row edit-order">
                 <div className="col-12">
-                    <Link to={'/orders'}>{`<<< Return to Orders`}</Link>
+                    <Link to={'/dashboard/orders'}>{`<<< Return to Orders`}</Link>
                     <br/><br/>
                 </div>
                 <div className="col-12">
-                    <h5>Order ID: {this.state.order.id}</h5>
+                    <h5>Order ID: {this.state.order.public_id}</h5>
                     <select id="order_status" defaultValue={this.state.order.order_status}
                             className={`order-status-${this.state.order.order_status}`}
                             onChange={this.updateData} disabled={this.state.updating}>

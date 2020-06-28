@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Navigation from './nav/Navigation';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Menu from './menu/Menu';
