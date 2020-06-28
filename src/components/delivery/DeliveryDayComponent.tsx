@@ -5,24 +5,26 @@ import {MenuItemDTO} from '../../models/MenuItemModel';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import MenuItem from '../../models/MenuItemModel';
 import menuItemService from '../../services/AdminMenuItemService';
+import deliveryWindowService from '../../services/DeliveryWindowService';
 import deliveryDayService from '../../services/DeliveryDayService';
+import helpers from '../../helpers/helpers';
+import DeliveryWindow from '../../models/DeliveryWindowModel';
+import DeliveryWindows from '../delivery_windows/DeliveryWindows';
 
 interface IState {
     loading: boolean,   //TODO: FINISH ADDING LOAD ALL MENU ITEMS, have MenuItems confirm if 
     menuItems: MenuItemDTO[],
-    deliveryDay: DeliveryDay
+    deliveryDay: DeliveryDay,
+    deliveryWindows: DeliveryWindow[]
 }
 
 export default class DeliveryDayComponent extends React.Component<any, IState> {
 
-    constructor(props: any) {
-        super(props);
-
-        this.state ={
-            loading: true,
-            menuItems: [],
-            deliveryDay: new DeliveryDay("")
-        }
+    state ={
+        loading: true,
+        menuItems: [],
+        deliveryDay: new DeliveryDay(""),
+        deliveryWindows: []
     }
 
     public componentDidMount = (): void => {
@@ -30,10 +32,11 @@ export default class DeliveryDayComponent extends React.Component<any, IState> {
 
         const deliveryDay: Promise<DeliveryDay> = deliveryDayService.get<DeliveryDay>(params.id);
         const menuItems: Promise<MenuItem[]> = menuItemService.get<MenuItem[]>();
+        const deliveryWindows: Promise<DeliveryWindow[]> = deliveryWindowService.get<DeliveryWindow[]>();
 
-        Promise.all([deliveryDay, menuItems])
+        Promise.all([deliveryDay, menuItems, deliveryWindows])
             .then((values: any) => {
-                this.setState({deliveryDay: values[0], menuItems: values[1], loading: false})
+                this.setState({deliveryDay: values[0], menuItems: values[1], deliveryWindows: values[2], loading: false})
             })
             .catch( err => window.alert("Unable to load week"))
     }
@@ -45,11 +48,17 @@ export default class DeliveryDayComponent extends React.Component<any, IState> {
         return(
             <div className="row">
                 <div className="col-12">
-                    <h3>Menu for {this.state.deliveryDay.date}</h3>
+                    <h3>{helpers.formatDate(this.state.deliveryDay.date)}</h3>
+                    <hr/>
+                </div>
+                <div className="col-2">
+                    <DeliveryWindows deliveryDay={this.state.deliveryDay} deliveryWindows={this.state.deliveryWindows} />
+                </div>
+                <div className="col-10 mt-3">
                     <MenuItems
                         menuItems={this.state.menuItems}
                         deliveryDay={this.state.deliveryDay} 
-                        mode={ItemsModes.deliveryDay} /> 
+                        mode={ItemsModes.deliveryDay} />
                 </div>
             </div>
         )

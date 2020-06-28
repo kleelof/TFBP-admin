@@ -49,7 +49,7 @@ class Navigation extends React.Component<Props, IState> {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/dashboard/deliveries">
-                                Deliveries</Link>
+                                Delivery Days</Link>
                         </li>
                         <li className="nav-item dropdown">
                             <button className="nav-link dropdown-toggle" id="orderDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
