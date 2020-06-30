@@ -4,13 +4,14 @@ import Order, { OrderDTO } from '../../models/OrderModel';
 import orderService from '../../services/OrderService';
 import OrderItem from '../../models/OrderItemModel';
 import helpers, {OrderedItems} from '../../helpers/helpers';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 interface IState {
     loading: boolean,
     order: Order,
     updating: boolean,
-    updatesPending: boolean
+    updatesPending: boolean,
+    returnToOrders: boolean
 }
 
 export default class EditOrder extends React.Component<any, IState> {
@@ -19,7 +20,8 @@ export default class EditOrder extends React.Component<any, IState> {
         loading: true,
         order: new Order(),
         updating: false,
-        updatesPending: false
+        updatesPending: false,
+        returnToOrders: false
     }
 
     public componentDidMount = (): void => {
@@ -34,7 +36,7 @@ export default class EditOrder extends React.Component<any, IState> {
         this.setState({updating: true});
 
         orderService.update<any>(this.state.order.id, new OrderDTO(this.state.order))
-            .then((order: Order) => this.setState({order, updating: false, updatesPending: false}))
+            .then((order: Order) => this.setState({order, updating: false, updatesPending: false, returnToOrders: true}))
             .catch ( err => window.alert(err))
     }
 
@@ -47,6 +49,9 @@ export default class EditOrder extends React.Component<any, IState> {
     public render() {
         if (this.state.loading)
             return <div>Loading...</div>
+
+        if (this.state.returnToOrders)
+            return <Redirect to="/dashboard/orders" />
 
         const orderedItems: OrderedItems = helpers.sortOrderItemsByDate(this.state.order.items);
 
