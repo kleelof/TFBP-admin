@@ -47,7 +47,7 @@ export default class Export extends React.Component<any, IState> {
     }
 
     private loadOrderItems = (): void => {
-        orderItemService.getByDate<OrderItem[]>(this.state.pullDate)
+        orderItemService.getCompleted(this.state.pullDate)
             .then((orderItems: OrderItem[]) => {
                 if (orderItems.length === 0) {
                     window.alert('There are not items for this day');
