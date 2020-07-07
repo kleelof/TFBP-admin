@@ -14,6 +14,7 @@ export default class Order extends ModelBase {
     public order_status!: number;
     public notes!: string;
     public public_id!: string;
+    public square_payment!: {};
 }
 
 export class OrderDTO extends ModelBase {

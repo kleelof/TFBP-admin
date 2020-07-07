@@ -208,8 +208,8 @@ function PrepDisplay(props: any) {
                         <td>Dish</td>
                         <td>Protein</td>
                         <td>Spicy</td>
-                        <td>Labels</td>
-                        <td>Packed</td>
+                        <td>L</td>
+                        <td>P</td>
                     </tr>
                 </thead>
                 <tbody>
