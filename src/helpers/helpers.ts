@@ -26,7 +26,7 @@ class Helpers {
     */
    public extractCartItemDescription = (cartItem: CartItem): string => {
         let description: string = cartItem.menu_item.name;
-        description += cartItem.protein === null || cartItem.protein === "" ?
+        description += cartItem.protein === null || cartItem.protein === "" || cartItem.menu_item.proteins.split(':').length < 2 ?
                     "" : 
                     cartItem.protein === 'vekan' ?
                     ' vegan' : ` with ${this.proteins[cartItem.protein]}`

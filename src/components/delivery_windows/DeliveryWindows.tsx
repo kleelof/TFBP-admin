@@ -23,6 +23,7 @@ export default class DeliveryWindows extends React.Component<IProps, IState> {
         let selectedDeliveryWindows: DeliveryWindow[] = [];
         let availableDeliveryWindows: DeliveryWindow[] = [];
 
+        // divide delivery windows into selected and available
         props.deliveryWindows.forEach((deliveryWindow: DeliveryWindow) => {
             if (props.deliveryDay.delivery_windows.indexOf(deliveryWindow.id) > -1) {
                 selectedDeliveryWindows.push(deliveryWindow);
@@ -42,11 +43,13 @@ export default class DeliveryWindows extends React.Component<IProps, IState> {
         let selectedDeliveryWindows: DeliveryWindow[] = this.state.selectedDeliveryWindows;
 
         if (this.state.availableDeliveryWindows.indexOf(deliveryWindow) > -1) {
-            availableDeliveryWindows = availableDeliveryWindows.filter((window: DeliveryWindow) => window.id !== deliveryWindow.id)
+            availableDeliveryWindows = availableDeliveryWindows.filter((window: DeliveryWindow) => 
+                window.id !== deliveryWindow.id)
             selectedDeliveryWindows.push(deliveryWindow);
             deliveryDayService.attachDeliveryWindow(this.props.deliveryDay, deliveryWindow);
         } else {
-            selectedDeliveryWindows = selectedDeliveryWindows.filter((window: DeliveryWindow) => window.id !== deliveryWindow.id)
+            selectedDeliveryWindows = selectedDeliveryWindows.filter((window: DeliveryWindow) => 
+                window.id !== deliveryWindow.id)
             availableDeliveryWindows.push(deliveryWindow);
             deliveryDayService.detachDeliveryWindow(this.props.deliveryDay, deliveryWindow);
         } 
