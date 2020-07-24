@@ -67,7 +67,7 @@ class Helpers {
             si: [],
             de: [],
         };
-        items.forEach((item: DeliveryDayItem) => sortedItems[item.menu_item.category].push(item))
+        if (items) items.forEach((item: DeliveryDayItem) => sortedItems[item.menu_item.category].push(item))
         return [...sortedItems['en'], ...sortedItems['ap'], ...sortedItems['si'], ...sortedItems['de']];
     }
 
