@@ -1,0 +1,13 @@
+.coupons table {
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+.coupons .row-highlight {
+    background-color: rgba(0,0,0,.3);
+}
+
+.coupons tr:hover {
+    background-color: rgba(51, 206, 46, 0.7);
+    cursor: pointer;
+}

@@ -24,12 +24,14 @@ export default class DeliveryWindows extends React.Component<IProps, IState> {
         let availableDeliveryWindows: DeliveryWindow[] = [];
 
         // divide delivery windows into selected and available
-        props.deliveryWindows.forEach((deliveryWindow: DeliveryWindow) => {
+        /*
+        props.deliveryWindows.forEach((deliveryWindow: DeliveryWindow) => {console.log(props.deliveryDay);
             if (props.deliveryDay.delivery_windows.indexOf(deliveryWindow.id) > -1) {
                 selectedDeliveryWindows.push(deliveryWindow);
             } else
                 availableDeliveryWindows.push(deliveryWindow);
         })
+        */
 
         this.state = {
             selectedDeliveryWindows,
