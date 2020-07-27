@@ -1,7 +1,7 @@
 import Service from './Service';
 
 class MailingListService extends Service {
-    appName = 'app';
+    appName = 'operator_app';
     view='mailing_list'
 }
 

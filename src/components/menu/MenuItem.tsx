@@ -2,7 +2,7 @@ import React from 'react';
 
 import './menu.css';
 import {MenuItemDTO} from '../../models/MenuItemModel';
-import menuItemService from '../../services/AdminMenuItemService';
+import menuItemService from '../../services/MenuItemService';
 import ImageUploader from '../widgets/imageUploader/ImageUploader';
 
 import {config} from '../../config';

@@ -4,7 +4,7 @@ import MenuItems, { ItemsModes } from '../menu/MenuItems';
 import {MenuItemDTO} from '../../models/MenuItemModel';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import MenuItem from '../../models/MenuItemModel';
-import menuItemService from '../../services/AdminMenuItemService';
+import menuItemService from '../../services/MenuItemService';
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import deliveryDayService from '../../services/DeliveryDayService';
 import helpers from '../../helpers/helpers';
