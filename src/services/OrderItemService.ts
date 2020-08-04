@@ -3,7 +3,7 @@ import OrderItem from '../models/OrderItemModel';
 
 class OrderItemService extends Service{
 
-    appName = 'admin_app';
+    appName = 'operator_app';
     view = 'order_item';
 
     public getCompleted = (date: string): Promise<OrderItem[]> => {

@@ -4,6 +4,8 @@ import OrderItem from "./OrderItemModel";
 
 export default class Order extends ModelBase {
 
+    public order_status!: number;
+    public square_payment!: string;
     public contact_name!: string;
     public phone_number!: string;
     public email!: string;

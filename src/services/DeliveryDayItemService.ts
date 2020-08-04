@@ -1,7 +1,7 @@
 import Service from './Service';
 
 class DeliveryDayItemService extends Service {
-    appName = "admin_app";
+    appName = "operator_app";
     view = "delivery_day_item";
 }
 
