@@ -4,12 +4,14 @@ import { actions } from "../store";
 
 export interface AuthState {
     loggedIn: boolean
-    user: User
+    user: User,
+    operator_token: string
 }
 
 const defaultState: AuthState = {
     loggedIn: false,
-    user: new User()
+    user: new User(),
+    operator_token: ''
 }
 
 const authReducer = (
@@ -19,6 +21,7 @@ const authReducer = (
     switch(action.type) {
         case actions.LOGIN:
             state.user = action.user
+            state.operator_token = action.operator_token
             state.loggedIn = true;
             return {...state};
     

@@ -12,10 +12,15 @@ class AuthService extends Service {
         
         return new Promise<AuthenticateDTO>((resolve, reject) => {
             this._post(`${this.viewPath}/authenticate/`, {email, password})
-            .then( (resp: any) => {
-                window.localStorage.setItem('access_token', resp.access);
-                window.localStorage.setItem('refresh_token', resp.refresh);
-                resolve(resp);
+            .then( (resp: any) => {console.log(resp);
+                if (resp.operator_token !== null) {
+                    window.localStorage.setItem('access_token', resp.access);
+                    window.localStorage.setItem('refresh_token', resp.refresh);
+                    window.localStorage.setItem('operator_token', resp.operator_token)
+                    resolve(resp);
+                } else {
+                    reject (resp);
+                }
             })
             .catch( (resp: any) => reject(resp))
         })

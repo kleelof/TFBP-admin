@@ -18,7 +18,7 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
-    login: (user: User) => void
+    login: (user: User, operator_token: string) => void
 }
 
 type Props = LinkStateProps & LinkDispatchProps
@@ -48,10 +48,9 @@ class Login extends React.Component<Props, IState> {
 
         authService.authenticate(this.state.email, this.state.password)
             .then( (dto: AuthenticateDTO) => {
-                this.props.login(dto.user);
+                this.props.login(dto.user, dto.operator_token);
             })
             .catch((err: any) => {
-                console.log(err);
                 window.alert("Invalid Credentials");
             });
     }

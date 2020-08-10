@@ -2,11 +2,11 @@ import { actions } from '../store';
 import { Dispatch } from 'react';
 import User from '../../models/UserModel';
 
-interface Login { type: typeof actions.LOGIN, user: User };
-export const login = (user: User): AuthActionTypes => ({ type: actions.LOGIN, user });
-export const dispatchLogin = (user: User) => {
+interface Login { type: typeof actions.LOGIN, user: User, operator_token: string };
+export const login = (user: User, operator_token: string): AuthActionTypes => ({ type: actions.LOGIN, user, operator_token });
+export const dispatchLogin = (user: User, operator_token: string) => {
     return(dispatch: Dispatch<AuthActionTypes>) => {
-        dispatch(login(user));
+        dispatch(login(user, operator_token));
     }
 }
 

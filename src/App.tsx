@@ -30,12 +30,12 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
-  login: (user: User) => void
+  login: (user: User, operator_token: string) => void
 }
 
 type Props = LinkStateProps & LinkDispatchProps;
 
-interface IState {
+interface IState { 
   connecting: boolean,
   loggedIn: boolean // temporary flag while auth login is completed
 }
@@ -47,18 +47,18 @@ class App extends React.Component<Props, IState> {
     loggedIn: false
   }
 
-  public componentDidMount = () => { 
+  public componentDidMount = () => {
     const refresh_token: string | null = window.localStorage.getItem('refresh_token');
     if(refresh_token !== null) {
         authService.validateToken(refresh_token)
               .then((user: User) => {
                 this.setState({connecting: false, loggedIn: true});
-                this.props.login(user);
+                this.props.login(user, "");
               })
               .catch((err: any) => {
                 this.setState({connecting: false, loggedIn: false});
               })
-    } else { console.log("unable to login")
+    } else {
         this.setState({connecting: false, loggedIn: false});
     }
   }
@@ -80,29 +80,37 @@ class App extends React.Component<Props, IState> {
     };
     
     return (
-      <div className="container-fluid">
-          <div className="col-12">
-            {this.props.auth.loggedIn &&
-              <Navigation/>
-            }
-            <br/>
-            <Switch>
-              <PrivateRoute path="/dashboard/menu" component={Menu} />
-              <PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
-              <PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
-              <PrivateRoute path="/dashboard/mailingList" component={MailingList} />
-              <PrivateRoute path="/dashboard/mailUtilities" component={MailUtilities} />
-              <PrivateRoute path="/dashboard/orders/export" component={Export} />
-              <PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
-              <PrivateRoute path="/dashboard/orders" component={Orders} />
-              <PrivateRoute path="/dashboard/coupons" component={Coupons} />
-              <Route path="/dashboard/login" component={Login} />
-            </Switch>
-          </div>
-      </div>
+		<div className="container-fluid">
+			
+			{this.props.auth.loggedIn &&
+				<div className="row">
+					<div className="col-12">
+						<Navigation/>
+					</div>
+				</div>
+			}
+			<div className="row app-page">
+				<div className="col-12">
+					<br/>
+					<Switch>
+					<PrivateRoute path="/dashboard/menu" component={Menu} />
+					<PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
+					<PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
+					<PrivateRoute path="/dashboard/mailingList" component={MailingList} />
+					<PrivateRoute path="/dashboard/mailUtilities" component={MailUtilities} />
+					<PrivateRoute path="/dashboard/orders/export" component={Export} />
+					<PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
+					<PrivateRoute path="/dashboard/orders" component={Orders} />
+					<PrivateRoute path="/dashboard/coupons" component={Coupons} />
+					<Route path="/dashboard/login" component={Login} />
+					</Switch>
+				</div>
+			</div>
+		</div>
     );
   }
 }
+
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({auth: state.authReducer});
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({

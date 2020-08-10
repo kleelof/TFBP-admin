@@ -1,6 +1,6 @@
 const dev = {
     API_URL: "http://localhost:8000",
-    OPERATOR_TOKEN: 'd7cf3b9fec034a35b7823f5287ff38ad'
+    OPERATOR_TOKEN: '8efedf49-db0e-4afe-9a96-2989fe599220'
 }
 
 const prod = {
