@@ -1,7 +1,7 @@
 import Service from './Service';
 
 class CouponService extends Service {
-    appName = "admin_app";
+    appName = "operator_app";
     view = "coupon";
 }
 

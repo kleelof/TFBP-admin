@@ -1,7 +1,7 @@
 import Service from './Service';
 
 class DeliveryWindowService extends Service {
-    appName = 'admin_app';
+    appName = 'operator_app';
     view = 'delivery_window'
 }
 

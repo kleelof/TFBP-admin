@@ -2,6 +2,9 @@ import React, { Fragment } from 'react';
 import {MenuItemDTO} from '../../models/MenuItemModel'; 
 import menuItemService from '../../services/MenuItemService';
 import MenuItems, { ItemsModes } from './MenuItems';
+import LoadingOverlay from '../overlays/LoadingOverlay';
+import MenuNavigation from './MenuNavigation';
+import { Switch, Route } from 'react-router-dom';
 
 interface IState {
     menuItems: MenuItemDTO[],
@@ -32,24 +35,19 @@ export default class Menu extends React.Component<any, IState> {
     public render() {
 
         if (!this.state.loaded)
-            return <div>Loading...</div>
+            return <LoadingOverlay />
 
         return(
-            <Fragment>
-                <div className="row mt-4">
-                    <div className="col-12">
-                        <h3>Menu Items</h3>
-                        <hr/>
-                    </div>
+            <div className="row">
+                <div className="col-12">
+                    <MenuNavigation />
                 </div>
-                <div className="row mt-4">
-                    <div className="col-12">
-                        <MenuItems
-                            menuItems={this.state.menuItems}
-                            mode={ItemsModes.menu}/>
-                    </div>
+                <div className="col-12">
+                    <Switch>
+                        <Route path=""
+                    </Switch>
                 </div>
-            </Fragment>
+            </div>
         )
     }
 }

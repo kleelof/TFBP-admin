@@ -6,5 +6,6 @@ export default class AuthenticateDTO {
     public access!: string;
     public id!: number;
     public email!: string;
-    public user!: User
+    public user!: User;
+    public operator_token!: string
 }

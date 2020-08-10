@@ -1,0 +1,112 @@
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .7);
+    text-align: center;
+}
+
+.loading-overlay img {
+    height: 60px;
+    width: 60px;
+    margin: auto;
+    //top: 50%;
+    //left: 50%;
+    //transform: translate(-50%, -50%);
+}
+
+.overlay {
+    position: fixed;
+    //display: block;
+    justify-content: center;
+    //align-items: center;
+    top: 0;
+    bottom: 0;
+    //right: 0;
+    left: 0;
+    height: 100%;
+    //width: 100vw;
+    overflow: hidden;
+    background-color:rgba(255, 255, 255, 1);
+    z-index: 100;
+}
+
+.overlay-inner {
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 1);
+    //margin: auto;
+    //height: 100%;
+    overflow: hidden;
+}
+
+.overlay-component {
+    position: relative;
+    display: block;
+    overflow-y: auto;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: hidden;
+}
+
+.overlay-close {
+    display: inline;
+    padding: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-size: 1.2em;
+    background-color: rgba(247, 7, 7, 0.7);
+    color: rgba(255, 255, 255, .9);
+    border-radius: 5px;
+ }
+
+ .overlay-close:hover {
+    background-color: rgba(247, 7, 7, 0.9);
+    cursor: pointer;
+ }
+
+@media(min-width: 576px) {
+    .overlay {
+        position: fixed;
+        display: block;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+        background-color:rgba(0, 0, 0, .5);
+        z-index: 100;
+    }
+
+    .overlay-inner {
+        position: relative;
+        display: block;
+        top: 25px;
+        min-height: 30vh;
+        max-height: 95vh;
+        //width: 100%;
+        max-width: 50vw;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 1);
+        margin: auto;
+        //height: 100vh;
+        overflow: hidden;
+    }
+
+    .overlay-component {
+        position: relative;
+        display: block;
+        overflow-y: auto;
+        height: 100vh;
+        max-height: 100vh;
+        overflow-y: hidden;
+    }
+}
