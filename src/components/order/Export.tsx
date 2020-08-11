@@ -8,14 +8,14 @@ import './order.scss';
 import Order from '../../models/OrderModel';
 import helpers from '../../helpers/helpers';
 
-interface IState {
+interface State {
     pullDate: string,
     orderItems: OrderItem[],
     pullType: string,
     orders: Order[]
 }
 
-export default class Export extends React.Component<any, IState> {
+export default class Export extends React.Component<any, State> {
 
     state = {
         pullDate: "",
@@ -92,7 +92,7 @@ export default class Export extends React.Component<any, IState> {
     private updateData = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         this.setState({
             [e.target.id]: e.target.value as any,
-         }  as Pick<IState, keyof IState>);
+         }  as Pick<State, keyof State>);
     }
 
     public render() {

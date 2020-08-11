@@ -5,19 +5,19 @@ import deliveryDayService from '../../services/DeliveryDayService';
 
 import './delivery_windows.scss';
 
-interface IProps {
+interface Props {
     deliveryDay: DeliveryDay,
     deliveryWindows: DeliveryWindow[]
 }
 
-interface IState {
+interface State {
     selectedDeliveryWindows: DeliveryWindow[],
     availableDeliveryWindows: DeliveryWindow[]
 }
 
-export default class DeliveryWindows extends React.Component<IProps, IState> {
+export default class DeliveryWindows extends React.Component<Props, State> {
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
 
         let selectedDeliveryWindows: DeliveryWindow[] = [];

@@ -14,7 +14,7 @@
 
 import React, {Component} from 'react';
 
-interface IProps {
+interface Props {
     id: string,
     type: string,
     onUpdate: any,
@@ -24,18 +24,18 @@ interface IProps {
     defaultUpdateValue?: any
 }
 
-interface IState {
+interface State {
     value: string
 }
 
 //todo: get type='number' to work
 
-export default class InputWidget extends Component<IProps, IState> {
+export default class InputWidget extends Component<Props, State> {
     
     private timer: any;
     private lastSavedValue: string | null = null;
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -45,7 +45,7 @@ export default class InputWidget extends Component<IProps, IState> {
         this.lastSavedValue = props.initialValue;
     };
 
-    public componentWillReceiveProps = (props: IProps) => {
+    public componentWillReceiveProps = (props: Props) => {
         if (props.initialValue !== this.props.initialValue) {
             this.setState({value: props.initialValue});
             this.lastSavedValue = props.initialValue

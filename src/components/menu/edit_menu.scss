@@ -1,0 +1,102 @@
+.menuedititem {
+}
+
+.menuedititem textarea {
+    resize: none;
+    height: 100px;
+}
+
+.menuedititem__unsaved_updates {
+    border-color: yellow;
+}
+
+.menuedititem__controls_area {
+    height: 40px;
+}
+
+.menuedititem__header {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.menuedititem__header span {
+    color: rgba(255, 255, 255, .7);
+    cursor: pointer;
+}
+
+.menuedititem__header span:hover {
+    color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+}
+
+.menuedititem__header .menuedititem__header-add {
+    background-color: rgb(53, 163, 163);
+}
+
+.menuedititem__header .menuedititem__header-edit {
+    background-color: green;
+}
+
+.menuedititem__header .menuedititem__header-view {
+    background-color: blue;
+}
+
+.menuedititem__header .menuedititem__header-view-deactivated {
+    background-color: red;
+}
+
+.menuedititem__header .menuedititem__header-edit a{
+    text-decoration: none;
+    color: rgba(255, 255, 255, .7);
+    margin: 0, 3px;
+}
+
+.menuedititem__header .menuedititem__header-edit a:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.menuedititem__imagearea {
+    display: block;
+    width: 97%;
+    height: 200px;
+    border: 2px solid rgba(0, 0, 0, .7);
+}
+
+.menuedititem__overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, .5);
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.menuedititem__checker {
+    display: inline-block;
+    margin: 5px 11px;
+    
+}
+
+.menuedititem__checker input {
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    transform: scale(2);
+    padding: 10px;
+    margin: 0 7px;
+}
+
+.menuedititem__checker-week {
+    display: inline;
+    margin: 0 7px;
+}
+
+.new_menu_item__add_link {
+    font-weight: bold;
+}
+
+.new_menu_item__add_link:hover {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 1);
+}

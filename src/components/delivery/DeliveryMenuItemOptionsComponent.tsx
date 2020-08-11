@@ -2,19 +2,19 @@ import React from 'react';
 import deliveryDayItemService from '../../services/DeliveryDayItemService';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 
-interface IProps {
+interface Props {
     deliveryDayItem: DeliveryDayItem
 }
 
-interface IState {
+interface State {
     deliveryDayItem: DeliveryDayItem,
     saving: boolean,
     active: boolean
 }
 
-export default class DeliveryMenuItemOptions extends React.Component<IProps, IState> {
+export default class DeliveryMenuItemOptions extends React.Component<Props, State> {
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             deliveryDayItem: props.deliveryDayItem,

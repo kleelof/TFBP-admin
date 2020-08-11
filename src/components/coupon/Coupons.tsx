@@ -5,12 +5,12 @@ import couponService from '../../services/CouponService';
 
 import './coupon.scss';
 
-interface IState {
+interface State {
     loading: boolean,
     coupons: Coupon[]
 }
 
-export default class Coupons extends React.Component<any, IState> {
+export default class Coupons extends React.Component<any, State> {
 
     state = {
         loading: true,

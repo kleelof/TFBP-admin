@@ -23,13 +23,13 @@ interface LinkDispatchProps {
 
 type Props = LinkStateProps & LinkDispatchProps
 
-interface IState {
+interface State {
     email: string,
     password: string,
     loggingIn: boolean
 }
 
-class Login extends React.Component<Props, IState> {
+class Login extends React.Component<Props, State> {
 
     state = {
         email: "",
@@ -40,7 +40,7 @@ class Login extends React.Component<Props, IState> {
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             [e.target.id]: e.target.value as any,
-         }  as Pick<IState, keyof IState>);
+         }  as Pick<State, keyof State>);
     }
 
     private login = (): void => {
@@ -57,7 +57,7 @@ class Login extends React.Component<Props, IState> {
 
     public render() {
         if (this.props.auth.loggedIn) 
-            return <Redirect to="/dashboard/asfd" />
+            return <Redirect to="/dashboard/menu" />
         
         return(
             <div className="row justify-content-center" id="login-panel">

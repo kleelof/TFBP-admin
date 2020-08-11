@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MenuItems, { ItemsModes } from '../menu/MenuItems';
+import { MenuItems, ItemsModes } from '../menu/MenuItems';
 import {MenuItemDTO} from '../../models/MenuItemModel';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import MenuItem from '../../models/MenuItemModel';
@@ -11,14 +11,14 @@ import helpers from '../../helpers/helpers';
 import DeliveryWindow from '../../models/DeliveryWindowModel';
 import DeliveryWindows from '../delivery_windows/DeliveryWindows';
 
-interface IState {
+interface State {
     loading: boolean,   //TODO: FINISH ADDING LOAD ALL MENU ITEMS, have MenuItems confirm if 
     menuItems: MenuItemDTO[],
     deliveryDay: DeliveryDay,
     deliveryWindows: DeliveryWindow[]
 }
 
-export default class DeliveryDayComponent extends React.Component<any, IState> {
+export default class DeliveryDayComponent extends React.Component<any, State> {
 
     state ={
         loading: true,
@@ -55,10 +55,12 @@ export default class DeliveryDayComponent extends React.Component<any, IState> {
                     <DeliveryWindows deliveryDay={this.state.deliveryDay} deliveryWindows={this.state.deliveryWindows} />
                 </div>
                 <div className="col-10 mt-3">
+                    {/* 
                     <MenuItems
                         menuItems={this.state.menuItems}
                         deliveryDay={this.state.deliveryDay} 
                         mode={ItemsModes.deliveryDay} />
+                        */} 
                 </div>
             </div>
         )

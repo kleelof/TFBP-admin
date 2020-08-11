@@ -2,12 +2,12 @@ import React from 'react';
 import MailingListDTO from '../../dto/MailingListDTO';
 import mailingListService from '../../services/MailingListService';
 
-interface IState {
+interface State {
     mailingList: MailingListDTO[],
     loaded: boolean
 }
  
-export default class MailingList extends React.Component<any, IState> {
+export default class MailingList extends React.Component<any, State> {
 
     constructor(props: any) {
         super(props);

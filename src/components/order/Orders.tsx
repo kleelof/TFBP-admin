@@ -6,7 +6,7 @@ import OrderItem from '../../models/OrderItemModel';
 import helpers from '../../helpers/helpers';
 import { Redirect } from 'react-router-dom';
 
-interface IState {
+interface State {
     loading: boolean,
     orders: Order[],
     editId: number,
@@ -14,7 +14,7 @@ interface IState {
     endDate: string
 }
 
-export default class Orders extends React.Component<any, IState> {
+export default class Orders extends React.Component<any, State> {
 
     state = {
         loading: false,
@@ -47,7 +47,7 @@ export default class Orders extends React.Component<any, IState> {
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             [e.target.id]: e.target.value as any,
-         }  as Pick<IState, keyof IState>);
+         }  as Pick<State, keyof State>);
     }
 
     public render() {

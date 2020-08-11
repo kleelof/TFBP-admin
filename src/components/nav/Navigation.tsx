@@ -19,11 +19,11 @@ interface LinkDispatchProps {
 
 type Props = LinkStateProps & LinkDispatchProps
 
-interface IState {
+interface State {
     doLogin: boolean
 }
 
-class Navigation extends React.Component<Props, IState> {
+class Navigation extends React.Component<Props, State> {
 
     state = {
         doLogin: false

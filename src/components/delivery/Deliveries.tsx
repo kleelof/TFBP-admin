@@ -8,7 +8,7 @@ import DeliveryDay from '../../models/DeliveryDayModel';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import helpers from '../../helpers/helpers';
 
-interface IState {
+interface State {
     loaded: boolean,
     deliveryDays: DeliveryDay[],
     newDate: string,
@@ -16,7 +16,7 @@ interface IState {
     editId: number
 }
 
-export default class Deliveries extends React.Component<any, IState> {
+export default class Deliveries extends React.Component<any, State> {
 
     state = {
         loaded: false,
@@ -59,7 +59,7 @@ export default class Deliveries extends React.Component<any, IState> {
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             [e.target.id]: e.target.value as any,
-         }  as Pick<IState, keyof IState>);
+         }  as Pick<State, keyof State>);
     }
 
     public render() {

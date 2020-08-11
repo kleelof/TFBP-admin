@@ -2,7 +2,7 @@ import React from 'react';
 
 import './imageUploader.css';
 
-interface IProps {
+interface Props {
     id: string;
     imageURL: string; 
     newImageLoaded(file: File | null): void;
@@ -12,24 +12,24 @@ interface IProps {
     disabled?: boolean
 }
 
-interface IState {
+interface State {
     hasImage: boolean,
     currentImage: File | null,
     loadingImage: boolean
 }
 
-export default class ImageUploader extends React.Component<IProps, IState> {
+export default class ImageUploader extends React.Component<Props, State> {
 
     private fileElement: HTMLInputElement | null = null;
     private reloadAttempted: boolean = true;
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
-
+        
         this.state = {
-            hasImage: props.imageURL !== "" ? true : false,
+            hasImage: props.imageURL !== "" && props.imageURL !== null ? true : false,
             currentImage: null,
-            loadingImage: props.imageURL !== "" ? true : false
+            loadingImage: props.imageURL !== "" && props.imageURL !== null ? true : false
         }
     }
 
@@ -39,7 +39,7 @@ export default class ImageUploader extends React.Component<IProps, IState> {
         }
     }
 
-    public componentDidUpdate = (props: IProps): void => {
+    public componentDidUpdate = (props: Props): void => {
     }
 
     private toDataURL(url: any): Promise<string> {
@@ -106,7 +106,6 @@ export default class ImageUploader extends React.Component<IProps, IState> {
                     window.alert(`Maximum File Size is ${maxSizeInMb}Mb`);
                     return;
                 } else {
-                    console.log(resp);
                     (window.document.getElementById(this.props.id) as HTMLImageElement).src=resp.result;
                     this.setState({currentImage: resp.dataURL, hasImage: true})
                     this.props.newImageLoaded(resp.file)
