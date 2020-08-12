@@ -28,7 +28,7 @@ describe('Menu tests', () => {
         
     })
 
-    it('should submit valid MenuItem to API', async () => {
+    it('should submit valid new MenuItem data to API', async () => {
         await component.update();
         component.find('#new_menu_item__name').simulate('change', {target: {value: 'item_name'}});
         component.find('.new_menu_item .btn').simulate('click');

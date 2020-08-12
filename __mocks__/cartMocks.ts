@@ -1,6 +1,5 @@
 import CartItem from "../src/models/CartItemModel"
 import User from "../src/models/User";
-import DeliveryDay from "../src/models/DeliveryDayModel";
 import DeliveryWindow from "../src/models/DeliveryWindowModel";
 import MenuItem from "../src/models/MenuItemModel";
 

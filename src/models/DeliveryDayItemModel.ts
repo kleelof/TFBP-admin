@@ -1,4 +1,4 @@
-import ModelBase from './ModelBaseModel';
+import ModelBase from './ModelBase';
 import MenuItem from './MenuItemModel';
 import DeliveryDay from './DeliveryDayModel';
 
@@ -24,16 +24,16 @@ export default class DeliveryDayItem extends ModelBase {
     public menu_item!: MenuItem;
     public delivery_day!: DeliveryDay;
 
-    constructor(delivery_day: DeliveryDay, menu_item: MenuItem, sold_out: boolean, price: number) {
+    constructor(delivery_day?: DeliveryDay, menu_item?: MenuItem, sold_out?: boolean, price?: number) {
         super();
-        this.delivery_day = delivery_day;
-        this.menu_item = menu_item;
-        this.sold_out = sold_out;
-        this.price = price;
-        
+
+        this.delivery_day = delivery_day || new DeliveryDay();
+        this.menu_item = menu_item || new MenuItem();
+        this.sold_out = sold_out || false;
+        this.price = price || 0;
     }
 
-    public getDTO = (): DeliveryDayItemDTO => {
+    public getDTOxxx = (): DeliveryDayItemDTO => {
         return new DeliveryDayItemDTO(this.delivery_day.id, this.menu_item.id, this.sold_out, this.price);
     }
 }

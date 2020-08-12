@@ -1,13 +1,13 @@
 import DeliveryDayItem from '../src/models/DeliveryDayItemModel';
 import MenuItem from '../src/models/MenuItemModel';
-import DeliveryDay from '../src/models/DeliveryDayModel';
+import DeliveryDay, { DeliveryDaysDTO } from '../src/models/DeliveryDayModel';
 import DeliveryWindow, { DeliveryWindowDTO } from '../src/models/DeliveryWindowModel';
-import { DeliveryDayDTO, DeliveryDaysDTO } from '../src/models/DeliveryDayModel';
-
 
 interface IBuildDeliveryDay {
     count: number,
-    deliveryItemsCount?: number
+    deliveryItemsCount?: number,
+    date?: string,
+    end_date?: string
 }
 
 export const BuildDeliveryDay = (params: IBuildDeliveryDay): any => {
@@ -22,9 +22,9 @@ export const BuildDeliveryDay = (params: IBuildDeliveryDay): any => {
     for(let x: number =0; x < params.count; x ++) {
         deliveryDays.push(
             new DeliveryDay(
-                `2020-07-${x + 1}`,
+                params.date || `2020-07-${x + 1}`,
                 x + 1,
-                `2020-07-${x + 8}`,
+                params.end_date || `2020-07-${x + 8}`,
                 deliveryDayItems
             )
         )
@@ -36,13 +36,12 @@ export const BuildDeliveryDay = (params: IBuildDeliveryDay): any => {
 interface IBuildDeliveryDayDTO {
     count: number,
     deliveryItemsCount?: number,
-    windows?: DeliveryWindowDTO[],
     date?: string,
     end_date?: string
 }
 
 export const BuildDeliveryDayDTO = (params: IBuildDeliveryDayDTO): any => {
-    let tDeliveryDays: DeliveryDayDTO[] = [];
+    let tDeliveryDays: DeliveryDay[] = [];
     params.deliveryItemsCount = params.deliveryItemsCount ? params.deliveryItemsCount : 1
     let deliveryDayItems: any = BuildDeliveryDayItem({
             count: params.deliveryItemsCount ? params.deliveryItemsCount : 1
@@ -50,15 +49,12 @@ export const BuildDeliveryDayDTO = (params: IBuildDeliveryDayDTO): any => {
     if (params.deliveryItemsCount && params.deliveryItemsCount === 1) deliveryDayItems = [deliveryDayItems]
 
     for(let x: number = 0; x < params.count; x ++ ) {
-        tDeliveryDays.push({
-            delivery_day: new DeliveryDay(
-                params.date || `2020-07-${x + 1}`,
-                x + 1,
-                params.end_date || `2020-07-${x + 8}`,
-                deliveryDayItems
-            ),
-            windows: params.windows ? params.windows : []
-        })
+        tDeliveryDays.push(new DeliveryDay(
+            params.date || `2020-07-${x + 1}`,
+            x + 1,
+            params.end_date || `2020-07-${x + 8}`,
+            deliveryDayItems 
+        ))
     }
 
     return tDeliveryDays.length === 1 ? tDeliveryDays[0] : tDeliveryDays;
@@ -76,7 +72,6 @@ export const BuildDeliveryDaysDTO = (params: IBuildDeliveryDaysDTO): any => {
         zip_valid: params.zipValid ? params.zipValid : true,
         delivery_days: BuildDeliveryDayDTO({
             count: params.deliveryDaysCount,
-            windows: params.windows,
             deliveryItemsCount: params.deliveryItemsCount
         })
     };

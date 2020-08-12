@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {format} from 'date-fns';
 import deliveryDayService from '../../services/DeliveryDayService';
 
 import './delivery.css';
@@ -7,6 +7,8 @@ import { Redirect } from 'react-router-dom';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import helpers from '../../helpers/helpers';
+import {config} from '../../config';
+import { DeliveryDays } from './DeliveryDays';
 
 interface State {
     loaded: boolean,
@@ -29,33 +31,26 @@ export default class Deliveries extends React.Component<any, State> {
     }
 
     public componentDidMount = (): void => {
-        deliveryDayService.get<DeliveryDay[]>()
+        deliveryDayService.get<DeliveryDay[]>(null, {start_date: format(new Date(), 'yyyy-MM-dd')})
             .then((deliveryDays: DeliveryDay[]) => this.setState({deliveryDays, loaded: true}))
             .catch( err => window.alert("Unable to load weeks"))
     }
 
     private createDeliveryDay = (): void => {
-        this.setState({creatingDeliveryDay: true})
-        deliveryDayService.add<DeliveryDay>(new DeliveryDay(this.state.startDate))
-            .then((deliveryDay: DeliveryDay) => {
-                this.setState({deliveryDays: [deliveryDay, ...this.state.deliveryDays], startDate: "", creatingDeliveryDay: false})
-            }) 
-            .catch( err => window.alert("Unable to create week"))
-    }
-
-    private duplicateDeliveryDay = (deliveryDay: DeliveryDay): void => {
-        if (this.state.startDate === ""){
-            window.alert("Selecte a date to duplicate to.");
+        if (this.state.startDate > this.state.endDate) {
+            window.alert('End date must be after start date');
+            return;
         }
 
-        if(!window.confirm(`Are you sure you want duplicate ${deliveryDay.date} to ${this.state.startDate}`))
-            return;
-
-        deliveryDayService.duplicateDeliveryDay(deliveryDay, this.state.startDate)
+        this.setState({creatingDeliveryDay: true})
+        deliveryDayService.add<DeliveryDay>(new DeliveryDay(this.state.startDate, -1, this.state.endDate))
             .then((deliveryDay: DeliveryDay) => {
-                this.setState({editId: deliveryDay.id})
-            })
-            .catch( err => window.alert("Unable to duplicate"));
+                this.setState({
+                    editId: deliveryDay.id, 
+                    startDate: "",
+                    creatingDeliveryDay: false}) 
+            }) 
+            .catch( err => window.alert("Unable to create week"))
     }
 
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -77,13 +72,21 @@ export default class Deliveries extends React.Component<any, State> {
         return(
             <div className="row weeks">
                 <div className="col-12">
-                    <h5>Add A Delivery Day:</h5>
+                    <h5>Add A Delivery Menu:</h5>
                     <input
                         type="date"
                         id="startDate"
                         value={this.state.startDate}
                         disabled={this.state.creatingDeliveryDay}
                         onChange={this.updateData} />
+
+                    <input
+                        type="date"
+                        id="endDate"
+                        value={this.state.endDate}
+                        disabled={this.state.creatingDeliveryDay}
+                        onChange={this.updateData} />
+
                     <button 
                         className="btn btn-success ml-2"
                         onClick={this.createDeliveryDay}
@@ -91,40 +94,15 @@ export default class Deliveries extends React.Component<any, State> {
                         >Add</button> 
                     <hr/>
                 </div>
-                <div className="col-12">
-                    {
-                        deliveries.map((deliveryDay: DeliveryDay) => 
-                            <div className="row deliveries-day" key={`week_${deliveryDay.id}`}>
-                                <div className="col-4">
-                                    {helpers.formatDate(deliveryDay.date)}
-                                </div>
-                                <div className="col-8">
-                                    <button
-                                        className="btn btn-success"
-                                        onClick={()=> this.setState({editId: deliveryDay.id})}>
-                                            Edit
-                                        </button>
-                                    <button
-                                        className="btn btn-warning ml-2"
-                                        onClick={()=> this.duplicateDeliveryDay(deliveryDay)}>
-                                            Duplicate
-                                        </button>
-                                </div>
-                                {
-                                    helpers.sortDeliveryDayItemsByCategory(deliveryDay.day_items).map((item: DeliveryDayItem) =>
-                                            <div className="col-3 deliveries-day-item" key={`ddi_${item.id}`}>
-                                                <small>{item.menu_item.name}</small>
-                                                <div>
-                                                    <img src={`${item.menu_item.image}`} alt={item.menu_item.name} />
-                                                </div>
-                                            </div>
-                                    )
-                                }
-                                <div className="col-12"><hr/></div>
-                            </div>
-                        )
-                    }
-                </div>
+                {
+                    deliveries.map((deliveryDay: DeliveryDay) =>
+                        <div className="col-12 col-md-6" key={`dd_${deliveryDay.id}`}>
+                            <DeliveryDays 
+                                deliveryDay={deliveryDay}
+                                key={`dd_${deliveryDay.id}`}/>
+                        </div>
+                    )
+                }
             </div>
         )
     }
