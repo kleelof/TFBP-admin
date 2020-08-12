@@ -2,8 +2,11 @@ import React from 'react';
 import deliveryDayItemService from '../../services/DeliveryDayItemService';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 
+import './delivery.css';
+
 interface Props {
-    deliveryDayItem: DeliveryDayItem
+    deliveryDayItem: DeliveryDayItem,
+    refreshItems: () => {}
 }
 
 interface State {
@@ -23,21 +26,8 @@ export default class DeliveryMenuItemOptions extends React.Component<Props, Stat
         }
     }
 
-    private activate = (): void => {
-        this.setState({saving: true});
-        let deliveryDayItem: DeliveryDayItem = this.state.deliveryDayItem;
-        deliveryDayItem.price = deliveryDayItem.menu_item.price;
-        deliveryDayItemService.add<any>(this.state.deliveryDayItem.getDTO())
-            .then((dto: DeliveryDayItem) => {this.setState({
-                deliveryDayItem: dto as any,
-                saving: false,
-                active: true
-            })}) 
-            .catch( resp => window.alert("Unable to activate"));
-    }
-
-    private deactivate = (): void => {
-        if (!window.confirm("Are you sure you want to deactivate this menu item?")) return;
+    private remove = (): void => {
+        if (!window.confirm("Are you sure you want to remove this menu item?")) return;
 
         this.setState({saving: true});
         deliveryDayItemService.delete(this.state.deliveryDayItem.id)
@@ -45,7 +35,7 @@ export default class DeliveryMenuItemOptions extends React.Component<Props, Stat
                 deliveryDayItem: new DeliveryDayItem(this.state.deliveryDayItem.delivery_day, this.state.deliveryDayItem.menu_item, false, 0),
                 active: false,
                 saving: false
-            }))
+            }, () => this.props.refreshItems()))
             .catch( resp => window.alert("Unable to deactivate"));
     }
 
@@ -68,35 +58,19 @@ export default class DeliveryMenuItemOptions extends React.Component<Props, Stat
 
     public render() {
         return(
-            <div className="week-options row">
+            <div className="row delivery_item_options">
                 <div className="col-12"><hr/></div>
-                <div className="col-6">
-                    {
-                        this.state.active ?
-                            <button
-                                className="btn btn-danger"
-                                disabled={this.state.saving}
-                                onClick={this.deactivate}>
-                                Deactivate</button>
-                            :
-                            <button
-                                className="btn btn-success"
-                                disabled={this.state.saving}
-                                onClick={this.activate}>
-                                Activate</button>
-                    } 
-                </div>
-                <div className="col-6 week-options-panel">
+                <div className="col-4">
                     <input
                         type="number"
                         id="price"
                         value={this.state.deliveryDayItem.price}
                         onChange={this.updateData}
                         disabled={this.state.saving || !this.state.active}
-                        className="form-control"/>
+                        className="form-control delivery_item_options__price"/>
                 </div>
-                <div className=" col-6 week-options-panel mt-3">
-                    <span className="week-options-panel-text">Sold Out:&nbsp;&nbsp;</span>
+                <div className=" col-8 mt-3">
+                    <span className="mr-2">Sold Out:</span>
                     <input
                         id="sold_out"
                         checked={this.state.deliveryDayItem.sold_out} 
@@ -110,6 +84,12 @@ export default class DeliveryMenuItemOptions extends React.Component<Props, Stat
                         disabled={this.state.saving || !this.state.active} 
                         onClick={this.save}
                         >Save</button>
+
+                    <button
+                        className="btn btn-danger ml-3"
+                        disabled={this.state.saving}
+                        onClick={this.remove}>
+                        Remove</button>
                 </div>
             </div>
         )

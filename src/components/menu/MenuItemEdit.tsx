@@ -32,27 +32,12 @@ export default class MenuItemEdit extends React.Component<any, State> {
         saving: false,
         viewingServings: false,
         hasBeenUpdated: false
-    }
+    } 
 
-    private addNewMenuItem = (): void => {
-        this.setState({saving: true});
+    private allergenSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         let menuItem: MenuItemDTO = this.state.menuItem;
-
-        if (this.temporaryImage){
-            menuItem.image = this.temporaryImage;
-        } else {
-            menuItem.image = null
-        }
-
-        menuItemService.add<MenuItemDTO>(menuItem, menuItem.image !== null)
-                .then((menuItemDTO: MenuItemDTO) => {
-                    this.setState({
-                        menuItem: new MenuItemDTO(),
-                        saving: false
-                    });
-
-                    if (this.props.itemAdded) this.props.itemAdded(menuItemDTO);
-                })
+        menuItem.allergens = this.checkboxesToString(menuItem.allergens, e.target.id)
+        this.setState({menuItem});
     }
 
     public componentDidMount = (): void => {
@@ -95,12 +80,6 @@ export default class MenuItemEdit extends React.Component<any, State> {
     private proteinSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         let menuItem: MenuItemDTO = this.state.menuItem;
         menuItem.proteins = this.checkboxesToString(menuItem.proteins, e.target.id);
-        this.setState({menuItem});
-    } 
-
-    private allergenSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        let menuItem: MenuItemDTO = this.state.menuItem;
-        menuItem.allergens = this.checkboxesToString(menuItem.allergens, e.target.id)
         this.setState({menuItem});
     }
 

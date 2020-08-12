@@ -53,12 +53,12 @@ export default class InputWidget extends Component<Props, State> {
     }
 
     private handleOnKeyPress = (e: any) => {
-        this.resetTimer();
         if (e.keyCode === 13) this.sendUpdate();
     };
 
     private updateValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         this.setState({value: e.target.value});
+        this.resetTimer();
     };
 
     private sendUpdate = () => {
@@ -79,7 +79,7 @@ export default class InputWidget extends Component<Props, State> {
     public render() {
         if (this.props.type === 'textarea') {
             return (
-                <div className={'row input-widget'}>
+                <div className={'row input_widget_textarea'}>
                     <div className={'col-12'}>
                         <textarea
                             className = {'form-control iw'}
@@ -95,7 +95,7 @@ export default class InputWidget extends Component<Props, State> {
             )
         } else {
             return (
-                <div className={'row input-widget'}>
+                <div className={'row input_widget_input'}>
                     <div className={'col-12'}>
                         <input
                             className={'form-control iw'}
@@ -104,8 +104,7 @@ export default class InputWidget extends Component<Props, State> {
                             value={this.state.value}
                             onBlur={() => this.sendUpdate()}
                             onChange={(e) => this.updateValue(e)}
-                            onKeyDown={(e) => this.handleOnKeyPress(e)}
-                        />
+                            onKeyDown={(e) => this.handleOnKeyPress(e)}/>
                     </div>
                 </div>
             )

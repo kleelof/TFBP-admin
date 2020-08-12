@@ -29,12 +29,14 @@ export const MenuItems = (): React.ReactElement => {
         return () => {
         }
     }, [params.category])
+
+    const sortedItems: MenuItem[] = menuItems.sort((a: MenuItem, b: MenuItem) => a.name > b.name ? 1 : -1);
+    
     return(
         <div className="row menuitems mt-3">
             {
-                menuItems.map((item: MenuItem) => {
+                sortedItems.map((item: MenuItem) => {
                     return(
-                        
                         <div className="col-12 col-md-3 menuitems__menuitem" key={`mi_${item.id}`}>
                             <Link to={`/dashboard/menu/edit/${item.id}/`}>
                                 <div className="row">
