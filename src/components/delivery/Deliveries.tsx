@@ -11,7 +11,8 @@ import helpers from '../../helpers/helpers';
 interface State {
     loaded: boolean,
     deliveryDays: DeliveryDay[],
-    newDate: string,
+    startDate: string,
+    endDate: string,
     creatingDeliveryDay: boolean,
     editId: number
 }
@@ -21,7 +22,8 @@ export default class Deliveries extends React.Component<any, State> {
     state = {
         loaded: false,
         deliveryDays: [],
-        newDate: "",
+        startDate: "",
+        endDate: "",
         creatingDeliveryDay: false,
         editId: 0
     }
@@ -34,22 +36,22 @@ export default class Deliveries extends React.Component<any, State> {
 
     private createDeliveryDay = (): void => {
         this.setState({creatingDeliveryDay: true})
-        deliveryDayService.add<DeliveryDay>(new DeliveryDay(this.state.newDate))
+        deliveryDayService.add<DeliveryDay>(new DeliveryDay(this.state.startDate))
             .then((deliveryDay: DeliveryDay) => {
-                this.setState({deliveryDays: [deliveryDay, ...this.state.deliveryDays], newDate: "", creatingDeliveryDay: false})
+                this.setState({deliveryDays: [deliveryDay, ...this.state.deliveryDays], startDate: "", creatingDeliveryDay: false})
             }) 
             .catch( err => window.alert("Unable to create week"))
     }
 
     private duplicateDeliveryDay = (deliveryDay: DeliveryDay): void => {
-        if (this.state.newDate === ""){
+        if (this.state.startDate === ""){
             window.alert("Selecte a date to duplicate to.");
         }
 
-        if(!window.confirm(`Are you sure you want duplicate ${deliveryDay.date} to ${this.state.newDate}`))
+        if(!window.confirm(`Are you sure you want duplicate ${deliveryDay.date} to ${this.state.startDate}`))
             return;
 
-        deliveryDayService.duplicateDeliveryDay(deliveryDay, this.state.newDate)
+        deliveryDayService.duplicateDeliveryDay(deliveryDay, this.state.startDate)
             .then((deliveryDay: DeliveryDay) => {
                 this.setState({editId: deliveryDay.id})
             })
@@ -78,8 +80,8 @@ export default class Deliveries extends React.Component<any, State> {
                     <h5>Add A Delivery Day:</h5>
                     <input
                         type="date"
-                        id="newDate"
-                        value={this.state.newDate}
+                        id="startDate"
+                        value={this.state.startDate}
                         disabled={this.state.creatingDeliveryDay}
                         onChange={this.updateData} />
                     <button 
