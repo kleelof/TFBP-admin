@@ -1,17 +1,19 @@
-import React, { Fragment } from 'react';
-import {MenuItemDTO} from '../../models/MenuItemModel'; 
+import React from 'react';
+import MenuItem, {MenuItemDTO} from '../../models/MenuItemModel'; 
 import menuItemService from '../../services/MenuItemService';
-import MenuItems, { ItemsModes } from './MenuItems';
 import LoadingOverlay from '../overlays/LoadingOverlay';
-import MenuNavigation from './MenuNavigation';
 import { Switch, Route } from 'react-router-dom';
+import { MenuItems } from './MenuItems';
+import MenuEdit from './MenuItemEdit';
+import {SubNavigation, NavItem} from '../nav/SubNavigation';
+import { NewMenuItem } from './NewMenuItem'; 
 
-interface IState {
+interface State {
     menuItems: MenuItemDTO[],
     loaded: boolean
 }
 
-export default class Menu extends React.Component<any, IState> {
+export default class Menu extends React.Component<any, State> {
 
     constructor(props: any) {
         super(props);
@@ -33,18 +35,25 @@ export default class Menu extends React.Component<any, IState> {
     }
 
     public render() {
-
-        if (!this.state.loaded)
-            return <LoadingOverlay />
+        const navItems: NavItem[] = [
+            {title: 'Entrees', link:'/dashboard/menu/en'},
+            {title: 'Appitizers', link:'/dashboard/menu/ap'},
+            {title: 'Sides', link:'/dashboard/menu/si'},
+            {title: 'Desserts', link:'/dashboard/menu/de'}
+        ]
 
         return(
             <div className="row">
                 <div className="col-12">
-                    <MenuNavigation />
+                    <SubNavigation navItems={navItems} />
+                </div>
+                <div className="col-12 col-md-5">
+                    <NewMenuItem key={Math.random().toString()}/>
                 </div>
                 <div className="col-12">
                     <Switch>
-                        <Route path=""
+                        <Route path="/dashboard/menu/edit/:id/" component={MenuEdit} />
+                        <Route path="/dashboard/menu/:category/" component={MenuItems} />
                     </Switch>
                 </div>
             </div>

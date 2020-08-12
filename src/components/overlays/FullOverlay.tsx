@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 
 import './overlays.scss';
 
-interface IProps {
+interface Props {
     component: React.ReactElement,
     closeCallback?: any
 }
 
 //TODO: Change FullOverlay to autoclose instead of App closing it.
-export const FullOverlay = (props: IProps): React.ReactElement => {
+export const FullOverlay = (props: Props): React.ReactElement => {
     const body: any = window.document.getElementById("body");
     body.classList.add('noscroll');
     const root: any = window.document.getElementById("root");

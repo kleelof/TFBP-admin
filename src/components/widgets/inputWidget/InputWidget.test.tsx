@@ -1,22 +1,26 @@
 import React from 'react';
-//import {shallow} from "enzyme";
+import {shallow, configure} from "enzyme";
+import Adapter from 'enzyme-adapter-react-16';
 
 import InputWidget from './InputWidget';
-/*
+
+configure({adapter: new Adapter()});
+
 describe('InputWidget widget tests', () => {
-    let wrapper: any;
+    let component: any;
     let spy: any;
     let input_element: any;
     const onHandleUpdate = jest.fn();
 
     beforeEach(() => {
-        wrapper = shallow(<InputWidget
+        component = shallow(<InputWidget
             id={'test_id'}
+            type=""
             initialValue={'initial_value_text'}
             onUpdate={onHandleUpdate}
             placeholder={'test_placeholder'}
         />);
-        input_element = wrapper.find('input');
+        input_element = component.find('input');
     });
 
     it('should fill in INPUT', () => {
@@ -29,7 +33,7 @@ describe('InputWidget widget tests', () => {
                 value: 'initial_value_text'
             }
         });
-        wrapper.instance().sendUpdate();
+        component.instance().sendUpdate();
         expect(onHandleUpdate).toHaveBeenCalledTimes(0);
     });
 
@@ -39,12 +43,12 @@ describe('InputWidget widget tests', () => {
                 value: 'updated_value_text'
             }
         });
-        wrapper.instance().sendUpdate();
+        component.instance().sendUpdate();
         expect(onHandleUpdate).toHaveBeenCalledTimes(1);
     });
 
     it('should call sendUpdate on "enter"', () => {
-        spy = jest.spyOn(wrapper.instance(), 'sendUpdate').mockImplementation(jest.fn());
+        spy = jest.spyOn(component.instance(), 'sendUpdate').mockImplementation(jest.fn());
 
         input_element
             .simulate('change', {
@@ -56,33 +60,33 @@ describe('InputWidget widget tests', () => {
         expect(spy).toHaveBeenCalledTimes(0);
     });
 
-    describe('defaultUpdateValue testing', () => {
+    describe.skip('defaultUpdateValue testing', () => {
         beforeEach(() => {
-            wrapper = shallow(<InputWidget
+            component = shallow(<InputWidget
                 id={'test_id'}
+                type=""
                 initialValue={'initial_value_text'}
                 onUpdate={onHandleUpdate}
                 placeholder={'test_placeholder'}
                 defaultUpdateValue={''}
             />);
-            wrapper.instance().setState({currentValue: ''});
-            input_element = wrapper.find('input');
+            component.instance().setState({currentValue: ''});
+            input_element = component.find('input');
             onHandleUpdate.mockClear();
         });
 
         it('should send empty string if defaultUpdateValue is not set', () => {
-            wrapper.instance().sendUpdate();
+            component.instance().sendUpdate();
             expect(onHandleUpdate).toHaveBeenCalledTimes(1);
             expect(onHandleUpdate).toHaveBeenCalledWith('test_id', '');
         });
 
         it('should send defaultUpdateValue instead of empty string', () => {
-            wrapper.instance().setState({defaultUpdateValue: 'default_value'});
-            wrapper.instance().sendUpdate();
+            component.instance().setState({defaultUpdateValue: 'default_value'});
+            component.instance().sendUpdate();
             expect(onHandleUpdate).toHaveBeenCalledTimes(1);
             expect(onHandleUpdate).toHaveBeenCalledWith('test_id', 'default_value');
         });
     })
 
 });
-*/

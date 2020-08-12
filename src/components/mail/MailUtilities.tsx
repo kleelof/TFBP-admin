@@ -4,10 +4,10 @@ import adminService from '../../services/AdminService';
 import './mail.scss';
 import FunctionsResponsesDTO from '../../dto/FunctionsResponsesDTO';
 
-interface IState {
+interface State {
     runningRemoteFunction: boolean
 }
-export default class MailUtilities extends React.Component<any, IState> {
+export default class MailUtilities extends React.Component<any, State> {
 
     state = {
         runningRemoteFunction: false

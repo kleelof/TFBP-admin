@@ -11,7 +11,7 @@ let closeCallback: any = jest.fn();
 
 describe('Overlays Tests', () => {
 
-    describe.skip('FullOverlay tests', () => {
+    describe('FullOverlay tests', () => {
 
         beforeEach(() => {
             component = shallow(<FullOverlay component={<LoadingOverlay />} closeCallback={closeCallback} />)

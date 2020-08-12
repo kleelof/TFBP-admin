@@ -1,8 +1,8 @@
 import DeliveryDayItem from '../src/models/DeliveryDayItemModel';
-import MenuItem from '../src/models/MenuItem';
-import DeliveryDay from '../src/models/DeliveryDay';
-import DeliveryWindow, { DeliveryWindowDTO } from '../src/models/DeliveryWindow';
-import { DeliveryDayDTO, DeliveryDaysDTO } from '../src/models/DeliveryDay';
+import MenuItem from '../src/models/MenuItemModel';
+import DeliveryDay from '../src/models/DeliveryDayModel';
+import DeliveryWindow, { DeliveryWindowDTO } from '../src/models/DeliveryWindowModel';
+import { DeliveryDayDTO, DeliveryDaysDTO } from '../src/models/DeliveryDayModel';
 
 
 interface IBuildDeliveryDay {

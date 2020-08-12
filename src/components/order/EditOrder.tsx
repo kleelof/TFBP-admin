@@ -6,7 +6,7 @@ import OrderItem from '../../models/OrderItemModel';
 import helpers, {OrderedItems} from '../../helpers/helpers';
 import { Link, Redirect } from 'react-router-dom';
 
-interface IState {
+interface State {
     loading: boolean,
     order: Order,
     updating: boolean,
@@ -14,7 +14,7 @@ interface IState {
     returnToOrders: boolean
 }
 
-export default class EditOrder extends React.Component<any, IState> {
+export default class EditOrder extends React.Component<any, State> {
 
     state = {
         loading: true,

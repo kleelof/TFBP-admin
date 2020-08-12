@@ -14,7 +14,7 @@
 
 import React, {Component} from 'react';
 
-interface IProps {
+interface Props {
     id: string,
     type: string,
     onUpdate: any,
@@ -24,18 +24,18 @@ interface IProps {
     defaultUpdateValue?: any
 }
 
-interface IState {
+interface State {
     value: string
 }
 
 //todo: get type='number' to work
 
-export default class InputWidget extends Component<IProps, IState> {
+export default class InputWidget extends Component<Props, State> {
     
     private timer: any;
     private lastSavedValue: string | null = null;
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -45,7 +45,7 @@ export default class InputWidget extends Component<IProps, IState> {
         this.lastSavedValue = props.initialValue;
     };
 
-    public componentWillReceiveProps = (props: IProps) => {
+    public componentWillReceiveProps = (props: Props) => {
         if (props.initialValue !== this.props.initialValue) {
             this.setState({value: props.initialValue});
             this.lastSavedValue = props.initialValue
@@ -53,12 +53,12 @@ export default class InputWidget extends Component<IProps, IState> {
     }
 
     private handleOnKeyPress = (e: any) => {
-        this.resetTimer();
         if (e.keyCode === 13) this.sendUpdate();
     };
 
     private updateValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         this.setState({value: e.target.value});
+        this.resetTimer();
     };
 
     private sendUpdate = () => {
@@ -79,7 +79,7 @@ export default class InputWidget extends Component<IProps, IState> {
     public render() {
         if (this.props.type === 'textarea') {
             return (
-                <div className={'row input-widget'}>
+                <div className={'row input_widget_textarea'}>
                     <div className={'col-12'}>
                         <textarea
                             className = {'form-control iw'}
@@ -95,7 +95,7 @@ export default class InputWidget extends Component<IProps, IState> {
             )
         } else {
             return (
-                <div className={'row input-widget'}>
+                <div className={'row input_widget_input'}>
                     <div className={'col-12'}>
                         <input
                             className={'form-control iw'}
@@ -104,8 +104,7 @@ export default class InputWidget extends Component<IProps, IState> {
                             value={this.state.value}
                             onBlur={() => this.sendUpdate()}
                             onChange={(e) => this.updateValue(e)}
-                            onKeyDown={(e) => this.handleOnKeyPress(e)}
-                        />
+                            onKeyDown={(e) => this.handleOnKeyPress(e)}/>
                     </div>
                 </div>
             )

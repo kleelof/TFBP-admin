@@ -19,11 +19,11 @@ interface LinkDispatchProps {
 
 type Props = LinkStateProps & LinkDispatchProps
 
-interface IState {
+interface State {
     doLogin: boolean
 }
 
-class Navigation extends React.Component<Props, IState> {
+class Navigation extends React.Component<Props, State> {
 
     state = {
         doLogin: false
@@ -44,7 +44,7 @@ class Navigation extends React.Component<Props, IState> {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item active">
-                            <Link className="nav-link" to="/dashboard/menu">
+                            <Link className="nav-link" to="/dashboard/menu/en">
                                 Menu</Link>
                         </li>
                         <li className="nav-item">

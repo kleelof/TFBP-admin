@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; 
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { bindActionCreators } from 'redux';
@@ -35,12 +35,12 @@ interface LinkDispatchProps {
 
 type Props = LinkStateProps & LinkDispatchProps;
 
-interface IState { 
+interface State { 
   connecting: boolean,
   loggedIn: boolean // temporary flag while auth login is completed
 }
 
-class App extends React.Component<Props, IState> {
+class App extends React.Component<Props, State> {
 
   state = {
     connecting: true,

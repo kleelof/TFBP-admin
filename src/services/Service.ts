@@ -60,11 +60,11 @@ export default class Service {
         return this._delete<T>(`${this.appName}/${this.view}/${id}/`);
     }
 
-    public get<T>(id?: number): Promise<T> {
-        if (id) {
-            return this._get(`${this.appName}/${this.view}/${id}/`);
+    public get<T>(id: number | null = null, params: {} = {}): Promise<T> {
+        if (id !== null) {
+            return this._get(`${this.appName}/${this.view}/${id}/?${this.querizeObject(params)}`);
         } else {
-            return this._get(`${this.appName}/${this.view}/`);
+            return this._get(`${this.appName}/${this.view}/?${this.querizeObject(params)}`);
         }
     }
 
@@ -99,6 +99,14 @@ export default class Service {
 
     public search<T>(search: String): Promise<T> {
         return this._get(`${this.appName}/${this.view}/?search=${search}`);
+    }
+
+    private querizeObject(object: any): String {
+        var str = [];
+        for (var p in object)
+            if (object.hasOwnProperty(p)) 
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(object[p]));
+        return str.join("&");
     }
 
     public softDelete<T>(id: number): Promise<T> {

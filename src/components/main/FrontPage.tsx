@@ -6,13 +6,13 @@ import mailingListService from '../../services/MailingListService';
 import './frontPage.css';
 import MailingListDTO from '../../dto/MailingListDTO';
 
-interface IState {
+interface State {
     emailAddress: string,
     savingEmail: boolean,
     emailSaved: boolean
 }
 
-export default class FrontPage extends React.Component<any, IState> {
+export default class FrontPage extends React.Component<any, State> {
 
     constructor(props: any) {
         super(props);
