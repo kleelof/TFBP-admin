@@ -157,29 +157,3 @@ export const BuildDeliveryWindowDTO = (params: IBuildDeliveryWindowDTO): any => 
     return windows.length > 1 ? windows : windows[0];
 }
 
-interface IBuildMenuItem {
-    count: number,
-    name?: string,
-    spicy?: boolean,
-    proteins?: string
-}
-
-export const BuildMenuItem = (params: IBuildMenuItem): any => {
-    let items: MenuItem[] = [];
-
-    for(let x: number = 1; x <= params.count; x ++ ) {
-        items.push(
-            new MenuItem(
-                x ,
-                params.name || `menu_item_${x}`,
-                `description ${x}`,
-                'en',
-                10,
-                params.proteins || '',
-                '',
-                params.spicy || false
-            )
-        )
-    }
-    return items.length > 1 ? items : items[0];
-}

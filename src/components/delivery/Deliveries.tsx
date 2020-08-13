@@ -5,7 +5,6 @@ import deliveryDayService from '../../services/DeliveryDayService';
 import './delivery.css';
 import { Redirect } from 'react-router-dom';
 import DeliveryDay from '../../models/DeliveryDayModel';
-import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import helpers from '../../helpers/helpers';
 import {config} from '../../config';
 import { DeliveryDays } from './DeliveryDays';
@@ -96,7 +95,7 @@ export default class Deliveries extends React.Component<any, State> {
                 </div>
                 {
                     deliveries.map((deliveryDay: DeliveryDay) =>
-                        <div className="col-12 col-md-6" key={`dd_${deliveryDay.id}`}>
+                        <div className="col-12 col-md-6 deliveries__delivery_days" key={`dd_${deliveryDay.id}`}>
                             <DeliveryDays 
                                 deliveryDay={deliveryDay}
                                 key={`dd_${deliveryDay.id}`}/>
