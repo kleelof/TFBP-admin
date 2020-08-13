@@ -16,27 +16,18 @@
     z-index: 1;
 }
 
-.deliveries-day-item img {
-    height: 100px;
+.delivery_days_item img {
+    width: 100%;
 }
 
-.deliveries-day {
-    font-size: 1.5em;
+.delivery_days {
     font-weight: bold;
-}
-
-.deliveries-day-date:hover {
-    cursor: pointer;
-    background-color: rgba(24, 128, 20, 0.7);
-}
-
-.week-options {
-    color: black;
+    border: 2px solid rgba(0, 0, 0, .2);
     padding: 5px;
 }
 
-.week-options-panel-text {
-    color: black !important;
+.delivery_duplicate_items__item img {
+    width: 100%;
 }
 
 @media(min-width: 576px) {

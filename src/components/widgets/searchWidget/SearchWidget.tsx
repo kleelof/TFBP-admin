@@ -21,22 +21,18 @@ export default class SearchWidget extends React.Component<Props, State> {
     
         this.state = {
             items: []
-        }
+        }  
+    }
 
-        const there: any = this;
-
+    public componentDidMount = (): void => {
         window.onclick = function(event: any) {
-            there.close()
+            this.close()
         }
     }
 
     private itemSelected = (item: any): void => {
         this.setState({items: []});
         this.props.itemSelected(item);
-    }
-
-    private close = (): void => {
-        this.setState({items: []});
     }
 
     private doSearch = (id: string, text: string): void => {

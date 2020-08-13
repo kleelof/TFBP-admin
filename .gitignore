@@ -25,3 +25,4 @@ yarn-error.log*
 TFBP-frontend.code-workspace
 TFBP-admin-app.code-workspace
 TFBP-adminapp.code-workspace
+/.idea/

@@ -2,59 +2,8 @@ import OrderItem from '../src/models/OrderItemModel';
 import Order from '../src/models/OrderModel';
 import CartItem from '../src/models/CartItemModel';
 import { BuildCartItem } from './cartMocks';
-import Coupon from '../src/models/Coupon';
-import MenuItem from '../src/models/MenuItemModel';
+import MenuItem from "../src/models/MenuItemModel";
 
-interface IBuildCoupon {
-    count: number
-}
-
-export const BuildCoupon = (params: IBuildCoupon): any => {
-    let items: Coupon[] = [];
-
-    for (let x: number = 1; x <= params.count; x ++) {
-        items.push(
-            new Coupon(
-                x,
-                true,
-                0,
-                '2020-07-04',
-                10,
-                0,
-                -1
-            )
-        )
-    }
-
-    return items.length > 1 ? items : items[0];
-}
-
-interface IBuildMenuItem {
-    count: number,
-    name?: string,
-    spicy?: boolean,
-    proteins?: string
-}
-
-export const BuildMenuItem = (params: IBuildMenuItem): any => {
-    let items: MenuItem[] = [];
-
-    for(let x: number = 1; x <= params.count; x ++ ) {
-        items.push(
-            new MenuItem(
-                x ,
-                params.name || `menu_item_${x}`,
-                `description ${x}`,
-                'en',
-                10,
-                params.proteins || '',
-                '',
-                params.spicy || false
-            )
-        )
-    }
-    return items.length > 1 ? items : items[0];
-}
 interface IBuildOrderItem {
     count: number,
     cartItem?: CartItem,
@@ -105,4 +54,31 @@ export const BuildOrder = (params: IOrder): any => {
     }
 
     return orders.length > 1 ? orders : orders[0];
+}
+
+interface BuildMenuItem {
+    count: number,
+    name?: string,
+    spicy?: boolean,
+    proteins?: string
+}
+
+export const BuildMenuItem = (params: BuildMenuItem): any => {
+    let items: MenuItem[] = [];
+
+    for(let x: number = 1; x <= params.count; x ++ ) {
+        items.push(
+            new MenuItem(
+                x ,
+                params.name || `menu_item_${x}`,
+                `description ${x}`,
+                'en',
+                10,
+                params.proteins || '',
+                '',
+                params.spicy || false
+            )
+        )
+    }
+    return items.length > 1 ? items : items[0];
 }

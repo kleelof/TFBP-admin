@@ -2,7 +2,6 @@ import OrderItem from "../models/OrderItemModel";
 import DeliveryDayItem from "../models/DeliveryDayItemModel";
 import CartItem from "../models/CartItemModel";
 import MenuItem from "../models/MenuItemModel";
-import { group } from "console";
 
 export type OrderedItems = {[key: string]: any[]};
 

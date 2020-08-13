@@ -20,8 +20,8 @@ class DeliveryDayService extends Service {
         return this._get(`${this.appName}/${this.view}/detach_delivery_window/${day.id}/${window.id}/`)
     }
 
-    public duplicateDeliveryDay = (deliveryDay: DeliveryDay, date: string): Promise<DeliveryDay> => {
-        return this._get<DeliveryDay>(`${this.appName}/${this.view}/duplicate/${deliveryDay.id}/${date}/`)
+    public duplicateDeliveryDay = (deliveryDay: DeliveryDay, start_date: string, end_date: string): Promise<DeliveryDay> => {
+        return this._get<DeliveryDay>(`${this.appName}/${this.view}/duplicate/?date=${start_date}&end_date=${end_date}&delivery_day=${deliveryDay.id}`);
     }
 }
 

@@ -45,9 +45,9 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
             .catch( err => window.alert('unable to add menu item'))
     }
 
-    private refreshDay = (id: number): void => { console.log(id)
+    private refreshDay = (id: number): void => {
         deliveryDayService.get<DeliveryDay>(id)
-            .then((deliveryDay: DeliveryDay) => {console.log(deliveryDay)
+            .then((deliveryDay: DeliveryDay) => {
                 this.setState({deliveryDay, loading: false})
             })
             .catch( err => window.alert("Unable to load week"))
@@ -60,7 +60,7 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
         return(
             <div className="row delivery_day_component">
                 <div className="col-12 col-md-6">
-                    <h3>{helpers.formatDate(this.state.deliveryDay.date)}</h3>
+                    {helpers.formatDate(this.state.deliveryDay.date)} - {helpers.formatDate(this.state.deliveryDay.end_date)}
                     <hr/>
                 </div>
                 <div className="col-12 col-md-6 delivery_day_component__search_widget">
@@ -69,7 +69,7 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
                     {
                         this.state.deliveryDay.day_items.map((item: DeliveryDayItem) => {
                             return (
-                                <div className="col-12 col-md-3">
+                                <div className="col-12 col-md-3" key={`dd_${item.id}`}>
                                     <div className="row">
                                         <div className="col-12">
                                             <DeliveryDayItemComponent item={item} refreshItems={() => this.refreshDay(this.state.deliveryDay.id)}/>
