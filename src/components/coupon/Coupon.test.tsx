@@ -6,7 +6,7 @@ import {BuildCoupon} from "../../../__mocks__/mockFactories";
 import Coupon from "../../models/Coupon";
 import couponService from '../../services/CouponService';
 import Coupons from '../coupon/Coupons';
-import EditCoupon from "./EditCoupon";
+import CouponAdd from "./CouponAdd";
 
 configure({adapter: new Adapter()});
 
@@ -45,20 +45,21 @@ describe('CouponComponent tests', () => {
             <CouponComponent coupon={coupon} />
         )
         expect(component.find('.coupon__code').text()).toEqual(coupon.code);
-        expect(component.find('.coupon__active').text()).toContain('active');
-        expect(component.find('.coupon__value').text()).toContain('20%');
-        expect(component.find('.coupon__expire').text()).toContain('expire: Sunday July 4, 2021');
+        // expect(component.find('.coupon__active').text()).toContain('active');
+        expect(component.find('.coupon__start_value').text()).toContain('20%');
+        expect(component.find('.coupon__uses').text()).toBe('1');
+        expect(component.find('.coupon__expire').text()).toContain('Sunday July 4, 2021');
         expect(component.find('.coupon__email').text()).toContain('user_1@mail.com');
     })
 })
 
-describe ('EditCoupon tests', () => {
+describe ('CouponAdd tests', () => {
     it('should display correct details --percentage mode --active', async () => {
         const coupon: Coupon = BuildCoupon({count: 1});
         couponGetSpy.mockImplementation(() => Promise.resolve(coupon));
         const props: any = {match: { params: {id: coupon.id}}}
         component = await mount(
-            <EditCoupon {...props} />
+            <CouponAdd {...props} />
         )
         await component.update();
 
@@ -75,7 +76,7 @@ describe ('EditCoupon tests', () => {
         couponGetSpy.mockImplementation(() => Promise.resolve(coupon));
         const props: any = {match: { params: {id: coupon.id}}};
         component = await mount(
-            <EditCoupon {...props} />
+            <CouponAdd {...props} />
         )
         await component.update();
         expect(component.find('.edit_coupon__mode').instance().value).toBe("1");

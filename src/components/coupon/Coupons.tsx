@@ -43,7 +43,7 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
         return(
             <div className="row coupons">
                 <div className={'col-12 mb-2'}>
-                    <div className={'add_coupon'} onClick={this.addCoupon}>
+                    <div className={'add_coupon'} onClick={() => this.props.history.push({pathname: '/dashboard/coupon/add'})}>
                         {
                             this.state.addingCoupon ?
                                 'Creating coupon...'
@@ -53,15 +53,27 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                     </div>
                 </div>
                 <div className={'col-12'}>
-                    <div className={'row'}>
-                        {
-                            this.state.coupons.map((coupon: Coupon) =>
-                                <div className={'col-12 col-md-2'}>
-                                    <CouponComponent coupon={coupon} key={`coupon_${coupon.id}`}/>
-                                </div>
-                            )
-                        }
-                    </div>
+                    <table className={'table'}>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>code</th>
+                                <th>type</th>
+                                <th>uses</th>
+                                <th>start value</th>
+                                <th>current value</th>
+                                <th>expire</th>
+                                <th>email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.coupons.map((coupon: Coupon) =>
+                                    <CouponComponent coupon={coupon} key={`c_${coupon.id}`} />
+                                )
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )
