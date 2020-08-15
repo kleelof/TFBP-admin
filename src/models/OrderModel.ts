@@ -22,6 +22,7 @@ export default class Order extends ModelBase {
 
     constructor(
         id: number = -1,
+        order_status: number = 0,
         contact_name: string = '',
         email: string = '',
         unit: string = '',
@@ -37,6 +38,7 @@ export default class Order extends ModelBase {
     ){
         super();
         this.id = id;
+        this.order_status = order_status;
         this.contact_name = contact_name;
         this.email = email;
         this.unit = unit;
@@ -54,6 +56,7 @@ export default class Order extends ModelBase {
 
 export class OrderDTO extends ModelBase {
 
+    public order_status!: number;
     public contact_name!: string;
     public phone_number!: string;
     public email!: string;
@@ -65,24 +68,22 @@ export class OrderDTO extends ModelBase {
     public notes!: string;
     public nonce!: string;
     public tip!: number;
-    public coupon!: string;
+    public coupon!: number;
     
-    constructor(contact_name: string, phone_number: string, email: string, unit: string,
-                street_address: string, city: string, zip: string, notes: string, nonce: string,
-                tip: number, coupon: string, cart_items: CartItem[]) {
+    constructor(order: Order) {
                     super();
 
-                    this.contact_name = contact_name;
-                    this.phone_number = phone_number;
-                    this.email = email;
-                    this.unit = unit;
-                    this.street_address = street_address;
-                    this.city = city;
-                    this.zip = zip;
-                    this.notes = notes;
-                    this.nonce = nonce;
-                    this.tip = tip;
-                    this.coupon = coupon;
-                    this.cart_items = cart_items.map((item: CartItem) => item.id);
+                    this.order_status = order.order_status;
+                    this.contact_name = order.contact_name;
+                    this.phone_number = order.phone_number;
+                    this.email = order.email;
+                    this.unit = order.unit;
+                    this.street_address = order.street_address;
+                    this.city = order.city;
+                    this.zip = order.zip;
+                    this.notes = order.notes;
+                    this.nonce = order.nonce;
+                    this.tip = order.tip;
+                    // this.coupon = order.coupon.id;
                 }
 }

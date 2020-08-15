@@ -4,7 +4,7 @@ import FunctionsResponsesDTO from '../dto/FunctionsResponsesDTO';
 class AdminService extends Service {
 
     public sendWeeklyEmails = (): Promise<FunctionsResponsesDTO> => {
-        return this._get(`admin_app/send_weekly_email/`);
+        return this._get(`operator_app/send_weekly_email/`);
     }
 }
 

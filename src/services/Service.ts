@@ -62,7 +62,7 @@ export default class Service {
 
     public get<T>(id: number | null = null, params: {} = {}): Promise<T> {
         if (id !== null) {
-            return this._get(`${this.appName}/${this.view}/${id}/?${this.querizeObject(params)}`);
+            return this._get(`${this.appName}/${this.view}/${id}/${this.querizeObject(params)}`);
         } else {
             return this._get(`${this.appName}/${this.view}/?${this.querizeObject(params)}`);
         }
@@ -102,11 +102,7 @@ export default class Service {
     }
 
     private querizeObject(object: any): String {
-        var str = [];
-        for (var p in object)
-            if (object.hasOwnProperty(p)) 
-                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(object[p]));
-        return str.join("&");
+        return Object.keys(object).map(key => key + '=' + object[key]).join('&')
     }
 
     public softDelete<T>(id: number): Promise<T> {

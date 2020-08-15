@@ -3,14 +3,48 @@ import Order from '../src/models/OrderModel';
 import CartItem from '../src/models/CartItemModel';
 import { BuildCartItem } from './cartMocks';
 import MenuItem from "../src/models/MenuItemModel";
+import Coupon from "../src/models/Coupon";
 
-interface IBuildOrderItem {
+interface BuildCoupon {
+    count: number,
+    mode?: number,
+    start_value?: number,
+    current_value?: number,
+    email?: string,
+    expire?: string,
+    active?: boolean,
+    remaining_uses?: number
+}
+
+export const BuildCoupon = (params: BuildCoupon): any => {
+    let items: Coupon[] = [];
+
+    for(let x: number = 1; x <= params.count; x ++ ) {
+        items.push(
+            new Coupon(
+                x,
+                'test_code',
+                params.active !== false ? true : false,
+                params.mode || 0,
+                params.expire || `2021-07-04`,
+                params.start_value || .2,
+                params.current_value || 0,
+                params.remaining_uses || 1,
+                params.email || `user_${x}@mail.com`
+            )
+        )
+    }
+
+    return  items.length > 1 ? items : items[0];
+}
+
+interface bOrderItem {
     count: number,
     cartItem?: CartItem,
     order?: Order
 }
 
-export const BuildOrderItem = (params: IBuildOrderItem): any => {
+export const BuildOrderItem = (params: bOrderItem): any => {
     let items: OrderItem[] = [];
 
     for(let x: number = 1; x <= params.count; x ++ ) {
@@ -25,18 +59,19 @@ export const BuildOrderItem = (params: IBuildOrderItem): any => {
     return items.length > 1 ? items : items[0];
 }
 
-interface IOrder {
+interface bOrder {
     count: number
     orderItems?: OrderItem[]
 }
 
-export const BuildOrder = (params: IOrder): any => {
+export const BuildOrder = (params: bOrder): any => {
     let orders: Order[] = [];
 
     for (let x: number = 1; x <= params.count; x ++) {
         orders.push(
             new Order(
                 x,
+                1,
                 `contact_name_${x}`,
                 `email${x}@email.com`,
                 '',
@@ -56,14 +91,14 @@ export const BuildOrder = (params: IOrder): any => {
     return orders.length > 1 ? orders : orders[0];
 }
 
-interface BuildMenuItem {
+interface bBuildMenuItem {
     count: number,
     name?: string,
     spicy?: boolean,
     proteins?: string
 }
 
-export const BuildMenuItem = (params: BuildMenuItem): any => {
+export const BuildMenuItem = (params: bBuildMenuItem): any => {
     let items: MenuItem[] = [];
 
     for(let x: number = 1; x <= params.count; x ++ ) {
