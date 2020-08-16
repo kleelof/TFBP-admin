@@ -1,44 +1,68 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Coupon from '../../models/Coupon';
 import helpers from '../../helpers/helpers';
 
 import './coupon.scss';
+import couponService from '../../services/CouponService';
 
 interface Props {
-    coupon: Coupon
+    coupon: Coupon,
+    couponUpdated: (coupon: Coupon) => void
 }
 
 export const CouponComponent = (props: Props): React.ReactElement => {
     const types: string[] = ['percentage', 'fixed'];
+    const [coupon, setCoupon] = useState<Coupon>(props.coupon);
+    const [deactivating, setDeactivating] = useState(false);
+
+    const deactivateCoupon = (): void => {
+        if (!window.confirm(`Are you sure you want to deactivate:\n${coupon.code}\n\nCoupons cannot be reactivated!`)) return;
+        setDeactivating(true);
+        coupon.active = false;
+        couponService.update(coupon.id, coupon)
+            .then((coupon: Coupon) => {
+                setCoupon(coupon);
+                props.couponUpdated(coupon);
+            })
+            .catch(
+                err => console.log(err))
+    }
 
     return (
-        <tr className={'coupon'}>
-            <td></td>
-            <td className={'coupon__code'}>{props.coupon.code}</td>
-            <td className={'coupon__mode'}>{types[props.coupon.mode]}</td>
-            <td className={'coupon__uses'}>{props.coupon.remaining_uses}</td>
+        <tr className={`coupon ${!props.coupon.active ? 'coupon--inactive' : ''}`}>
+            <td>
+                { coupon.active &&
+                    <button className={'btn btn-outline-danger coupon__deactivate'}
+                            disabled={deactivating}
+                            onClick={deactivateCoupon}
+                    >X</button>
+                }
+            </td>
+            <td className={'coupon__code'}>{coupon.code}</td>
+            <td className={'coupon__mode'}>{types[coupon.mode]}</td>
+            <td className={'coupon__uses'}>{coupon.remaining_uses}</td>
             <td className={'coupon__start_value'}>
                 {
                     props.coupon.mode === 0 ?
-                        `${props.coupon.start_value * 100}%`
+                        `${coupon.start_value * 100}%`
                         :
-                        `$${props.coupon.start_value.toFixed(2)}`
+                        `$${coupon.start_value.toFixed(2)}`
                 }
             </td>
             <td className={'coupon__end_value'}>
                 {
-                    props.coupon.mode === 0 ?
+                    coupon.mode === 0 ?
                         ``
                         :
-                        `$${props.coupon.current_value.toFixed(2)}`
+                        `$${coupon.current_value.toFixed(2)}`
                 }
             </td>
             <td className={'coupon__expire'}>
-                {helpers.formatDate(props.coupon.expire)}
+                {helpers.formatDate(coupon.expire)}
             </td>
             <td className={'coupon__email'}>
-                {props.coupon.email}
+                {coupon.email}
             </td>
         </tr>
     )

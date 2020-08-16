@@ -29,6 +29,17 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
             .catch( err => console.log(err))
     }
 
+    private couponUpdated = (coupon: Coupon): void => {
+        this.setState({
+            coupons: this.state.coupons.map((c: Coupon) => {
+                if (c.id === coupon.id)
+                    return coupon
+                else
+                    return c
+            })
+        })
+    }
+
     private addCoupon = (): void => {
         this.setState(({addingCoupon: true}));
         couponService.add<Coupon>(new Coupon())
@@ -39,6 +50,14 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
     public render() {
         if (this.state.loading)
             return <LoadingOverlay />
+
+        const coupons: Coupon[] = this.state.coupons.sort((a: Coupon, b:Coupon) => {
+            return a.active < b.active ?
+                1
+                :
+                a.active > b.active ?
+                    -1 : 0
+        })
 
         return(
             <div className="row coupons">
@@ -68,8 +87,10 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                         </thead>
                         <tbody>
                             {
-                                this.state.coupons.map((coupon: Coupon) =>
-                                    <CouponComponent coupon={coupon} key={`c_${coupon.id}`} />
+                                coupons.map((coupon: Coupon) =>
+                                    <CouponComponent
+                                        coupon={coupon} key={`c_${coupon.id}`}
+                                        couponUpdated={this.couponUpdated} />
                                 )
                             }
                         </tbody>

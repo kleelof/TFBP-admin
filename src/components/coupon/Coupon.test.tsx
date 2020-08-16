@@ -13,6 +13,7 @@ configure({adapter: new Adapter()});
 let component: any;
 const couponGetSpy: jest.SpyInstance = jest.spyOn(couponService, 'get');
 const couponAddSpy: jest.SpyInstance = jest.spyOn(couponService, 'add');
+const couponUpdateSpy: jest.SpyInstance = jest.spyOn(couponService, 'update');
 
 describe('Coupons tests', () => {
     beforeAll(() => {
@@ -20,7 +21,7 @@ describe('Coupons tests', () => {
     })
 
     beforeEach(async () => {
-        const props: any = {};
+        const props: any = {history: []};
         component = await shallow(
             <Coupons {...props}/>
         )
@@ -42,7 +43,7 @@ describe('CouponComponent tests', () => {
     it('should list all the details', () => {
         const coupon: Coupon = BuildCoupon({count: 1});
         component = shallow(
-            <CouponComponent coupon={coupon} />
+            <CouponComponent coupon={coupon} couponUpdated={jest.fn()} />
         )
         expect(component.find('.coupon__code').text()).toEqual(coupon.code);
         // expect(component.find('.coupon__active').text()).toContain('active');
@@ -50,6 +51,19 @@ describe('CouponComponent tests', () => {
         expect(component.find('.coupon__uses').text()).toBe('1');
         expect(component.find('.coupon__expire').text()).toContain('Sunday July 4, 2021');
         expect(component.find('.coupon__email').text()).toContain('user_1@mail.com');
+    })
+
+    it('should call props.couponUpdated when deactivated', async() => {
+        global.confirm = () => true;
+        couponUpdateSpy.mockImplementation(() => Promise.resolve(BuildCoupon({count:1})))
+        const coupon: Coupon = BuildCoupon({count: 1});
+        const couponUpdated = jest.fn();
+        component = await shallow(
+            <CouponComponent coupon={coupon} couponUpdated={couponUpdated} />
+        )
+        component.find('.coupon__deactivate').simulate('click');
+        await component.update();
+        expect(couponUpdated).toHaveBeenCalledTimes(1);
     })
 })
 
