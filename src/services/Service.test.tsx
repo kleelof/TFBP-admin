@@ -1,19 +1,16 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
 import { configure } from 'enzyme';
+import menuItemService from '../services/MenuItemService';
+import axiosInstance from "./axiosApi";
 
-import couponService from './CouponService';
-import { BuildCoupon } from '../../__mocks__/mockFactories';
+configure({adapter: new Adapter()});
 
-//configure({adapter: new Adapter()});
-
-//let postSpy = jest.spyOn(axiosInstance, 'post');
+const getSpy: jest.SpyInstance = jest.spyOn(axiosInstance, 'get');
 
 describe('Service Tests', () => {
-    describe('CRUD tests', () => {
-        it('should ADD', () => {
-            //couponService.add(BuildCoupon({count: 1}));
-            //expect(postSpy).toBeCalledWith({});
-        })
+    it('should add query variables', () => {
+        menuItemService.get(null, {test: 'var_1'});
+        expect(getSpy).toBeCalledWith('/operator_app/menu_item/?test=var_1');
     })
 })

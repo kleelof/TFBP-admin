@@ -5,8 +5,7 @@ import deliveryDayService from '../../services/DeliveryDayService';
 import './delivery.css';
 import { Redirect } from 'react-router-dom';
 import DeliveryDay from '../../models/DeliveryDayModel';
-import helpers from '../../helpers/helpers';
-import {config} from '../../config';
+
 import { DeliveryDays } from './DeliveryDays';
 
 interface State {

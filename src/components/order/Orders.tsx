@@ -33,7 +33,7 @@ export default class Orders extends React.Component<any, State> {
     private getByDateRange = (startDate?: string, endDate?: string): void => {
         this.setState({loading: true});
 
-        orderService.getByDateRange<Order[]>(startDate, endDate)
+        orderService.get<Order[]>()
             .then((orders: Order[]) => {
                 this.setState({orders, loading: false})
             })

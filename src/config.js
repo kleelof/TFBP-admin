@@ -5,7 +5,7 @@ const dev = {
 
 const prod = {
     API_URL: "",
-    OPERATOR_TOKEN: ''
+    OPERATOR_TOKEN: '8500f3e1-0282-4d09-a752-6756d188f584'
 }
 
 export const config = process.env.NODE_ENV === 'development' ? dev : prod;

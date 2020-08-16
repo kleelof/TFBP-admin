@@ -1,13 +1,19 @@
-.coupons table {
-    border-spacing: 10px;
-    border-collapse: separate;
+.add_coupon {
+    display: inline;
+    border: 2px solid rgba(0, 0, 0, .2);
+    padding: 5px;
+    position: relative;
 }
 
-.coupons .row-highlight {
-    background-color: rgba(0,0,0,.3);
-}
-
-.coupons tr:hover {
-    background-color: rgba(51, 206, 46, 0.7);
+.add_coupon:hover {
     cursor: pointer;
+    background-color: rgba(0, 0, 0, .2);
+}
+
+.coupon {
+    padding: 5px;
+}
+
+.coupon--inactive {
+    color: rgba(0, 0, 0, .5);
 }

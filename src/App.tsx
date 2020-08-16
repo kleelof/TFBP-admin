@@ -25,6 +25,7 @@ import EditOrder from './components/order/EditOrder';
 import MailUtilities from './components/mail/MailUtilities';
 import Coupons from './components/coupon/Coupons';
 import DeliveryDuplicate from './components/delivery/DeliveryDuplicate';
+import CouponAdd from "./components/coupon/CouponAdd";
 
 interface LinkStateProps {
   auth: AuthState
@@ -103,6 +104,7 @@ class App extends React.Component<Props, State> {
 					<PrivateRoute path="/dashboard/orders/export" component={Export} />
 					<PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
 					<PrivateRoute path="/dashboard/orders" component={Orders} />
+					<PrivateRoute path="/dashboard/coupon/add" component={CouponAdd}/>
 					<PrivateRoute path="/dashboard/coupons" component={Coupons} />
 					<Route path="/dashboard/login" component={Login} />
 					</Switch>

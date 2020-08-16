@@ -4,51 +4,93 @@ import Coupon from '../../models/Coupon';
 import couponService from '../../services/CouponService';
 
 import './coupon.scss';
+import {CouponComponent} from "./CouponComponent";
+import LoadingOverlay from "../overlays/LoadingOverlay";
+import {RouteComponentProps} from 'react-router-dom';
 
 interface State {
     loading: boolean,
-    coupons: Coupon[]
+    coupons: Coupon[],
+    addingCoupon: boolean
 }
 
-export default class Coupons extends React.Component<any, State> {
+export default class Coupons extends React.Component<RouteComponentProps, State> {
 
     state = {
         loading: true,
-        coupons: []
+        coupons: [],
+        addingCoupon: false
     }
 
     public componentDidMount = (): void => {
         couponService.get<Coupon[]>()
-            .then((coupons: Coupon[]) => this.setState({coupons, loading: false}))
-            .catch( err => window.alert(err))
+            .then((coupons: Coupon[]) =>
+                this.setState({coupons, loading: false}))
+            .catch( err => console.log(err))
+    }
+
+    private couponUpdated = (coupon: Coupon): void => {
+        this.setState({
+            coupons: this.state.coupons.map((c: Coupon) => {
+                if (c.id === coupon.id)
+                    return coupon
+                else
+                    return c
+            })
+        })
+    }
+
+    private addCoupon = (): void => {
+        this.setState(({addingCoupon: true}));
+        couponService.add<Coupon>(new Coupon())
+            .then((coupon: Coupon) => {this.props.history.push({pathname: `/dashboard/coupon/edit/${coupon.id}`})})
+            .catch( err => window.alert('Unable to create coupon'));
     }
 
     public render() {
+        if (this.state.loading)
+            return <LoadingOverlay />
+
+        const coupons: Coupon[] = this.state.coupons.sort((a: Coupon, b:Coupon) => {
+            return a.active < b.active ?
+                1
+                :
+                a.active > b.active ?
+                    -1 : 0
+        })
+
         return(
             <div className="row coupons">
-                <div className="col-12">
-                    <table>
+                <div className={'col-12 mb-2'}>
+                    <div className={'add_coupon'} onClick={() => this.props.history.push({pathname: '/dashboard/coupon/add'})}>
+                        {
+                            this.state.addingCoupon ?
+                                'Creating coupon...'
+                                :
+                                '+ Add Coupon'
+                        }
+                    </div>
+                </div>
+                <div className={'col-12'}>
+                    <table className={'table'}>
                         <thead>
                             <tr>
-                                <th>Code</th>
-                                <th>Type</th>
-                                <th>Start</th>
-                                <th>Current</th>
-                                <th>Email</th>
-                                <th>Expire</th>
+                                <th></th>
+                                <th>code</th>
+                                <th>type</th>
+                                <th>uses</th>
+                                <th>start value</th>
+                                <th>current value</th>
+                                <th>expire</th>
+                                <th>email</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                this.state.coupons.map((coupon: Coupon) =>
-                                    <tr className={`coupon ${coupon.id % 2 === 0 ? 'row-highlight' : ''}`} key={`c_${coupon.id}`}>
-                                        <td>{coupon.code}</td>
-                                        <td>{['percent', 'fixed'][coupon.mode]}</td>
-                                        <td>{coupon.start_value.toFixed(2)}</td>
-                                        <td>{coupon.current_value.toFixed(2)}</td>
-                                        <td>{coupon.email !== null ? coupon.email : "no email"}</td>
-                                        <td>{coupon.expire}</td>
-                                    </tr>
+                                coupons.map((coupon: Coupon) =>
+                                    <CouponComponent
+                                        coupon={coupon} key={`c_${coupon.id}`}
+                                        couponUpdated={this.couponUpdated} />
                                 )
                             }
                         </tbody>
