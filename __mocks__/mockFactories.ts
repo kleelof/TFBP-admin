@@ -13,7 +13,8 @@ interface BuildCoupon {
     email?: string,
     expire?: string,
     active?: boolean,
-    remaining_uses?: number
+    remaining_uses?: number,
+    calculation_type?: number
 }
 
 export const BuildCoupon = (params: BuildCoupon): any => {
@@ -26,6 +27,7 @@ export const BuildCoupon = (params: BuildCoupon): any => {
                 'test_code',
                 params.active !== false ? true : false,
                 params.mode || 0,
+                params.calculation_type || 0,
                 params.expire || `2021-07-04`,
                 params.start_value || .2,
                 params.current_value || 0,

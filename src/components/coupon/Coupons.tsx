@@ -77,7 +77,8 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                             <tr>
                                 <th></th>
                                 <th>code</th>
-                                <th>type</th>
+                                <th>mode</th>
+                                <th>calculation</th>
                                 <th>uses</th>
                                 <th>start value</th>
                                 <th>current value</th>

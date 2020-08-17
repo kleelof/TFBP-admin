@@ -28,12 +28,6 @@ describe('Coupons tests', () => {
         await component.update();
     })
 
-    it('should create new coupon', async () => {
-        const addCoupon: any = component.find('.add_coupon');
-        addCoupon.simulate('click');
-        expect(couponAddSpy).toBeCalledTimes(1);
-    })
-
     it('should list all the coupons', () => {
         expect(component.find(CouponComponent).length).toEqual(2);
     })
@@ -68,34 +62,6 @@ describe('CouponComponent tests', () => {
 })
 
 describe ('CouponAdd tests', () => {
-    it('should display correct details --percentage mode --active', async () => {
-        const coupon: Coupon = BuildCoupon({count: 1});
-        couponGetSpy.mockImplementation(() => Promise.resolve(coupon));
-        const props: any = {match: { params: {id: coupon.id}}}
-        component = await mount(
-            <CouponAdd {...props} />
-        )
-        await component.update();
 
-        expect(component.find('.edit_coupon__code').text()).toContain(coupon.code);
-        expect(component.find('.edit_coupon__email').text()).toContain(coupon.email);
-        expect(component.find('.edit_coupon__mode').instance().value).toBe("0");
-        expect(component.find('.edit_coupon__start_value').length).toBe(1);
-        expect(component.find('.edit_coupon__current_value').length).toBe(0);
-        expect(component.find('.edit_coupon__active--active').length).toBe(1);
-    })
-
-    it('should display correct details --fixed price mode --inactive', async () => {
-        const coupon: Coupon = BuildCoupon({count: 1, mode: 1, active: false});
-        couponGetSpy.mockImplementation(() => Promise.resolve(coupon));
-        const props: any = {match: { params: {id: coupon.id}}};
-        component = await mount(
-            <CouponAdd {...props} />
-        )
-        await component.update();
-        expect(component.find('.edit_coupon__mode').instance().value).toBe("1");
-        expect(component.find('.edit_coupon__start_value').length).toBe(1);
-        expect(component.find('.edit_coupon__current_value').length).toBe(1);
-        expect(component.find('.edit_coupon__active--inactive').length).toBe(1);
-    })
+    it('should ', () => {})
 })

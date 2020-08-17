@@ -5,6 +5,7 @@ export default class Coupon extends ModelBase {
 
     public code!: string;
     public mode!: number;
+    public calculation_type!: number;
     public expire!: string;
     public start_value!: number;
     public current_value!: number;
@@ -17,6 +18,7 @@ export default class Coupon extends ModelBase {
         code?: string,
         active?: boolean,
         mode?: number,
+        calculation_type?: number,
         expire?: string,
         start_value?: number,
         current_value?: number,
@@ -30,6 +32,7 @@ export default class Coupon extends ModelBase {
         this.code = code || '';
         this.active = active !== false ? true : false;
         this.mode = mode || 0;
+        this.calculation_type = calculation_type || 0
         this.expire = expire ||
             format(expire_date, 'yyyy-mm-dd');
         this.start_value = start_value || 0;
@@ -43,6 +46,7 @@ export class CouponDTO extends Coupon {
 
     public code!: string;
     public mode!: number;
+    public calculation_type!: number;
     public expire!: string;
     public start_value!: number;
     public current_value!: number;
@@ -55,6 +59,7 @@ export class CouponDTO extends Coupon {
         this.id = coupon.id;
         this.active = coupon.active;
         this.mode = coupon.mode;
+        this.calculation_type = coupon.calculation_type;
         this.expire = coupon.expire;
         this.start_value = coupon.start_value;
         this.current_value = coupon.current_value;

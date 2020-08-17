@@ -31,7 +31,7 @@ export default class CouponAdd extends React.Component<RouteComponentProps, Stat
             coupon.start_value = coupon.start_value * .01
 
         couponService.add<Coupon>(this.state.coupon)
-            .then(() => this.props.history.push({pathname: '/dashboard/coupons'}))
+            .then(() => {}) //this.props.history.push({pathname: '/dashboard/coupons'}))
             .catch( err => alert('unable to add coupon'))
             .finally(() => this.setState({saving: false}));
     }
@@ -52,9 +52,18 @@ export default class CouponAdd extends React.Component<RouteComponentProps, Stat
                     <h3>Add Coupon</h3>
                     <div className={'row'}>
                         <div className={'col-12 col-6 mt-3'}>
-                            Type:
+                            Mode:
                             <select id={'mode'} className={'form-control edit_coupon__mode'}
                                 value={this.state.coupon.mode}
+                                onChange={this.updateData}>
+                                <option value={0}>standard</option>
+                                <option value={1}>one off</option>
+                            </select>
+                        </div>
+                        <div className={'col-12 col-6 mt-3'}>
+                            Calculation:
+                            <select id={'calculation_type'} className={'form-control edit_coupon__calculation_type'}
+                                value={this.state.coupon.calculation_type}
                                 onChange={this.updateData}>
                                 <option value={0}>percentage</option>
                                 <option value={1}>fixed value</option>

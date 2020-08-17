@@ -12,7 +12,8 @@ interface Props {
 }
 
 export const CouponComponent = (props: Props): React.ReactElement => {
-    const types: string[] = ['percentage', 'fixed'];
+    const modes: string[] = ['standard', 'one off'];
+    const calculation_types: string[] = ['percentage', 'fixed'];
     const [coupon, setCoupon] = useState<Coupon>(props.coupon);
     const [deactivating, setDeactivating] = useState(false);
 
@@ -40,11 +41,12 @@ export const CouponComponent = (props: Props): React.ReactElement => {
                 }
             </td>
             <td className={'coupon__code'}>{coupon.code}</td>
-            <td className={'coupon__mode'}>{types[coupon.mode]}</td>
+            <td className={'coupon__mode'}>{modes[coupon.mode]}</td>
+            <td className={'coupon__mode'}>{calculation_types[coupon.calculation_type]}</td>
             <td className={'coupon__uses'}>{coupon.remaining_uses}</td>
             <td className={'coupon__start_value'}>
                 {
-                    props.coupon.mode === 0 ?
+                    props.coupon.calculation_type === 0 ?
                         `${coupon.start_value * 100}%`
                         :
                         `$${coupon.start_value.toFixed(2)}`
@@ -52,7 +54,7 @@ export const CouponComponent = (props: Props): React.ReactElement => {
             </td>
             <td className={'coupon__end_value'}>
                 {
-                    coupon.mode === 0 ?
+                    coupon.calculation_type === 0 ?
                         ``
                         :
                         `$${coupon.current_value.toFixed(2)}`
