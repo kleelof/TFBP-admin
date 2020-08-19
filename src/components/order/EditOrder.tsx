@@ -5,6 +5,7 @@ import orderService from '../../services/OrderService';
 import OrderItem from '../../models/OrderItemModel';
 import helpers, {OrderedItems} from '../../helpers/helpers';
 import { Link, Redirect } from 'react-router-dom';
+import OrderEmail from "./OrderEmail";
 
 interface State {
     loading: boolean,
@@ -70,64 +71,62 @@ export default class EditOrder extends React.Component<any, State> {
                         <option value="2">Paid</option>
                     </select>
                 </div>
-                <div className="col-12">
-                    <div className="row">
-                        <div className="col-5">
-                            <div className="form-group mt-2">
-                                <label htmlFor="contact_name">contact name</label>
-                                <input id="contact_name" type="text" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.contact_name} onChange={this.updateData}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="phone_number">phone number</label>
-                                <input id="phone_number" type="text" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.phone_number} onChange={this.updateData}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="city">city</label>
-                                <input id="city" type="text" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.city} onChange={this.updateData}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="zip">zip</label>
-                                <input id="zip" type="text" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.zip} onChange={this.updateData}/>
-                            </div>
-                        </div>
-                        <div className="col-5">
-                            <div className="form-group">
-                                <label htmlFor="email">email</label>
-                                <input id="email" type="email" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.email} onChange={this.updateData}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="street_address">Street Address</label>
-                                <input id="street_address" type="text" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.street_address} onChange={this.updateData}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="unit">unit</label>
-                                <input id="unit" type="text" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.unit} onChange={this.updateData}/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="notes">delivery notes</label>
-                                <textarea id="notes" className="form-control" disabled={this.state.updating}
-                                        value={this.state.order.notes} onChange={this.updateData}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <pre>
-                                <code className="prettyprint">
-                                    {JSON.stringify(this.state.order.square_payment, null, 4)}
-                                </code>
-                            </pre>
-                        </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group mt-2">
+                        <label htmlFor="contact_name">contact name</label>
+                        <input id="contact_name" type="text" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.contact_name} onChange={this.updateData}/>
                     </div>
+
+                    <div className="form-group">
+                        <label htmlFor="phone_number">phone number</label>
+                        <input id="phone_number" type="text" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.phone_number} onChange={this.updateData}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="city">city</label>
+                        <input id="city" type="text" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.city} onChange={this.updateData}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="zip">zip</label>
+                        <input id="zip" type="text" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.zip} onChange={this.updateData}/>
+                    </div>
+                </div>
+                <div className="col-12 col-md-6">
+                    <div className="form-group">
+                        <label htmlFor="email">email</label>
+                        <input id="email" type="email" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.email} onChange={this.updateData}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="street_address">Street Address</label>
+                        <input id="street_address" type="text" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.street_address} onChange={this.updateData}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="unit">unit</label>
+                        <input id="unit" type="text" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.unit} onChange={this.updateData}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="notes">delivery notes</label>
+                        <textarea id="notes" className="form-control" disabled={this.state.updating}
+                                value={this.state.order.notes} onChange={this.updateData}/>
+                    </div>
+                </div>
+                <div className="col-2">
+                    <pre>
+                        <code className="prettyprint">
+                            {JSON.stringify(this.state.order.square_payment, null, 4)}
+                        </code>
+                    </pre>
                 </div>
                 <div className="col-12">
                     <button className="btn btn-success" onClick={this.saveUpdates}
                             disabled={!this.state.updatesPending || this.state.updating}>Save Updates</button>
+                    <Link to={`/dashboard/order/mail/${this.state.order.id}`}>Email</Link>
                 </div>
                 <div className="col-12 edit-order-deliveries">
                     <hr/>
@@ -155,6 +154,9 @@ export default class EditOrder extends React.Component<any, State> {
                             )
                         })
                     }
+                </div>
+                <div className={'col-12'}>
+                    <OrderEmail />
                 </div>
             </div> 
         )

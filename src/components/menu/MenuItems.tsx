@@ -35,16 +35,17 @@ export const MenuItems = (): React.ReactElement => {
     return(
         <div className="row menuitems mt-3">
             {
-                sortedItems.map((item: MenuItem) => {
+                sortedItems.sort((a: MenuItem, b: MenuItem) =>
+                                    a.name.toLowerCase() > b.name.toLowerCase() ?
+                                        1 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 0 )
+                            .map((item: MenuItem) => {
                     return(
                         <div className="col-12 col-md-3 menuitems__menuitem" key={`mi_${item.id}`}>
-                            <Link to={`/dashboard/menu/edit/${item.id}/`}>
-                                <div className="row">
+                            <Link className="row" to={`/dashboard/menu/edit/${item.id}/`}>
                                     <div className="col-12 menuitem__name">{item.name}</div>
                                     <div className="col-12 menuitem__image">
                                         <img src={config.API_URL + item.image} alt={item.name}/>
                                     </div>
-                                </div>
                             </Link>
                         </div>
                     )

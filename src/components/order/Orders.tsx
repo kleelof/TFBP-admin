@@ -88,44 +88,46 @@ export default class Orders extends React.Component<any, State> {
                                 </thead>
                                 <tbody>
                                     {
-                                        this.state.orders.map((order: Order, index: number) => {
-                                            let menuItemCount: number = 0;
-                                            let total: number = 0;
-                                            let deliveryDates: string[] = [];
-        
-                                            order.items.forEach((orderItem: OrderItem) => {
-                                                menuItemCount += orderItem.cart_item.quantity;
-                                                total += orderItem.cart_item.quantity * orderItem.cart_item.price;
-                                                if (deliveryDates.indexOf(orderItem.cart_item.delivery_date) === -1)
-                                                    deliveryDates.push(orderItem.cart_item.delivery_date);
-                                            })
-        
-                                            return (
-                                                <tr key={order.id} className={index % 2 ? '' : 'orders-line-highlight'}
-                                                    onClick={()=> this.setState({editId: order.id})}>
-                                                    <td>{order.contact_name}</td>
-                                                    <td>{order.public_id}</td>
-                                                    <td>{order.email}<br/>{order.phone_number}</td>
-                                                    <td>{helpers.formatDate(order.created_at)}</td>
-                                                    <td>
-                                                        {
-                                                            deliveryDates.map((date: string) => {
-                                                                return (
-                                                                    <Fragment>
-                                                                        {helpers.formatDate(date)}
-                                                                        <br/>
-                                                                    </Fragment>
-                                                                )
-                                                            })
-                                                        }
-                                                    </td>
-                                                    <td>{menuItemCount}</td>
-                                                    <td>${total.toFixed(2)}</td>
-                                                    <td className={`order-status-${order.order_status}`}>
-                                                        {this.orderStatuses[order.order_status]}
-                                                    </td>
-                                                </tr>
-                                            )
+                                        this.state.orders
+                                            .sort((a: Order, b: Order) => a.id > b.id ? -11 : a.id < b.id ? 1 : 0)
+                                            .map((order: Order, index: number) => {
+                                                let menuItemCount: number = 0;
+                                                let total: number = 0;
+                                                let deliveryDates: string[] = [];
+
+                                                order.items.forEach((orderItem: OrderItem) => {
+                                                    menuItemCount += orderItem.cart_item.quantity;
+                                                    total += orderItem.cart_item.quantity * orderItem.cart_item.price;
+                                                    if (deliveryDates.indexOf(orderItem.cart_item.delivery_date) === -1)
+                                                        deliveryDates.push(orderItem.cart_item.delivery_date);
+                                                })
+
+                                                return (
+                                                    <tr key={order.id} className={index % 2 ? '' : 'orders-line-highlight'}
+                                                        onClick={()=> this.setState({editId: order.id})}>
+                                                        <td>{order.contact_name}</td>
+                                                        <td>{order.public_id}</td>
+                                                        <td>{order.email}<br/>{order.phone_number}</td>
+                                                        <td>{helpers.formatDate(order.created_at)}</td>
+                                                        <td>
+                                                            {
+                                                                deliveryDates.map((date: string) => {
+                                                                    return (
+                                                                        <Fragment>
+                                                                            {helpers.formatDate(date)}
+                                                                            <br/>
+                                                                        </Fragment>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </td>
+                                                        <td>{menuItemCount}</td>
+                                                        <td>${total.toFixed(2)}</td>
+                                                        <td className={`order-status-${order.order_status}`}>
+                                                            {this.orderStatuses[order.order_status]}
+                                                        </td>
+                                                    </tr>
+                                                )
                                         })
                                     }
                                 </tbody>

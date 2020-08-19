@@ -27,7 +27,7 @@ export default class CouponAdd extends React.Component<RouteComponentProps, Stat
 
         let coupon: Coupon = this.state.coupon;
 
-        if (coupon.mode === 0 && coupon.start_value > 1)
+        if (coupon.calculation_type === 0 && coupon.start_value > 1)
             coupon.start_value = coupon.start_value * .01
 
         couponService.add<Coupon>(this.state.coupon)
