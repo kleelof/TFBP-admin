@@ -61,9 +61,10 @@ export default class Orders extends React.Component<any, State> {
             <div className="row orders">
                 <div className="col-12">
                     <div className="row">
-                        <div className="col-12">
+                        <div className="col-12 col-md-3">
                             Start Date: <input type="date" id="startDate" value={this.state.startDate} onChange={this.updateData}/>
-                            &nbsp;&nbsp;
+                        </div>
+                        <div className={'col-12 col-md-9'}>
                             End Date: <input type="date" id="endDate" value={this.state.endDate} onChange={this.updateData} />
                             &nbsp;&nbsp;
                             <button className="btn btn-success" onClick={this.searchByOrderDateRange}>Search</button>
@@ -73,16 +74,13 @@ export default class Orders extends React.Component<any, State> {
                         this.state.orders.length === 0 ?
                             <div>No Orders Found</div>
                             :
-                            <table>
+                            <table className={'table'}>
                                 <thead>
                                     <tr>
                                         <th>Name</th>
                                         <th>Order ID</th>
                                         <th>Contact</th>
                                         <th>Date</th>
-                                        <th>Delivery Dates</th>
-                                        <th>Items Delivered</th>
-                                        <th>Total</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -109,20 +107,7 @@ export default class Orders extends React.Component<any, State> {
                                                         <td>{order.public_id}</td>
                                                         <td>{order.email}<br/>{order.phone_number}</td>
                                                         <td>{helpers.formatDate(order.created_at)}</td>
-                                                        <td>
-                                                            {
-                                                                deliveryDates.map((date: string) => {
-                                                                    return (
-                                                                        <Fragment>
-                                                                            {helpers.formatDate(date)}
-                                                                            <br/>
-                                                                        </Fragment>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </td>
-                                                        <td>{menuItemCount}</td>
-                                                        <td>${total.toFixed(2)}</td>
+
                                                         <td className={`order-status-${order.order_status}`}>
                                                             {this.orderStatuses[order.order_status]}
                                                         </td>
