@@ -56,7 +56,7 @@ export default class EditOrder extends React.Component<any, State> {
         const orderedItems: OrderedItems = helpers.sortOrderItemsByDate(this.state.order.items);
 
         return (
-            <div className="row edit-order">
+            <div className="row edit_order">
                 <div className="col-12">
                     <Link to={'/dashboard/orders'}>{`<<< Return to Orders`}</Link>
                     <br/><br/>
@@ -64,7 +64,7 @@ export default class EditOrder extends React.Component<any, State> {
                 <div className="col-12">
                     <h5>Order ID: {this.state.order.public_id}</h5>
                     <select id="order_status" defaultValue={this.state.order.order_status}
-                            className={`order-status-${this.state.order.order_status}`}
+                            className={`order_status--${this.state.order.order_status}`}
                             onChange={this.updateData} disabled={this.state.updating}>
                         <option value="0">Canceled</option>
                         <option value="1">Pending</option>
@@ -126,9 +126,8 @@ export default class EditOrder extends React.Component<any, State> {
                 <div className="col-12">
                     <button className="btn btn-success" onClick={this.saveUpdates}
                             disabled={!this.state.updatesPending || this.state.updating}>Save Updates</button>
-                    <Link to={`/dashboard/order/mail/${this.state.order.id}`}>Email</Link>
                 </div>
-                <div className="col-12 edit-order-deliveries">
+                <div className="col-12 edit_order__deliveries">
                     <hr/>
                     <h5>Deliveries:</h5>
                     {
@@ -156,7 +155,9 @@ export default class EditOrder extends React.Component<any, State> {
                     }
                 </div>
                 <div className={'col-12'}>
-                    <OrderEmail />
+                    <hr/>
+                    <h5>Email Customer:</h5>
+                    <OrderEmail order={this.state.order}/>
                 </div>
             </div> 
         )

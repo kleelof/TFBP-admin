@@ -23,26 +23,26 @@
     float: left;
 }
 
-.edit-order select {
+.edit_order select {
     padding: 5px;
     font-size: 1.3em;
 }
 
-.edit-order select option[value="0"], .order-status-0 {
+.edit_order select option[value="0"], .order-status-0 {
     background-color: rgba(247, 4, 4, 0.7);
     color: rgba(255, 255, 255, .9);
 }
 
-.edit-order select option[value="1"], .order-status-1 {
+.edit_order select option[value="1"], .order-status-1 {
     background-color: rgba(247, 243, 4, 0.7);
 }
 
-.edit-order select option[value="2"], .order-status-2 {
+.edit_order select option[value="2"], .order-status-2 {
     background-color: rgba(81, 247, 4, 0.7);
 }
 
-.edit-order-deliveries {
-    font-size: 1.5em;
+.edit_order__deliveries {
+    font-size: 1.1em;
 }
 
 .export-panel {

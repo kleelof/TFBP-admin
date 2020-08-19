@@ -75,7 +75,7 @@ export const BuildOrder = (params: bOrder): any => {
                 x,
                 1,
                 `contact_name_${x}`,
-                `email${x}@email.com`,
+                `email_${x}@email.com`,
                 '',
                 '',
                 '',
