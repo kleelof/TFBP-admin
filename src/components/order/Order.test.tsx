@@ -31,6 +31,7 @@ describe('OrderEmail tests', () => {
     })
 
     it('should submit correctly --include_order', () => {
+        sendSupportEmailSpy.mockImplementation(() => Promise.resolve(BuildOrder({count: 1})));
         component.find('.order_email__body').simulate('change', {target: {id: 'body', value: 'body text'}});
         component.find('.order_email__submit').simulate('click');
 

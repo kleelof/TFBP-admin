@@ -4,7 +4,7 @@ import DeliveryDay from '../models/DeliveryDayModel';
 import DeliveryWindow from '../models/DeliveryWindowModel';
 
 class DeliveryDayService extends Service {
-    appName = "operator_app";
+    appName = "dashboard";
     view = "delivery_day";
 
     public attachWeekMenuItem(weekID: number, menuItemID: number, attach: boolean = true): Promise<WeekMenuItemDTO> {

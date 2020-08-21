@@ -2,7 +2,7 @@ import Service from './Service';
 import Order from '../models/OrderModel';
 
 class OrderService extends Service {
-    appName="operator_app";
+    appName="dashboard";
     view="order";
 
     public getCompletedOrders = (date: string): Promise<Order[]> => {

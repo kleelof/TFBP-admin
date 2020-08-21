@@ -2,7 +2,7 @@ import Service from './Service';
 import MenuItem from '../models/MenuItemModel';
 
 class MenuItemService extends Service {
-    appName = "operator_app";
+    appName = "dashboard";
     view = "menu_item";
 
     public loadByCategory = (category: string): Promise<MenuItem[]> => {

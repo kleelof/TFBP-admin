@@ -11,6 +11,6 @@ const getSpy: jest.SpyInstance = jest.spyOn(axiosInstance, 'get');
 describe('Service Tests', () => {
     it('should add query variables', () => {
         menuItemService.get(null, {test: 'var_1'});
-        expect(getSpy).toBeCalledWith('/operator_app/menu_item/?test=var_1');
+        expect(getSpy).toBeCalledWith('/dashboard/menu_item/?test=var_1');
     })
 })

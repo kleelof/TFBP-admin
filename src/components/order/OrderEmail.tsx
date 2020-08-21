@@ -39,7 +39,7 @@ export default class OrderEmail extends React.Component<Props, State> {
                 this.setState({subject: '', body: '', include_order: true})
             })
             .catch( err => window.alert('unable to send email'))
-            .finally(() => this.setState({submitting: false}))
+            .then(() => this.setState({submitting: false}))
     }
 
     private toggleIncludeOrder = (): void => {console.log(this.state.include_order)
