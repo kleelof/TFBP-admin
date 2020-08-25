@@ -17,16 +17,15 @@ import Navigation from './components/nav/Navigation';
 import Deliveries from './components/delivery/Deliveries';
 import DeliveryDay from './components/delivery/DeliveryDayComponent';
 import Menu from './components/menu/Menu';
-import MailingList from './components/mail/MailingList';
 import Login from './components/authentication/Login';
 import Orders from './components/order/Orders';
 import Export from './components/order/Export';
 import EditOrder from './components/order/EditOrder';
-import MailUtilities from './components/mail/MailUtilities';
 import Coupons from './components/coupon/Coupons';
 import DeliveryDuplicate from './components/delivery/DeliveryDuplicate';
 import CouponAdd from "./components/coupon/CouponAdd";
 import OrderEmail from "./components/order/OrderEmail";
+import {Mail} from "./components/mail/Mail";
 
 interface LinkStateProps {
   auth: AuthState
@@ -100,8 +99,7 @@ class App extends React.Component<Props, State> {
 					<PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
 					<PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
                     <PrivateRoute path="/dashboard/delivery/duplicate/:id" component={DeliveryDuplicate} />
-					<PrivateRoute path="/dashboard/mailingList" component={MailingList} />
-					<PrivateRoute path="/dashboard/mailUtilities" component={MailUtilities} />
+					<PrivateRoute path="/dashboard/mail" component={Mail} />
 					<PrivateRoute path="/dashboard/orders/export" component={Export} />
 					<PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
 					<PrivateRoute path={'/dashboard/order/mail/:id'} component={OrderEmail} />
