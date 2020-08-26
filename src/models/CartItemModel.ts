@@ -1,7 +1,6 @@
 import ModelBase from "./ModelBase"
 import MenuItem from "./MenuItemModel";
 import User from "./User";
-import DeliveryDay from "./DeliveryDayModel";
 import DeliveryWindow from "./DeliveryWindowModel";
 
 export class CartItemDTO {

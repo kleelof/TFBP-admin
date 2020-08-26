@@ -5,7 +5,7 @@ export default class MailTemplate extends ModelBase {
     public text!: string;
     public options!: {}
 
-    constructor(slug: string, text: string, options: {}) {
+    constructor(slug?: string, text?: string, options?: {}) {
         super();
         this.slug = slug || '';
         this.text = text || '';

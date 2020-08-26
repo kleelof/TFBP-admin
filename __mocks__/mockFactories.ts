@@ -4,6 +4,7 @@ import CartItem from '../src/models/CartItemModel';
 import { BuildCartItem } from './cartMocks';
 import MenuItem from "../src/models/MenuItemModel";
 import Coupon from "../src/models/Coupon";
+import MailTemplate from "../src/models/MailTemplate";
 
 interface BuildCoupon {
     count: number,
@@ -40,13 +41,13 @@ export const BuildCoupon = (params: BuildCoupon): any => {
     return  items.length > 1 ? items : items[0];
 }
 
-interface bOrderItem {
+interface IOrderItem {
     count: number,
     cartItem?: CartItem,
     order?: Order
 }
 
-export const BuildOrderItem = (params: bOrderItem): any => {
+export const BuildOrderItem = (params: IOrderItem): any => {
     let items: OrderItem[] = [];
 
     for(let x: number = 1; x <= params.count; x ++ ) {
@@ -61,12 +62,12 @@ export const BuildOrderItem = (params: bOrderItem): any => {
     return items.length > 1 ? items : items[0];
 }
 
-interface bOrder {
+interface IOrder {
     count: number
     orderItems?: OrderItem[]
 }
 
-export const BuildOrder = (params: bOrder): any => {
+export const BuildOrder = (params: IOrder): any => {
     let orders: Order[] = [];
 
     for (let x: number = 1; x <= params.count; x ++) {
@@ -93,14 +94,35 @@ export const BuildOrder = (params: bOrder): any => {
     return orders.length > 1 ? orders : orders[0];
 }
 
-interface bBuildMenuItem {
+interface IBuildMailTemplate {
+    count: number;
+    options?: {}
+}
+
+export const BuildMailTemplate = (params: IBuildMailTemplate): any => {
+    let items: MailTemplate[] = [];
+
+    for (let x: number = 1; x <= params.count; x ++){
+        items.push(
+            new MailTemplate(
+                `template-slug-${x}`,
+                `template text ${x}`,
+                params.options || {}
+            )
+        )
+    }
+
+    return items.length> 1 ? items : items[0];
+}
+
+interface IBuildMenuItem {
     count: number,
     name?: string,
     spicy?: boolean,
     proteins?: string
 }
 
-export const BuildMenuItem = (params: bBuildMenuItem): any => {
+export const BuildMenuItem = (params: IBuildMenuItem): any => {
     let items: MenuItem[] = [];
 
     for(let x: number = 1; x <= params.count; x ++ ) {

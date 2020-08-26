@@ -15,6 +15,11 @@ class AdminService extends Service {
 
         return this._post<any>('dashboard/send_support_email/', payload)
     }
+
+    public sendMassMail = (body: string, options: any, send_email: boolean = false): Promise<any> => {
+        return this._post<any>('dashboard/send_mass_mail/',
+            {body: body, options: options, send_email: send_email});
+    }
 }
 
 export default new AdminService();

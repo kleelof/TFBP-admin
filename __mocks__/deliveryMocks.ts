@@ -61,7 +61,7 @@ export const BuildDeliveryDayDTO = (params: IBuildDeliveryDayDTO): any => {
 }
 
 interface IBuildDeliveryDaysDTO {
-    deliveryDaysCount: number,
+    count: number,
     deliveryItemsCount?: number,
     windows?: DeliveryWindowDTO[],
     zipValid?: boolean
@@ -71,7 +71,7 @@ export const BuildDeliveryDaysDTO = (params: IBuildDeliveryDaysDTO): any => {
     let deliveryDay: DeliveryDaysDTO = {
         zip_valid: params.zipValid ? params.zipValid : true,
         delivery_days: BuildDeliveryDayDTO({
-            count: params.deliveryDaysCount,
+            count: params.count,
             deliveryItemsCount: params.deliveryItemsCount
         })
     };
