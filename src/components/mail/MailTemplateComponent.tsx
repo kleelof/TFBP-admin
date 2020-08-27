@@ -13,7 +13,8 @@ interface State {
     loading: boolean,
     updating: boolean,
     template: MailTemplate,
-    text: string
+    text: string,
+    originalText: string
 }
 
 export default class MailTemplateComponent extends React.Component<Props, State> {
@@ -25,14 +26,15 @@ export default class MailTemplateComponent extends React.Component<Props, State>
             loading: true,
             updating: false,
             template: new MailTemplate(),
-            text: ''
+            text: '',
+            originalText: ''
         }
     }
 
     public componentDidMount() {
         mailTemplateService.get_template_by_slug(this.props.templateSlug)
             .then((template: MailTemplate) => {
-                this.setState({text: template.text, template, loading: false})
+                this.setState({text: template.text, originalText: template.text, template, loading: false})
             })
             .catch(() => window.alert('unable to load templates'))
             .then(() => this.setState({loading: false}))
@@ -70,9 +72,10 @@ export default class MailTemplateComponent extends React.Component<Props, State>
                     ></textarea>
                 </div>
                 <div className={'col-12'}>
-                    <button className={'btn btn-success'}
+                    <button className={`btn btn-${this.state.updating || this.state.text === this.state.originalText ? 
+                        'default' : 'success'}`}
                             onClick={() => this.saveUpdates()}
-                            disabled={this.state.updating}
+                            disabled={this.state.updating || this.state.text === this.state.originalText}
                             >Update</button>
                 </div>
             </div>

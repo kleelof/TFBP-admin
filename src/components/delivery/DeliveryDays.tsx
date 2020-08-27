@@ -5,6 +5,8 @@ import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import { config } from '../../config';
 import { useHistory } from 'react-router-dom';
 
+import './delivery.css';
+
 interface Props {
     deliveryDay: DeliveryDay
 }
@@ -27,7 +29,9 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
                                 <div className="col-4 delivery_days_item" key={`ddi_${item.id}`}>
                                     <small>{item.menu_item.name}</small>
                                     <div>
-                                        <img src={`${config.API_URL + item.menu_item.image}`} alt={item.menu_item.name} />
+                                        <img
+                                            src={`${config.API_URL + item.menu_item.image}`}
+                                            alt={item.menu_item.name} />
                                     </div>
                                 </div>
                         )

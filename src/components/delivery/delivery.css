@@ -16,7 +16,7 @@
     z-index: 1;
 }
 
-.delivery_days_item img {
+.delivery_days_item img, .delivery_day_item__img {
     width: 100%;
 }
 

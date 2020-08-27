@@ -11,7 +11,7 @@ interface State {
     deliveryDays: DeliveryDay[],
     deliveryWindows: DeliveryWindow[],
     message: string,
-    deliveryWindow: DeliveryWindow,
+    deliveryWindowId: number,
     deliveryDate: string,
     deliveryDay: DeliveryDay,
     includeSamples: boolean
@@ -23,7 +23,7 @@ export default class MailMassMailer extends React.Component<any, State> {
         deliveryDays: [],
         deliveryWindows: [],
         message: '',
-        deliveryWindow: new DeliveryWindow(),
+        deliveryWindowId: 0,
         deliveryDate: '',
         deliveryDay: new DeliveryDay(),
         includeSamples: false
@@ -45,7 +45,7 @@ export default class MailMassMailer extends React.Component<any, State> {
                     deliveryDays: values[0],
                     deliveryDay: deliveryDay,
                     deliveryWindows: deliveryWindows,
-                    deliveryWindow: deliveryWindow
+                    deliveryWindowId: deliveryWindow.id
                 })
             })
     }
@@ -69,8 +69,8 @@ export default class MailMassMailer extends React.Component<any, State> {
 
         switch (this.state.who){
             case 'delivery_window':
-                confirmMessage = `Send to customers in the delivery window: ${this.state.deliveryWindow.name}`;
-                options['delivery_window'] = this.state.deliveryWindow.id;
+                confirmMessage = `Send to customers in the selected delivery window.`;
+                options['delivery_window'] = this.state.deliveryWindowId;
                 break;
 
             case 'upcoming_delivery':
@@ -165,10 +165,13 @@ export default class MailMassMailer extends React.Component<any, State> {
                         {this.state.who === 'delivery_window' &&
                             <Fragment>
                                 select delivery window:
-                                <select className={'form-control options__delivery_windows'}>
+                                <select
+                                    className={'form-control options__delivery_windows'}
+                                    onChange={(e) =>
+                                        this.setState({deliveryWindowId: parseInt(e.target.value)})}>
                                     {
                                         this.state.deliveryWindows.map((window: DeliveryWindow) =>
-                                            <option key={`wi_${window.id}`}>
+                                            <option key={`wi_${window.id}`} value={window.id}>
                                                 {window.name}
                                             </option>
                                         )
