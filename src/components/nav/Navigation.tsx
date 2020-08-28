@@ -59,6 +59,10 @@ class Navigation extends React.Component<Props, State> {
                             <Link className="nav-link" to="/dashboard/mail">
                                     Mail</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/dashboard/newsletter">
+                                    Newsletters</Link>
+                        </li>
                         <li className="nav-item dropdown">
                             <button className="nav-link dropdown-toggle" id="orderDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Orders

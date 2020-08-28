@@ -5,6 +5,7 @@ import { BuildCartItem } from './cartMocks';
 import MenuItem from "../src/models/MenuItemModel";
 import Coupon from "../src/models/Coupon";
 import MailTemplate from "../src/models/MailTemplate";
+import Newsletter from "../src/models/Newsletter";
 
 interface BuildCoupon {
     count: number,
@@ -139,5 +140,29 @@ export const BuildMenuItem = (params: IBuildMenuItem): any => {
             )
         )
     }
+    return items.length > 1 ? items : items[0];
+}
+
+interface IBuildNewsletter {
+    count: number,
+    title?: string,
+    content?: string,
+    release_date?: any
+}
+
+export const BuildNewsletter = (params: IBuildNewsletter):any => {
+    let items: Newsletter[] = [];
+
+    for (let x: number = 1; x <= params.count; x ++) {
+        items.push(
+            new Newsletter(
+                x,
+                params.title || `newsletter_title_${x}`,
+                params.content || 'Newsletter Content',
+                params.release_date || null
+            )
+        )
+    }
+
     return items.length > 1 ? items : items[0];
 }

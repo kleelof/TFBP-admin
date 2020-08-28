@@ -1,4 +1,4 @@
-import ModelBase from "./ModelBaseModel";
+import ModelBase from "./ModelBase";
 
 export default class MenuItem {
 
