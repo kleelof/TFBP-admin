@@ -95,10 +95,12 @@ export default class MailMassMailer extends React.Component<any, State> {
                     window.alert(`${confirmMessage} did not produce any emails.`);
                     return;
                 } else {
-                    if(!window.confirm(`${confirmMessage}\n\nwill produce approx. ${resp.count} emails.\n\nSend?`)) return
+                    if(!window.confirm(`${confirmMessage}\n\nwill produce approx. ${resp.count} emails.\n\nSend?`))
+                        return
+
+                    adminService.sendMassMail(this.state.message, options, true)
+                        .then((resp: any) => window.alert(`${resp.count} emails were sent`))
                 }
-                adminService.sendMassMail(this.state.message, options, true)
-                    .then((resp: any) => window.alert(`${resp.count} emails were sent`))
             })
     }
 

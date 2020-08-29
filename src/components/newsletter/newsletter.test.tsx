@@ -18,6 +18,7 @@ let component: any;
 let newsletter: Newsletter;
 const getNewslettersSpy: jest.SpyInstance = jest.spyOn(newsletterService, 'get');
 const addNewsletterSpy: jest.SpyInstance = jest.spyOn(newsletterService, 'add');
+const updateNewsletterSpy: jest.SpyInstance = jest.spyOn(newsletterService, 'update');
 const historyMock: any = { push: jest.fn() };
 let props: any;
 
@@ -55,12 +56,14 @@ describe('NewsletterAdd tests', () => {
     it('should submit title and redirect to edit page',  async () => {
         const newsletter: Newsletter = BuildNewsletter({count: 1})
         getNewslettersSpy.mockImplementation(() => Promise.resolve(newsletter))
-        component = shallow(
-            <NewsletterAdd
-                history={historyMock}
-                location={{} as any}
-                match={{} as any}
-                />
+        component = mount(
+            <MemoryRouter>
+                <NewsletterAdd
+                    history={historyMock}
+                    location={{} as any}
+                    match={{} as any}
+                    />
+            </MemoryRouter>
         )
 
         component.find('input').simulate('change', {target: {value: 'test_new_newsletter'}});
@@ -92,6 +95,7 @@ describe('NewsletterEdit tests', () => {
 
         await component.update();
     })
+
     it('should set-up correctly', () => {
         expect(component.text()).toContain(newsletter.content);
         expect(component.find('.newsletter_edit_controls__save_btn').props().disabled).toBe(true);
@@ -108,6 +112,20 @@ describe('NewsletterEdit tests', () => {
     })
 
     it('should submit correct data to API and reset buttons to correct states', () => {
+        component.find('.newsletter_edit__title_input').simulate('change', {target: { value: 'send_title'}});
+        component.find('.newsletter_edit__content_input').simulate('change', {target: { value: 'send_content'}});
+        component.find('.newsletter_edit_controls__save_btn').simulate('click');
 
+        expect(updateNewsletterSpy).toHaveBeenCalledTimes(1);
+        expect(updateNewsletterSpy.mock.calls[0][1]['title']).toBe('send_title');
+        expect(updateNewsletterSpy.mock.calls[0][1]['content']).toBe('send_content');
+    })
+
+    it('should send correct email and newsletter ID for email test', () => {
+
+    })
+
+    it('should alert if no email address', () => {
+        
     })
 })

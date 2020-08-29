@@ -2,6 +2,8 @@ import React from 'react';
 import LoadingOverlay from "../overlays/LoadingOverlay";
 
 import newsletterService from '../../services/NewsletterService';
+import adminService from '../../services/AdminService';
+
 import Newsletter from "../../models/Newsletter";
 
 interface State {
@@ -9,7 +11,9 @@ interface State {
     saving: boolean,
     title: string,
     content: string,
-    newsLetter: Newsletter
+    newsLetter: Newsletter,
+    email: string,
+    sendingEmail: boolean
 }
 
 export default class NewsletterEdit extends React.Component<any, State> {
@@ -22,7 +26,9 @@ export default class NewsletterEdit extends React.Component<any, State> {
             saving: false,
             title: '',
             content: '',
-            newsLetter: new Newsletter()
+            newsLetter: new Newsletter(),
+            email: '',
+            sendingEmail: false
         }
     }
 
@@ -41,6 +47,26 @@ export default class NewsletterEdit extends React.Component<any, State> {
             .catch( err => window.alert('unable to load newsletter'))
     }
 
+    private release = (): void => { //TODO: add testing
+        let options: any = {
+            mailing_list: true
+        }
+
+        newsletterService.release(this.state.newsLetter.id)
+            .then((resp: any) => {
+                if(resp.count === 0) {
+                    window.alert('no emails found');
+                    return;
+                } else {
+                    if(!window.confirm(`You are about to send ${resp.count} emails.\n\nContinue?`)) return
+                    newsletterService.release(this.state.newsLetter.id, true)
+                        .then((resp: any) => window.alert(`${resp.count} emails sent`))
+                        .catch( err => window.alert('unable to release newsletter'))
+                }
+            })
+            .catch( err => window.alert('unable to release newsletter'))
+    }
+
     private saveNewsletter = (): void => {
         this.setState({saving: true});
 
@@ -57,6 +83,18 @@ export default class NewsletterEdit extends React.Component<any, State> {
                 })
             })
             .catch( err => window.alert('unable to update newsletter'))
+    }
+
+    private sendTestEmail = (): void => {
+        if (this.state.email === '') {
+            window.alert('Enter an email address');
+            return;
+        }
+        this.setState({sendingEmail: true});
+        newsletterService.sendEmailSample(this.state.newsLetter.id, this.state.email)
+            .then((resp: any) => window.alert('sample mail sent'))
+            .catch( err => window.alert('unable to send sample'))
+            .finally(() => this.setState({sendingEmail: false}))
     }
 
     public render() {
@@ -81,7 +119,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
                 <div className={'col-12 newsletter_edit__content'}>
                     content:
                     <textarea
-                        className={'form-control'}
+                        className={'form-control newsletter_edit__content_input'}
                         value={this.state.content}
                         rows={10}
                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -97,17 +135,26 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                 disabled={saveDisabled}
                                 onClick={this.saveNewsletter}
                                 >save</button>
+                            <button
+                                className={'btn btn-outline-warning newsletter_edit_controls__release_btn ml-3'}
+                                disabled={!saveDisabled}
+                                onClick={this.release}
+                                >release</button>
                         </div>
                         <div className={'col-6'}>
                             <button
                                 className={'btn btn-outline-success newsletter_edit_controls__email_btn'}
-                                disabled={!saveDisabled}
+                                disabled={!saveDisabled || this.state.sendingEmail}
+                                onClick={this.sendTestEmail}
                                 >Send Email Test</button>
                             <input
                                 className={'form-control mt-3 newsletter_edit_controls__email_input'}
                                 placeholder={'enter email address'}
                                 type={'email'}
-                                disabled={!saveDisabled}
+                                value={this.state.email}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    this.setState({email: e.target.value})}
+                                disabled={!saveDisabled || this.state.sendingEmail}
                                    />
                         </div>
                     </div>
