@@ -2,7 +2,6 @@ import React from 'react';
 import LoadingOverlay from "../overlays/LoadingOverlay";
 
 import newsletterService from '../../services/NewsletterService';
-import adminService from '../../services/AdminService';
 
 import Newsletter from "../../models/Newsletter";
 
@@ -11,7 +10,7 @@ interface State {
     saving: boolean,
     title: string,
     content: string,
-    newsLetter: Newsletter,
+    newsletter: Newsletter,
     email: string,
     sendingEmail: boolean
 }
@@ -26,7 +25,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
             saving: false,
             title: '',
             content: '',
-            newsLetter: new Newsletter(),
+            newsletter: new Newsletter(),
             email: '',
             sendingEmail: false
         }
@@ -38,7 +37,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
         newsletterService.get<Newsletter>(params.id)
             .then((newsLetter: Newsletter) =>
                 this.setState({
-                    newsLetter,
+                    newsletter: newsLetter,
                     title: newsLetter.title,
                     content: newsLetter.content,
                     loading: false
@@ -52,15 +51,20 @@ export default class NewsletterEdit extends React.Component<any, State> {
             mailing_list: true
         }
 
-        newsletterService.release(this.state.newsLetter.id)
+        newsletterService.release(this.state.newsletter.id)
             .then((resp: any) => {
                 if(resp.count === 0) {
                     window.alert('no emails found');
                     return;
                 } else {
                     if(!window.confirm(`You are about to send ${resp.count} emails.\n\nContinue?`)) return
-                    newsletterService.release(this.state.newsLetter.id, true)
-                        .then((resp: any) => window.alert(`${resp.count} emails sent`))
+                    newsletterService.release(this.state.newsletter.id, true)
+                        .then((resp: any) => {
+                            window.alert(`${resp.count} emails sent`);
+                            const newsletter: Newsletter = this.state.newsletter;
+                            newsletter.release_date = 'a';
+                            this.setState({newsletter});
+                        })
                         .catch( err => window.alert('unable to release newsletter'))
                 }
             })
@@ -70,13 +74,13 @@ export default class NewsletterEdit extends React.Component<any, State> {
     private saveNewsletter = (): void => {
         this.setState({saving: true});
 
-        const newsletter: Newsletter = this.state.newsLetter;
+        const newsletter: Newsletter = this.state.newsletter;
         newsletter.title = this.state.title;
         newsletter.content = this.state.content;
         newsletterService.update<Newsletter>(newsletter.id, newsletter)
             .then((nl: Newsletter) => {
                 this.setState({
-                    newsLetter: nl,
+                    newsletter: nl,
                     title: nl.title,
                     content: nl.content,
                     saving: false
@@ -91,7 +95,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
             return;
         }
         this.setState({sendingEmail: true});
-        newsletterService.sendEmailSample(this.state.newsLetter.id, this.state.email)
+        newsletterService.sendEmailSample(this.state.newsletter.id, this.state.email)
             .then((resp: any) => window.alert('sample mail sent'))
             .catch( err => window.alert('unable to send sample'))
             .finally(() => this.setState({sendingEmail: false}))
@@ -101,8 +105,8 @@ export default class NewsletterEdit extends React.Component<any, State> {
         if (this.state.loading)
             return <LoadingOverlay />
 
-        const saveDisabled: boolean = (this.state.title === this.state.newsLetter.title &&
-                                            this.state.content === this.state.newsLetter.content) ||
+        const saveDisabled: boolean = (this.state.title === this.state.newsletter.title &&
+                                            this.state.content === this.state.newsletter.content) ||
                                                 this.state.saving
         return (
             <div className={'row newsletter_edit'}>
@@ -135,11 +139,14 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                 disabled={saveDisabled}
                                 onClick={this.saveNewsletter}
                                 >save</button>
-                            <button
-                                className={'btn btn-outline-warning newsletter_edit_controls__release_btn ml-3'}
-                                disabled={!saveDisabled}
-                                onClick={this.release}
-                                >release</button>
+
+                            {this.state.newsletter.release_date === null &&
+                                <button
+                                    className={'btn btn-outline-warning newsletter_edit_controls__release_btn ml-3'}
+                                    disabled={!saveDisabled}
+                                    onClick={this.release}
+                                    >release</button>
+                            }
                         </div>
                         <div className={'col-6'}>
                             <button

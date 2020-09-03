@@ -77,6 +77,7 @@ export const BuildOrder = (params: IOrder): any => {
                 x,
                 1,
                 `contact_name_${x}`,
+                `000-000-000${x}`,
                 `email_${x}@email.com`,
                 '',
                 '',

@@ -46,6 +46,7 @@ export default class MailTemplateComponent extends React.Component<Props, State>
         const template: MailTemplate = this.state.template;
         template.text = this.state.text;
         mailTemplateService.update<MailTemplate>(template.id, template)
+            .then(() => this.setState({originalText: this.state.text}))
             .catch( err => window.alert('unable to update'))
             .then(() => this.setState({updating: false}))
     }

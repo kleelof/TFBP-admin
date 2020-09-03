@@ -24,6 +24,7 @@ export default class Order extends ModelBase {
         id: number = -1,
         order_status: number = 0,
         contact_name: string = '',
+        phone_number: string = '',
         email: string = '',
         unit: string = '',
         street_address: string = '',
@@ -40,6 +41,7 @@ export default class Order extends ModelBase {
         this.id = id;
         this.order_status = order_status;
         this.contact_name = contact_name;
+        this.phone_number = phone_number;
         this.email = email;
         this.unit = unit;
         this.street_address = street_address;

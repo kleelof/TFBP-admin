@@ -27,3 +27,8 @@ input[type=checkbox]
   position: relative;
   min-height: 200px;
 }
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}

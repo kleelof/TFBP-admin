@@ -11,8 +11,7 @@ interface Props {
 
 export const SubNavigation = (props: Props): React.ReactElement => {
     return(
-        <div className="row subnav">
-            <div className="col-12">
+            <div className="col-12 subnav">
                 {
                     props.navItems.map((item: NavItem) => {
                         return(
@@ -23,6 +22,5 @@ export const SubNavigation = (props: Props): React.ReactElement => {
                     })
                 }
             </div>
-        </div>
     )
 }

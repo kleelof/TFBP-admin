@@ -44,6 +44,10 @@ class Navigation extends React.Component<Props, State> {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item active">
+                            <Link className="nav-link" to="/dashboard/browser">
+                                Home</Link>
+                        </li>
+                        <li className="nav-item active">
                             <Link className="nav-link" to="/dashboard/menu/en">
                                 Menu</Link>
                         </li>
@@ -62,6 +66,10 @@ class Navigation extends React.Component<Props, State> {
                         <li className="nav-item">
                             <Link className="nav-link" to="/dashboard/newsletter">
                                     Newsletters</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/dashboard/production">
+                                    Production Tools</Link>
                         </li>
                         <li className="nav-item dropdown">
                             <button className="nav-link dropdown-toggle" id="orderDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

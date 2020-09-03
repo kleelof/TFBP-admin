@@ -20,3 +20,9 @@ export default class DeliveryWindow extends ModelBase {
         this.id = id || -1;
     }
 }
+
+export class DeliveryWindowWithCountsDTO {
+    public dish_count!: number;
+    public order_count!: number;
+    public window!: DeliveryWindow;
+}

@@ -28,6 +28,9 @@ import OrderEmail from "./components/order/OrderEmail";
 import {Mail} from "./components/mail/Mail";
 import {Newsletters} from "./components/newsletter/Newsletters";
 import NewsletterEdit from "./components/newsletter/NewsletterEdit";
+import Home from "./components/home/Home";
+import BrowserTool from "./components/browser_tool/BrowserTool";
+import BrowserFullDay from "./components/browser_tool/BrowserFullDay";
 
 interface LinkStateProps {
   auth: AuthState
@@ -97,20 +100,23 @@ class App extends React.Component<Props, State> {
 				<div className="col-12">
 					<br/>
 					<Switch>
-					<PrivateRoute path="/dashboard/menu" component={Menu} />
-					<PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
-					<PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
-                    <PrivateRoute path="/dashboard/delivery/duplicate/:id" component={DeliveryDuplicate} />
-					<PrivateRoute path="/dashboard/mail" component={Mail} />
-					<PrivateRoute path='/dashboard/newsletter/edit/:id' component={NewsletterEdit} />
-					<PrivateRoute path='/dashboard/newsletter' component={Newsletters} />
-					<PrivateRoute path="/dashboard/orders/export" component={Export} />
-					<PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
-					<PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
-					<PrivateRoute path="/dashboard/orders" component={Orders} />
-					<PrivateRoute path="/dashboard/coupon/add" component={CouponAdd}/>
-					<PrivateRoute path="/dashboard/coupons" component={Coupons} />
-					<Route path="/dashboard/login" component={Login} />
+                        <PrivateRoute path='/dashboard/browser/day/:targetDate' component={BrowserFullDay} />
+                        <PrivateRoute path='/dashboard/browser' component={BrowserTool} />
+                        <PrivateRoute path="/dashboard/coupon/add" component={CouponAdd}/>
+                        <PrivateRoute path="/dashboard/coupons" component={Coupons} />
+                        <PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
+                        <PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
+                        <PrivateRoute path="/dashboard/delivery/duplicate/:id" component={DeliveryDuplicate} />
+                        <PrivateRoute path="/dashboard/mail" component={Mail} />
+                        <PrivateRoute path="/dashboard/menu" component={Menu} />
+                        <PrivateRoute path='/dashboard/newsletter/edit/:id' component={NewsletterEdit} />
+                        <PrivateRoute path='/dashboard/newsletter' component={Newsletters} />
+                        <PrivateRoute path="/dashboard/orders/export" component={Export} />
+                        <PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
+                        <PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
+                        <PrivateRoute path="/dashboard/orders" component={Orders} />
+                        <PrivateRoute path='/dashboard/' component={Home} />
+                        <Route path="/dashboard/login" component={Login} />
 					</Switch>
 				</div>
 			</div>

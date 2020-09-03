@@ -23,10 +23,11 @@ const historyMock: any = { push: jest.fn() };
 let props: any;
 
 describe('Newsletters Tests', () => {
-    beforeAll( async () => {
+    beforeAll( () => {
         getNewslettersSpy.mockImplementation(() => Promise.resolve(BuildNewsletter({count: 3})));
         component = shallow(<Newsletters />);
     })
+
     it('should load all newsletters', async () => {
         await(() => expect(component.find(NewslettersNewsletter).length).toBe(3));
     })
@@ -43,12 +44,6 @@ describe('NewslettersNewsletter', () => {
         const newsletter: Newsletter = BuildNewsletter({count: 1, release_date: '2020-07-04'});
         component = shallow(<NewslettersNewsletter newsletter={newsletter} />);
         expect(component.text()).toContain(helpers.formatDate('2020-07-04'));
-    })
-
-    it('should display Release button if release_date == null', () => {
-        const newsletter: Newsletter = BuildNewsletter({count: 1});
-        component = shallow(<NewslettersNewsletter newsletter={newsletter} />);
-        expect(component.html()).toContain('newsletters_newsletter__release_btn');
     })
 })
 

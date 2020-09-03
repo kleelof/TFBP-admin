@@ -13,16 +13,14 @@ export const NewslettersNewsletter = (props: Props): React.ReactElement => {
     const history = useHistory();
 
     return (
-        <tr className={'row newsletters_newsletter'}>
+        <tr className={'newsletters_newsletter'}>
             <td>{props.newsletter.title}</td>
             <td>
                 {
                     props.newsletter.release_date !== null && props.newsletter.release_date !== undefined ?
                         helpers.formatDate(props.newsletter.release_date)
                         :
-                        <button
-                            className={'btn btn-outline-danger newsletters_newsletter__release_btn'}
-                            >release</button>
+                        <span>click 'Edit' to release</span>
                 }
             </td>
             <td>

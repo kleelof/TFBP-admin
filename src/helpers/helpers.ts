@@ -20,10 +20,14 @@ class Helpers {
         'shrimp' : 'Shrimp'
     };
 
+    public dateToShortISO = (date: Date): string => {
+        return date.toISOString().slice(0,10);
+    }
+
     /*
         Returns a string ex; Pad-Tai with Chicken, mild spicy
     */
-   public extractCartItemDescription = (cartItem: CartItem): string => {
+    public extractCartItemDescription = (cartItem: CartItem): string => {
         let description: string = cartItem.menu_item.name;
         description += cartItem.protein === null || cartItem.protein === "" || cartItem.menu_item.proteins.split(':').length < 2 ?
                     "" : 
@@ -41,6 +45,7 @@ class Helpers {
         const date: Date = new Date(rawDate);
         return `${this.days[date.getDay()]} ${this.months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
     }
+
 
     /*
         Returns AA of orderItems sorted by their delivery dates
