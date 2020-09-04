@@ -71,6 +71,7 @@ export default class MailTemplateComponent extends React.Component<Props, State>
                         onChange={(e: any) => this.setState({text:e.target.value})}
                         disabled={this.state.updating}
                     ></textarea>
+                    ({this.state.text.length} characters)
                 </div>
                 <div className={'col-12'}>
                     <button className={`btn btn-${this.state.updating || this.state.text === this.state.originalText ? 

@@ -6,6 +6,8 @@ import helpers from "../../helpers/helpers";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import BrowserWindowTools, {PrepDisplay} from "./BrowserWindowTools";
 
+import './browser_day.scss';
+
 interface Props extends RouteComponentProps {
     match: any;
 }
@@ -44,15 +46,28 @@ export default class BrowserFullDay extends React.Component<Props, State> {
             return(<LoadingOverlay />)
 
         return(
-            <div className={'row'}>
-                <div className={'col-12'}>{helpers.formatDate(helpers.dateToShortISO(this.state.targetDate))}</div>
-                {
-                    this.state.counts.map((dto:DeliveryWindowWithCountsDTO) =>
-                        <div className={'col-12 col-md-4 mt-2'}>
-                            <BrowserWindowTools dto={dto} date={this.state.targetDate} printDocument={this.printDocument} />
+            <div className={'row browser_full_day justify-content-center'}>
+                <div className={'col-12 col-md-7'}>
+                    <button
+                        onClick={() => this.props.history.goBack()}
+                        >return to calendar</button>
+                    <div className={'col-12 row browser_full_day__date'}>{helpers.formatDate(helpers.dateToShortISO(this.state.targetDate))}</div>
+                    <div className={'col-12'}>
+                        <div className={'row'}>
+                            {
+                                this.state.counts.map((dto:DeliveryWindowWithCountsDTO) =>
+                                    <div className={'col-12 col-md-6'}>
+                                        <BrowserWindowTools
+                                            dto={dto}
+                                            date={this.state.targetDate}
+                                            key={`dto_${dto.window.id}`}
+                                            printDocument={this.printDocument} />
+                                    </div>
+                                )
+                            }
                         </div>
-                    )
-                }
+                    </div>
+                </div>
                 <div className="col-12 print-sheet">
                     {this.state.documentToPrint}
                 </div>

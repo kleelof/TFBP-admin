@@ -130,6 +130,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                         this.setState({content: e.target.value})}
                         disabled={this.state.saving}
                         ></textarea>
+                    ({this.state.content.length} characters)
                 </div>
                 <div className={'col-12 newsletter_edit_controls mt-3'}>
                     <div className={'row'}>

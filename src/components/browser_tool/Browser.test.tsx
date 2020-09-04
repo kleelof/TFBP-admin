@@ -9,6 +9,7 @@ import {BuildDeliveryWindow} from "../../../__mocks__/deliveryMocks";
 import {DeliveryTagsDisplay, PrepDisplay} from "./BrowserWindowTools";
 import {BuildMenuItem, BuildOrder, BuildOrderItem} from "../../../__mocks__/mockFactories";
 import {BuildCartItem} from "../../../__mocks__/cartMocks";
+import {BrowserRouter as Router} from 'react-router-dom';
 
 configure({adapter: new Adapter()});
 
@@ -47,13 +48,34 @@ describe('BrowserDay tests', () => {
 describe('BrowserTool tests', () => {
     beforeEach(() => {
         date = new Date();
-        props = {}
+        props = {
+            match: {
+                params: {}
+            },
+            history:{
+                push: jest.fn()
+            }
+        }
         component = shallow(<BrowserTool {...props}/>);
     })
 
-    it('should display correct month and year', () => {
+    it('should display correct month and year; default current month and year', () => {
         expect(component.find('.month_nav__date').text()).toContain(months[date.getMonth()]);
         expect(component.find('.month_nav__date').text()).toContain(date.getFullYear().toString());
+    })
+
+    it('should display correct month and year when supplied', () => {
+        props= {
+            match: {
+                params: {
+                    month: date.getMonth() + 1,
+                    year: (date.getFullYear() + 1)
+                }
+            }
+        }
+        component = shallow(<BrowserTool {...props}/>);
+        expect(component.find('.month_nav__date').text()).toContain(months[date.getMonth() + 1]);
+        expect(component.find('.month_nav__date').text()).toContain((date.getFullYear() + 1).toString());
     })
 
     it('should advance the month', () => {

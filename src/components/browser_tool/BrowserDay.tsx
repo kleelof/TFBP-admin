@@ -21,22 +21,22 @@ export const BrowserDay = (props: Props): React.ReactElement => {
             })
             .catch( err => window.alert(`unable to load date: ${props.date.toISOString().slice(0,10)}`))
 
-    }, [])
+    }, []);
 
     return(
         <div
             className={'row browser_day nopadding'}
-            onClick={() => history.push({pathname: `browser/day/${helpers.dateToShortISO(props.date)}`})}
+            onClick={() => history.push({pathname: `/dashboard/browser/day/${helpers.dateToShortISO(props.date)}`})}
         >
             <div className={'col-12 nopadding'}>
-                <div className='browser_day__date'>
+                <div className={`browser_day__date ${helpers.dateToShortISO(props.date) == helpers.dateToShortISO(new Date()) ? 'browser_day__date--today' : ''}`}>
                     {props.date.getDate()}
                 </div>
                 <div className='browser_day__windows'>
                     {
                         countsData === undefined ? <div></div> :
                             countsData.map((dto: DeliveryWindowWithCountsDTO) =>
-                                <div className={'browser_day__window'}>
+                                <div className={'browser_day__window'} key={`dto_${dto.window.id}`}>
                                     <div className={'d-none d-md-block'}>
                                         {dto.window.name}
                                     </div>

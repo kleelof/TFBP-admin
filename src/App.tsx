@@ -101,6 +101,7 @@ class App extends React.Component<Props, State> {
 					<br/>
 					<Switch>
                         <PrivateRoute path='/dashboard/browser/day/:targetDate' component={BrowserFullDay} />
+                        <PrivateRoute path='/dashboard/browser/:month/:year' component={BrowserTool} />
                         <PrivateRoute path='/dashboard/browser' component={BrowserTool} />
                         <PrivateRoute path="/dashboard/coupon/add" component={CouponAdd}/>
                         <PrivateRoute path="/dashboard/coupons" component={Coupons} />

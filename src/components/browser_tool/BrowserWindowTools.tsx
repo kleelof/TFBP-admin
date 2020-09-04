@@ -38,7 +38,8 @@ export default class BrowserWindowTools extends React.Component<Props, State>{
         let orderItems: OrderItem[] = [];
         for (let x: number = 0; x < this.state.orders.length; x ++)
             for (let y: number = 0; y < this.state.orders[x].items.length; y ++)
-                orderItems.push(this.state.orders[x].items[y])
+                if (this.state.orders[x].items[y].cart_item.delivery_date === helpers.dateToShortISO(this.props.date))
+                    orderItems.push(this.state.orders[x].items[y])
 
         switch(pullType) {
             case 'prep': this.props.printDocument(<PrepDisplay orderItems={orderItems} date={this.props.date} />); break;
@@ -53,17 +54,17 @@ export default class BrowserWindowTools extends React.Component<Props, State>{
             return( <LoadingOverlay /> );
 
         return(
-            <div className={'row browser_window_tools'}>
+            <div className={'row browser_window_tools mb-2'}>
                 <div className={'col-12 browser_window_tools__inner'}>
                     <div className={'row'}>
                         <div className={'col-12'}>{this.props.dto.window.name}</div>
                         <div className={'col-6'}>Deliveries: {this.props.dto.order_count}</div>
                         <div className={'col-6'}>Dishes: {this.props.dto.dish_count}</div>
-                        <div className={'col-12 browser_window_tools__controls'}>
+                        <div className={'d-none d-md-block col-md-12 browser_window_tools__controls'}>
                             <button className={'btn btn-success'} onClick={() => this.print('prep')}
-                            disabled={this.state.orders.length === 0}>Print Prep List</button>
+                            disabled={this.state.orders.length === 0}>print prep list</button>
                             <button className={'btn btn-success ml-3'} onClick={() => this.print('delivery_tags')}
-                            disabled={this.state.orders.length === 0}>Delivery Tags</button>
+                            disabled={this.state.orders.length === 0}>print delivery tags</button>
                         </div>
                     </div>
                 </div>

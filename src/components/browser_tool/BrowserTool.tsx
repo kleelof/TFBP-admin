@@ -5,18 +5,41 @@ import './browser_tools.scss';
 import {BrowserDay} from "./BrowserDay";
 import { RouteComponentProps } from 'react-router-dom';
 
+interface Props extends RouteComponentProps {
+    match: any
+}
+
 interface State {
     month: number,
     year: number,
     viewDay: number
 }
 
-export default class BrowserTool extends React.Component<RouteComponentProps, State>{
+export default class BrowserTool extends React.Component<Props, State>{
 
     state = {
-        month: new Date().getMonth(),
-        year: new Date().getFullYear(),
+        month: 0,
+        year: 0,
         viewDay: 0
+    }
+
+    public componentDidMount() {
+        let month: number = new Date().getMonth();
+        let year: number = new Date().getFullYear();
+
+        const { match: { params } } = this.props;
+
+        // sets URL to include the month and year of they are not in the path
+        if ('month' in params || 'year' in params) {
+            if ('month' in params)
+                month = parseInt(params['month']);
+            if ('year' in params)
+                year = parseInt(params['year']);
+        } else {
+            this.props.history.push({pathname: `/dashboard/browser/${month}/${year}`});
+        }
+
+        this.setState({month, year});
     }
 
     private changeMonth = (add: number): void => {
@@ -32,11 +55,16 @@ export default class BrowserTool extends React.Component<RouteComponentProps, St
             month = 11;
             year --;
         }
-
+        this.props.history.push({pathname: `/dashboard/browser/${month}/${year}`});
         this.setState({month, year});
     }
 
+    private setDate = (month: number, year: number): void => {
+
+    }
+
     public render(){
+
         const startDate: Date = new Date(this.state.year, this.state.month, 1);
         const daysInMonth: number = new Date(this.state.year, this.state.month + 1, 0).getDate();
         let dateNdx: number = -startDate.getDay() + 1;
@@ -88,11 +116,11 @@ export default class BrowserTool extends React.Component<RouteComponentProps, St
                                 </thead>
                                 <tbody>
                                 {
-                                    weeks.map((week: any) =>
-                                        <tr>
+                                    weeks.map((week: any, index: number) =>
+                                        <tr key={`week_${index.toString()}`}>
                                             {
                                                 week.map((day: any) =>
-                                                    <td>{day}</td>
+                                                    <td key={Math.random()}>{day}</td>
                                                 )
                                             }
                                         </tr>
