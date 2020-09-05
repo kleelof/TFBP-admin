@@ -128,7 +128,7 @@ export default class Export extends React.Component<any, State> {
 
 function DeliveryTagsDisplay(props: any) {
     return (
-        <div className='delivery-tags-print'>
+        <div className='delivery_tags_print'>
             {
                 props.orders.map((order: Order) => {
                     const orderItems: OrderItem[] = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === props.date)
@@ -157,7 +157,7 @@ function DeliveryTagsDisplay(props: any) {
                                         <br/>
                                         _______________________________
                                         <h4>Delivery Instructions:</h4>
-                                        <div className="delivery-instructions-text">
+                                        <div className="delivery_instructions_text">
                                             {order.notes}
                                         </div>
                                     </div>

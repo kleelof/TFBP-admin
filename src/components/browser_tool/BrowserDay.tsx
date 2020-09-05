@@ -2,7 +2,7 @@ import React, {useEffect, useState, Fragment} from 'react';
 import DeliveryWindow, {DeliveryWindowWithCountsDTO} from "../../models/DeliveryWindowModel";
 import deliveryWindowService from '../../services/DeliveryWindowService';
 
-import './browser_day.scss';
+import './browser.scss';
 import { useHistory } from 'react-router-dom';
 import helpers from "../../helpers/helpers";
 

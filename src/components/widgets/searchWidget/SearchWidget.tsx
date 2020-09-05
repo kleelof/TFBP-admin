@@ -55,14 +55,14 @@ export default class SearchWidget extends React.Component<Props, State> {
                     />
                 </div>
                 { this.state.items.length > 0 &&
-                    <div className="col-12 search_widget__search_items">
-                        <div className="search_items__content">
+                    <div className="col-12 search_widget_results">
+                        <div className="search_widget_results__content">
                             {
                                 this.state.items.map((item: any) => {
                                     return(
-                                        <div className="row search_items__search_item"
+                                        <div className="row result"
                                             onClick={() => this.itemSelected(item)}>
-                                            <div className="col-9 search_item__name">
+                                            <div className="col-9 result__name">
                                                 {item.name}
                                             </div>
                                             <div className="col-3">

@@ -1,125 +1,27 @@
 
-.menunav__menuitem {
-    display: inline-block;
-    font-weight: bold;
-    margin: 0 5px;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, .1);
-    border: 2px solid black;
-    text-decoration: none !important;
-    padding: 0 10px;
-}
+.menu_items {
 
-.menuitems__menuitem {
-    border: 2px solid rgba(0, 0, 0, 0);
-}
+    &__item {
+        border: 2px solid rgba(0, 0, 0, 0);
 
-.menuitems__menuitem:hover {
-    border-color: rgba(0, 0, 0, 1);
-    cursor: pointer;
-}
+        &:hover {
+            border-color: rgba(0, 0, 0, 1);
+            cursor: pointer;
+        }
 
-.menuitem__image img {
-    width: 100%;
-}
+        &__menuitem__name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: black;
+        }
 
-.menuitem__name {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: black;
+        img {
+            width: 100%;
+        }
+    }
 }
 
 .new_menu_item {
     padding: 5px;
     border: 2px solid rgba(0, 0, 0, .2);
-}
-
-@media(min-width: 576px) {
-    .menunav__menuitem {
-        font-size: 2em;
-    }
-
-}
-
-
-/* ------------------------------------------------------------------ */
-.category-name {
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.servings {
-    position: relative;
-    width: 90%;
-    height: 90%;
-    margin: auto;
-    background-color: rgba(255, 255, 255, 1);
-    margin-top: 15px;
-    border: 2px solid rgba(0, 0, 0, .7);
-    padding: 5px;
-}
-
-.servings .header {
-    position: relative;
-    text-align: center;
-    color: black
-}
-
-.servings .header .close-btn {
-    position: absolute;
-    right: 0;
-    top: 0;
-    background-color: red;
-}
-
-.servings .btn {
-    font-size: .5em;
-}
-
-.servings .list {
-    height: 250px;
-    overflow-y: auto;
-}
-
-.serving {
-    position: relative;
-    width: 90%;
-    height: 40px;
-    margin: auto;
-    margin-bottom: 5px;
-    padding: 2px;
-    border: 1px solid rgba(0, 0, 0, 9);
-}
-
-.serving .controls {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    padding-right: 5px;
-    padding-top: 3px;
-}
-
-.serving .controls button {
-    margin-left: 3px;
-}
-
-.serving .quantity {
-    width: 50px;
-}
-
-.serving .price {
-    width: 100px;
-}
-
-.serving input, select {
-    margin-right: 5px;
-}
-
-.toggle-state-false {
-    display: none;
-}
-
-.toggle-state-true {
-    display: block;
 }

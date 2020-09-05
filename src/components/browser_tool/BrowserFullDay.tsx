@@ -6,7 +6,7 @@ import helpers from "../../helpers/helpers";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import BrowserWindowTools, {PrepDisplay} from "./BrowserWindowTools";
 
-import './browser_day.scss';
+import './browser.scss';
 
 interface Props extends RouteComponentProps {
     match: any;

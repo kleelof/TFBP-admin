@@ -2,7 +2,7 @@ import React from 'react';
 import deliveryDayItemService from '../../services/DeliveryDayItemService';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 
-import './delivery.css';
+import './delivery.scss';
 
 interface Props {
     deliveryDayItem: DeliveryDayItem,

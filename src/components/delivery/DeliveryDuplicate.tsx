@@ -68,7 +68,7 @@ export default class DeliveryDuplicate extends React.Component<Props, State> {
 
         return(
             <div className="row delivery_duplicate">
-                <div className="col-12 delivery_duplicate_dates">
+                <div className="col-12 delivery_duplicate__dates">
                     {helpers.formatDate(this.state.deliveryDay.date)} - {helpers.formatDate(this.state.deliveryDay.end_date)}
                     <hr/>
                 </div>
@@ -77,7 +77,7 @@ export default class DeliveryDuplicate extends React.Component<Props, State> {
                 </div>
                 <div className="col-12">
                     <div className="row">
-                        <div className="col-12 col-md-2 delivery_duplicate_date">
+                        <div className="col-12 col-md-2 delivery_duplicate__date">
                             <small>start date</small>
                             <br/>
                             <input
@@ -87,7 +87,7 @@ export default class DeliveryDuplicate extends React.Component<Props, State> {
                                 disabled={this.state.duplicating}
                                 onChange={this.updateData} />
                         </div>
-                        <div className="col-12 col-md-2 delivery_duplicate_date">
+                        <div className="col-12 col-md-2 delivery_duplicate__date">
                             <small>end date</small>
                             <br/>
                             <input

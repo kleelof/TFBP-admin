@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {months} from '../../constants';
-import './browser_tools.scss';
+import './browser.scss';
 import {BrowserDay} from "./BrowserDay";
 import { RouteComponentProps } from 'react-router-dom';
 

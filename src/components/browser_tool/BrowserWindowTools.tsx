@@ -7,6 +7,8 @@ import deliveryWindowService from '../../services/DeliveryWindowService';
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
+import './browser.scss';
+
 interface Props extends RouteComponentProps {
     dto: DeliveryWindowWithCountsDTO,
     date: Date,
@@ -111,13 +113,13 @@ interface DeliveryTagsDisplayProps {
 export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.ReactElement => {
     const target_date: string = helpers.dateToShortISO(props.date);
     return (
-        <div className='delivery-tags-print'>
+        <div className='delivery_tags'>
             {
                 props.orders.map((order: Order) => {
                     const orderItems: OrderItem[] = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === target_date)
 
                     return (
-                        <div className='quarter-page' key={`order_${order.id}`}>
+                        <div className='quarter_print_page' key={`order_${order.id}`}>
                             <span className="contact-info">{order.contact_name}</span>
                             <span className="street-address">{order.street_address} {order.unit}</span>
                             <span className="street-address">{order.city} {order.zip}</span>
@@ -139,7 +141,7 @@ export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.Reac
                                     <br/>
                                     _______________________________
                                     <h4>Delivery Instructions:</h4>
-                                    <div className="delivery-instructions-text">
+                                    <div className="delivery_instructions_text">
                                         {order.notes}
                                     </div>
                                 </div>
@@ -185,9 +187,9 @@ export const PrepDisplay = (props: PrepDisplayProps): React.ReactElement => {
     });
 
     return (
-        <Fragment>
-            <span className='print-sheet-header'>{helpers.dateToShortISO(props.date)} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
-            <table className='prep-sheet'>
+        <div className={'prep_list'}>
+            <span className='prep_list__header'>{helpers.dateToShortISO(props.date)} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
+            <table className='prep_list__list'>
                 <thead>
                     <tr>
                         <td>#</td>
@@ -215,6 +217,6 @@ export const PrepDisplay = (props: PrepDisplayProps): React.ReactElement => {
                     }
                 </tbody>
             </table>
-        </Fragment>
+        </div>
     )
 }

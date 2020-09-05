@@ -1,0 +1,35 @@
+@import '../../scss_variables.scss';
+
+.delivery_day_component {
+
+    &__search_widget {
+        position: relative;
+        display: inline-block;
+    }
+}
+
+.delivery_item_options {
+    &__price {
+        width: 80px;
+    }
+}
+
+.delivery_days {
+    font-weight: bold;
+    border: 2px solid rgba(0, 0, 0, .2);
+    padding: 5px;
+
+    & .delivery_days_item img, .delivery_day_item__img {
+        width: 100%;
+    }
+}
+
+.delivery_duplicate {
+    .delivery_duplicate_items__item img {
+        width: 100%;
+    }
+}
+
+
+@media(min-width: 576px) {
+}
