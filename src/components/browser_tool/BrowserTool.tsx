@@ -59,10 +59,6 @@ export default class BrowserTool extends React.Component<Props, State>{
         this.setState({month, year});
     }
 
-    private setDate = (month: number, year: number): void => {
-
-    }
-
     public render(){
 
         const startDate: Date = new Date(this.state.year, this.state.month, 1);

@@ -19,6 +19,12 @@ const updateTemplateSpy: jest.SpyInstance = jest.spyOn(mailTemplateService, 'upd
 const getDeliveryDaySpy: jest.SpyInstance = jest.spyOn(deliveryDayService, 'get');
 const getDeliveryWindowSpy: jest.SpyInstance = jest.spyOn(deliveryWindowService, 'get');
 const confirmSpy: any = jest.fn(() => true)
+let matchProps: any = {
+    match: {
+        params: {}
+    }
+}
+let props: any;
 
 global.confirm = confirmSpy;
 
@@ -34,12 +40,32 @@ describe('MailTemplates tests', () => {
 })
 
 describe('MailMassMailer tests', () => {
+    describe('configuring from URL params', () => {
+        it('should handle upcoming_delivery', async () => {
+            getDeliveryDaySpy.mockImplementation(() => Promise.resolve(BuildDeliveryDay({count: 2})));
+            getDeliveryWindowSpy.mockImplementation(() => Promise.resolve(BuildDeliveryWindowDTO({count: 2})));
+            props = {
+                match: {
+                    params: {
+                        mail_type: 'upcoming_delivery',
+                        option: '2020-07-04'
+                    }
+                }
+            }
+            component = await mount(<MailMassMailer {...props} />);
+            await component.update();
+
+            expect(component.find('#upcoming_delivery').instance().checked).toBe(true);
+            expect(component.find('.options__upcoming_delivery').instance().value).toBe('')
+        })
+    })
+
     describe('options/includes displaying tests; initial set-up', () => {
          beforeAll(async () => {
              getDeliveryDaySpy.mockImplementation(() => Promise.resolve(BuildDeliveryDay({count: 2})));
-             getDeliveryWindowSpy.mockImplementation(() => Promise.resolve(BuildDeliveryWindowDTO({count: 2})))
+             getDeliveryWindowSpy.mockImplementation(() => Promise.resolve(BuildDeliveryWindowDTO({count: 2})));
              component = await shallow(
-                 <MailMassMailer />
+                 <MailMassMailer {...matchProps}/>
                 )
              await component.update();
         })
@@ -88,7 +114,7 @@ describe('MailMassMailer tests', () => {
              getDeliveryDaySpy.mockImplementation(() => Promise.resolve([]));
              getDeliveryWindowSpy.mockImplementation(() => Promise.resolve([]))
              component = await shallow(
-                 <MailMassMailer />
+                 <MailMassMailer {...matchProps} />
                 )
              await component.update();
         })
@@ -105,9 +131,9 @@ describe('MailMassMailer tests', () => {
     describe('send email tests', () => {
         beforeAll(async () => {
              getDeliveryDaySpy.mockImplementation(() => Promise.resolve(BuildDeliveryDay({count: 2})));
-             getDeliveryWindowSpy.mockImplementation(() => Promise.resolve(BuildDeliveryWindowDTO({count: 2})))
+             getDeliveryWindowSpy.mockImplementation(() => Promise.resolve(BuildDeliveryWindowDTO({count: 2})));
              component = await shallow(
-                 <MailMassMailer />
+                 <MailMassMailer {...matchProps} />
                 )
              await component.update();
 

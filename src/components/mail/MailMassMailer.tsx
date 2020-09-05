@@ -6,6 +6,10 @@ import DeliveryDay from "../../models/DeliveryDayModel";
 import DeliveryWindow from "../../models/DeliveryWindowModel";
 import adminService from '../../services/AdminService';
 
+interface Props {
+    match: any
+}
+
 interface State {
     who: string,
     deliveryDays: DeliveryDay[],
@@ -17,7 +21,7 @@ interface State {
     includeSamples: boolean
 }
 
-export default class MailMassMailer extends React.Component<any, State> {
+export default class MailMassMailer extends React.Component<Props, State> {
     state = {
         who: 'all_customers',
         deliveryDays: [],
@@ -35,13 +39,31 @@ export default class MailMassMailer extends React.Component<any, State> {
             deliveryWindowService.get<DeliveryWindow>()
         ])
             .then((values) => {
+                // defaults for state
+                let who: string = 'all_customers';
+                let deliveryDate: string = '';
                 const deliveryWindows: DeliveryWindow[] = values[1] as any;
                 const deliveryWindow: DeliveryWindow = deliveryWindows.length > 0 ?
                     deliveryWindows[0] : new DeliveryWindow();
                 const deliveryDay: DeliveryDay = values[0].length > 0 ?
                     values[0][0] : new DeliveryDay()
 
+                //check if a type of email and option were sent
+                const { match: { params }} = this.props;
+                const option: any = 'option' in params ? params['option'] : '';
+
+                if ('mail_type' in params) {
+                    switch(params['mail_type']) {
+                        case('upcoming_delivery'):
+                            who = 'upcoming_delivery';
+                            deliveryDate = option;
+                            break;
+                    }
+                }
+
                 this.setState({
+                    who,
+                    deliveryDate,
                     deliveryDays: values[0],
                     deliveryDay: deliveryDay,
                     deliveryWindows: deliveryWindows,
@@ -115,28 +137,42 @@ export default class MailMassMailer extends React.Component<any, State> {
                             value={this.state.message}
                             onChange={(e) => this.setState({message: e.target.value})}
                         ></textarea>
+                        ({this.state.message.length} characters)
                     </div>
-                    <div className={'col-12 mt-3'}>
+                    <div className={'col-12 mt-3 mass_mailer_send_to'}>
                         send to:<br/>
-                        <input type={'radio'}
-                               name={'to'}
-                               id={'all_customers'}
-                               checked={this.state.who === 'all_customers'}
-                               onChange={() => this.setState({who: 'all_customers'})}/> all customers<br/>
-                        <input type={'radio'} name={'to'}
-                               id={'delivery_window'}
-                               disabled={this.state.deliveryWindows.length === 0}
-                               checked={this.state.who === 'delivery_window'}
-                               onChange={() => this.setState({who: 'delivery_window'})}/> delivery window<br/>
-                        <input type={'radio'} name={'to'}
+                        <div className={'mass_mailer_send_to__option'}>
+                            <input type={'radio'}
+                                   name={'to'}
+                                   id={'all_customers'}
+                                   checked={this.state.who === 'all_customers'}
+                                   onChange={() => this.setState({who: 'all_customers'})}/> all customers<br/>
+                                   <span>anyone who has completed an order</span>
+                        </div>
+                        <div className={'mass_mailer_send_to__option'}>
+                            <input type={'radio'} name={'to'}
+                                   id={'delivery_window'}
+                                   disabled={this.state.deliveryWindows.length === 0}
+                                   checked={this.state.who === 'delivery_window'}
+                                   onChange={() => this.setState({who: 'delivery_window'})}/> delivery window<br/>
+                                   <span>customers in the window selected below</span>
+                        </div>
+                        <div className={'mass_mailer_send_to__option'}>
+                            <input type={'radio'} name={'to'}
                                id={'upcoming_delivery'}
                                checked={this.state.who === 'upcoming_delivery'}
                                onChange={() => this.setState({who: 'upcoming_delivery'})} /> upcoming delivery<br/>
-                        <input type={'radio'} name={'to'}
+                               <span>customers receiving a delivery on the date selected below</span>
+                        </div>
+                        <div className={'mass_mailer_send_to__option'}>
+                            <input type={'radio'} name={'to'}
                                id={'upcoming_delivery_days'}
                                disabled={this.state.deliveryDays.length === 0}
                                checked={this.state.who === 'upcoming_delivery_days'}
                                onChange={() => this.setState({who: 'upcoming_delivery_days'})} /> upcoming delivery days<br/>
+                               <span>customers receiving an order during the deliver days selected below</span>
+                        </div>
+
                     </div>
                     <div className={'col-12 mt-3 mass_mailer__options'}>
                         {this.state.who === 'upcoming_delivery' &&

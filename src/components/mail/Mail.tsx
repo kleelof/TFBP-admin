@@ -22,6 +22,7 @@ export const Mail = (): React.ReactElement => {
                 <Switch>
                     <Route path="/dashboard/mail/list/" component={MailingList} />
                     <Route path={'/dashboard/mail/template'} component={MailTemplates} />
+                    <Route path={'/dashboard/mail/mass_mailer/:mail_type/:option'} component={MailMassMailer} />
                     <Route path={'/dashboard/mail/mass_mailer'} component={MailMassMailer} />
                     <Route path="/dashboard/mail/" component={MailUtilities} />
                 </Switch>

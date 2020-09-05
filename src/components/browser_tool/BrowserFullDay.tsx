@@ -48,26 +48,29 @@ export default class BrowserFullDay extends React.Component<Props, State> {
         return(
             <div className={'row browser_full_day justify-content-center'}>
                 <div className={'col-12 col-md-7'}>
-                    <button
-                        onClick={() => this.props.history.goBack()}
-                        >return to calendar</button>
-                    <div className={'col-12 row browser_full_day__date'}>{helpers.formatDate(helpers.dateToShortISO(this.state.targetDate))}</div>
                     <div className={'col-12'}>
-                        <div className={'row'}>
-                            {
-                                this.state.counts.map((dto:DeliveryWindowWithCountsDTO) =>
-                                    <div className={'col-12 col-md-6'}>
-                                        <BrowserWindowTools
-                                            dto={dto}
-                                            date={this.state.targetDate}
-                                            key={`dto_${dto.window.id}`}
-                                            printDocument={this.printDocument} />
-                                    </div>
-                                )
-                            }
+                        <button
+                            onClick={() => this.props.history.goBack()}
+                            >return to calendar</button>
+                        <div className={'col-12 row browser_full_day__date'}>{helpers.formatDate(helpers.dateToShortISO(this.state.targetDate))}</div>
+                        <div className={'col-12'}>
+                            <div className={'row'}>
+                                {
+                                    this.state.counts.map((dto:DeliveryWindowWithCountsDTO) =>
+                                        <div className={'col-12 col-md-6'} key={`dto_${dto.window.id}`}>
+                                            <BrowserWindowTools
+                                                dto={dto}
+                                                date={this.state.targetDate}
+                                                key={`dto_${dto.window.id}`}
+                                                printDocument={this.printDocument} />
+                                        </div>
+                                    )
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div className="col-12 print-sheet">
                     {this.state.documentToPrint}
                 </div>
