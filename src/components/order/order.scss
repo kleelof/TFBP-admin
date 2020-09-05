@@ -1,126 +1,50 @@
-.delivery-instructions-text {
-    display: block;
-    font-size: 1.2em;
-} 
+@import '../../scss_variables';
 
-.delivery-tags-print .contact-info {
-    font-size: 1.25em;
-}
+.orders {
+    table {
+        border-collapse: separate;
+        font-size: 1em;
 
-.delivery-tags-print .street-address {
-    font-size: 1.5em;
-    font-weight: bold;
-} 
+        td {
+            vertical-align: top;
+            padding: 9px;
+        }
 
-.delivery-tags-print span {
-    display: block;
-}
-
-.delivery-tag-item {
-    display: inline;
-    font-size: 1.5em;
-    width: 90%;
-    float: left;
-}
-
-.edit_order select {
-    padding: 5px;
-    font-size: 1.3em;
-}
-
-.edit_order select option[value="0"], .order-status-0 {
-    background-color: rgba(247, 4, 4, 0.7);
-    color: rgba(255, 255, 255, .9);
-}
-
-.edit_order select option[value="1"], .order-status-1 {
-    background-color: rgba(247, 243, 4, 0.7);
-}
-
-.edit_order select option[value="2"], .order-status-2 {
-    background-color: rgba(81, 247, 4, 0.7);
-}
-
-.edit_order__deliveries {
-    font-size: 1.1em;
-}
-
-.export-panel {
-    margin-bottom: 10px;
-}
-
-.order-status {
-    font-weight: bold;
-}
-
-.prep-sheet {
-    font-size: 2em;
-}
-
-.print-sheet {
-    visibility: hidden;
-}
-
-.print-sheet td {
-    padding: 0 20px;
-    border: 1px solid rgba(0, 0, 0, .9)
-}
-
-.print-sheet-header {
-    font-size: 3.5em;
-}
-
-.print-row-dark {
-    font-weight: bold;
-}
-
-.orders table {
-    border-collapse: separate;
-    font-size: 1em;
-}
-
-.orders td {
-    vertical-align: top;
-    padding: 9px;
-}
-
-.orders tbody tr:hover {
-    background-color: rgba(85, 224, 92, 0.3);
-    cursor: pointer;
-}
-
-.orders-line-highlight {
-    background-color: rgba(0, 0, 0, .3);
-}
-
-.quarter-page {
-    display: inline-block;
-    width: 50%;
-    height: 500px;
-    border: 2px solid rgba(0 ,0 ,0 , .3);
-    padding: 15px;
-}
-
-@page {
-    margin: 1px;
-}
-
-@media print {
-    body * {
-      visibility: hidden;
+        tbody tr:hover {
+            background-color: rgba(85, 224, 92, 0.3);
+            cursor: pointer;
+        }
     }
 
-    .print-sheet, .print-sheet * {
-      visibility: visible;
+    .orders-line-highlight {
+        background-color: rgba(0, 0, 0, .3);
+    }
+}
+
+.edit_order {
+    select {
+        padding: 5px;
+        font-size: 1.3em;
+
+        option[value="0"], .order-status-0 {
+            background-color: rgba(247, 4, 4, 0.7);
+            color: rgba(255, 255, 255, .9);
+        }
+
+        option[value="1"], .order-status-1 {
+            background-color: rgba(247, 243, 4, 0.7);
+        }
+
+        option[value="2"], .order-status-2 {
+            background-color: rgba(81, 247, 4, 0.7);
+        }
     }
 
-    .print-sheet {
-      position: absolute;
-      left: 0;
-      top: 0;
+    .order-status {
+        font-weight: bold;
     }
 
-    .quarter-page {
-        page-break-after: always;
+    .edit_order_deliveries {
+        font-size: 1.1em;
     }
-  }
+}

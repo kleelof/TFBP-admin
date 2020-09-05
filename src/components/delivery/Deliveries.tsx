@@ -2,7 +2,7 @@ import React from 'react';
 import {format} from 'date-fns';
 import deliveryDayService from '../../services/DeliveryDayService';
 
-import './delivery.css';
+import './delivery.scss';
 import { Redirect } from 'react-router-dom';
 import DeliveryDay from '../../models/DeliveryDayModel';
 

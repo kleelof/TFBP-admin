@@ -20,7 +20,7 @@ import Menu from './components/menu/Menu';
 import Login from './components/authentication/Login';
 import Orders from './components/order/Orders';
 import Export from './components/order/Export';
-import EditOrder from './components/order/EditOrder';
+import OrderEdit from './components/order/OrderEdit';
 import Coupons from './components/coupon/Coupons';
 import DeliveryDuplicate from './components/delivery/DeliveryDuplicate';
 import CouponAdd from "./components/coupon/CouponAdd";
@@ -113,7 +113,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/newsletter/edit/:id' component={NewsletterEdit} />
                         <PrivateRoute path='/dashboard/newsletter' component={Newsletters} />
                         <PrivateRoute path="/dashboard/orders/export" component={Export} />
-                        <PrivateRoute path="/dashboard/orders/edit/:id" component={EditOrder} />
+                        <PrivateRoute path="/dashboard/orders/edit/:id" component={OrderEdit} />
                         <PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
                         <PrivateRoute path="/dashboard/orders" component={Orders} />
                         <PrivateRoute path='/dashboard/' component={Home} />

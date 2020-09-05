@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './imageUploader.css';
+import './image_uploader.scss';
 
 interface Props {
     id: string;
@@ -134,7 +134,7 @@ export default class ImageUploader extends React.Component<Props, State> {
 
     public render() {
         return(
-            <div className={`image-uploader ${this.props.disabled ? '' : 'image-uploader-active'}`}>
+            <div className={`image_uploader ${this.props.disabled ? '' : 'image_uploader--active'}`}>
                 <div 
                     className="inner"
                     onClick={this.open}
@@ -154,7 +154,7 @@ export default class ImageUploader extends React.Component<Props, State> {
                     >
                     </input>
                     {(!this.state.hasImage && !this.props.disabled) &&
-                        <div className={`no-image image-uploader-overlay`}>
+                        <div className={`no-image image_uploader-overlay`}>
                             <span>{ this.props.uploadPrompt || "Click to  Upload Image"}</span>
                         </div>
                     }
@@ -166,7 +166,7 @@ export default class ImageUploader extends React.Component<Props, State> {
                         >X</div>
                 }
                 {this.state.loadingImage &&
-                    <div className="loading-image image-uploader-overlay">
+                    <div className="loading-image image_uploader-overlay">
                         <span>Loading Image...</span>
                     </div>
                 }

@@ -11,7 +11,7 @@ import DeliveryWindow from '../../models/DeliveryWindowModel';
 import SearchWidget from '../widgets/searchWidget/SearchWidget';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 import { DeliveryDayItemComponent } from './DeliveryDayItemComponent';
-import './delivery.css';
+import './delivery.scss';
 
 interface State {
     loading: boolean,   //TODO: FINISH ADDING LOAD ALL MENU ITEMS, have MenuItems confirm if 

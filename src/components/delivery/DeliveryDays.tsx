@@ -5,7 +5,7 @@ import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import { config } from '../../config';
 import { useHistory } from 'react-router-dom';
 
-import './delivery.css';
+import './delivery.scss';
 
 interface Props {
     deliveryDay: DeliveryDay
