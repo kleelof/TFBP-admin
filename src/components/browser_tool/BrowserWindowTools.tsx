@@ -5,8 +5,9 @@ import helpers from "../../helpers/helpers";
 import Order from "../../models/OrderModel";
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import LoadingOverlay from "../overlays/LoadingOverlay";
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-interface Props {
+interface Props extends RouteComponentProps {
     dto: DeliveryWindowWithCountsDTO,
     date: Date,
     printDocument: (component: React.ReactElement) => void
@@ -17,7 +18,7 @@ interface State {
     orders: Order[]
 }
 
-export default class BrowserWindowTools extends React.Component<Props, State>{
+class BrowserWindowTools extends React.Component<Props, State>{
 
     constructor(props: any) {
         super(props);
@@ -34,7 +35,26 @@ export default class BrowserWindowTools extends React.Component<Props, State>{
             .catch( err => window.alert('unable to load data'))
     }
 
-    public print = (pullType: string): void => {
+    private downloadDeliverySpreadsheet = (): void => {console.log('xx')
+        let fileContent: string = "Address line 1\tAddress line 2\tCity\tState\tZip\tName\tEmail Address\tPhone Number\tExternal ID\tOrder Count\tDriver\n";
+        let orderItems: OrderItem[] = [];
+
+        this.state.orders.forEach((order: Order) => {
+            orderItems = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === helpers.dateToShortISO(this.props.date));
+            if (orderItems.length > 0) {
+                fileContent += `${order.street_address}\t${order.unit}\t${order.city}\tCA\t${order.zip}\t${order.contact_name}\t${order.email}\t${order.phone_number}\t${order.public_id}\t${orderItems.length}\tLee\n`;
+            }
+        })
+
+        const bb = new Blob([fileContent ], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.download = `delivery_route_${helpers.dateToShortISO(this.props.date)}.tsv`;
+        a.href = window.URL.createObjectURL(bb);
+        a.click();
+        console.log(a);
+    }
+
+    private print = (pullType: string): void => {
         let orderItems: OrderItem[] = [];
         for (let x: number = 0; x < this.state.orders.length; x ++)
             for (let y: number = 0; y < this.state.orders[x].items.length; y ++)
@@ -63,8 +83,16 @@ export default class BrowserWindowTools extends React.Component<Props, State>{
                         <div className={'d-none d-md-block col-md-12 browser_window_tools__controls'}>
                             <button className={'btn btn-success'} onClick={() => this.print('prep')}
                             disabled={this.state.orders.length === 0}>print prep list</button>
-                            <button className={'btn btn-success ml-3'} onClick={() => this.print('delivery_tags')}
+                            <button className={'btn btn-info ml-3'} onClick={() => this.print('delivery_tags')}
                             disabled={this.state.orders.length === 0}>print delivery tags</button>
+                            <button
+                                className={'btn btn-outline-danger ml-3'}
+                                onClick={() =>
+                                    this.props.history.push(
+                                        {pathname: `/dashboard/mail/mass_mailer/upcoming_delivery/${helpers.dateToShortISO(this.props.date)}`})}
+                            disabled={this.state.orders.length === 0}>send mail</button>
+                            <button className={'btn btn-success ml-3'} onClick={this.downloadDeliverySpreadsheet}
+                            disabled={this.state.orders.length === 0}>download delivery spreadsheet</button>
                         </div>
                     </div>
                 </div>
@@ -72,6 +100,8 @@ export default class BrowserWindowTools extends React.Component<Props, State>{
         )
     }
 }
+
+export default withRouter(BrowserWindowTools);
 
 interface DeliveryTagsDisplayProps {
     orders: Order[],
