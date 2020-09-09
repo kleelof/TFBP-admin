@@ -134,7 +134,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
                 </div>
                 <div className={'col-12 newsletter_edit_controls mt-3'}>
                     <div className={'row'}>
-                        <div className={'col-6'}>
+                        <div className={'col-12 col-md-6'}>
                             <button
                                 className={'btn btn-success newsletter_edit_controls__save_btn'}
                                 disabled={saveDisabled}
@@ -149,7 +149,19 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                     >release</button>
                             }
                         </div>
-                        <div className={'col-6'}>
+                        <div className={'col-12 col-md-6'}>
+                            {this.state.content.indexOf('newsletter__email_title') === -1 &&
+                                <div className={'newsletter_edit__error'}>
+                                    Missing 'newsletter__email_title' class
+                                </div>
+                            }
+                            {this.state.content.indexOf('newsletter__email_content') === -1 &&
+                                <div className={'newsletter_edit__error'}>
+                                    Missing 'newsletter__email_content' class
+                                </div>
+                            }
+                        </div>
+                        <div className={'col-12'}>
                             <button
                                 className={'btn btn-outline-success newsletter_edit_controls__email_btn'}
                                 disabled={!saveDisabled || this.state.sendingEmail}

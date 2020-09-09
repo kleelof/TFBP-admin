@@ -36,7 +36,7 @@ export default class MailTemplateComponent extends React.Component<Props, State>
             .then((template: MailTemplate) => {
                 this.setState({text: template.text, originalText: template.text, template, loading: false})
             })
-            .catch(() => window.alert('unable to load templates'))
+            .catch(() => {})
             .then(() => this.setState({loading: false}))
     }
 
@@ -45,10 +45,20 @@ export default class MailTemplateComponent extends React.Component<Props, State>
 
         const template: MailTemplate = this.state.template;
         template.text = this.state.text;
-        mailTemplateService.update<MailTemplate>(template.id, template)
-            .then(() => this.setState({originalText: this.state.text}))
-            .catch( err => window.alert('unable to update'))
-            .then(() => this.setState({updating: false}))
+
+        if (template.id < 0) {
+            template.slug = this.props.templateSlug;
+            template.options = '';
+            mailTemplateService.add<MailTemplate>(template)
+                .then(() => this.setState({originalText: this.state.text}))
+                .catch( err => window.alert('unable to save'))
+                .then(() => this.setState({updating: false}))
+        } else {
+            mailTemplateService.update<MailTemplate>(template.id, template)
+                .then(() => this.setState({originalText: this.state.text}))
+                .catch( err => window.alert('unable to update'))
+                .then(() => this.setState({updating: false}))
+        }
     }
 
     public render() {

@@ -31,6 +31,8 @@ import NewsletterEdit from "./components/newsletter/NewsletterEdit";
 import Home from "./components/home/Home";
 import BrowserTool from "./components/browser_tool/BrowserTool";
 import BrowserFullDay from "./components/browser_tool/BrowserFullDay";
+import {DeliveryWindows} from "./components/delivery_windows/DeliveryWindows";
+import DeliveryWindowEdit from "./components/delivery_windows/DeliveryWindowEdit";
 
 interface LinkStateProps {
   auth: AuthState
@@ -108,6 +110,8 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
                         <PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
                         <PrivateRoute path="/dashboard/delivery/duplicate/:id" component={DeliveryDuplicate} />
+                        <PrivateRoute path='/dashboard/delivery_window/edit/:id' component={DeliveryWindowEdit} />
+                        <PrivateRoute path="/dashboard/delivery_window" component={DeliveryWindows} />
                         <PrivateRoute path="/dashboard/mail" component={Mail} />
                         <PrivateRoute path="/dashboard/menu" component={Menu} />
                         <PrivateRoute path='/dashboard/newsletter/edit/:id' component={NewsletterEdit} />

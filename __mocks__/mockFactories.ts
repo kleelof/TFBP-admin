@@ -159,7 +159,7 @@ export const BuildNewsletter = (params: IBuildNewsletter):any => {
             new Newsletter(
                 x,
                 params.title || `newsletter_title_${x}`,
-                params.content || 'Newsletter Content',
+                params.content || 'Newsletter Content newsletter__email_title  newsletter__email_content',
                 params.release_date || null
             )
         )

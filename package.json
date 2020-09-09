@@ -31,8 +31,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject",
-    "postbuild": "rm -r ~/Documents/thaiFoodByPla/website/project/templates/operator_app/index.html; mv build/index.html ~/Documents/thaiFoodByPla/website/project/templates/operator_app/index.html;rm -r ~/Documents/thaiFoodByPla/website/project/apps/operator_app/static; mv build/static ~/Documents/thaiFoodByPla/website/project/apps/operator_app/static"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
