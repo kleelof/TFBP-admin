@@ -1,101 +1,69 @@
-import React from 'react';
-import DeliveryDay from '../../models/DeliveryDayModel';
+import React, {useEffect, useState} from 'react';
 import DeliveryWindow from '../../models/DeliveryWindowModel';
-import deliveryDayService from '../../services/DeliveryDayService';
+import deliveryWindowService from '../../services/DeliveryWindowService';
 
 import './delivery_windows.scss';
+import LoadingOverlay from "../overlays/LoadingOverlay";
+
+import { pythonDays } from '../../constants';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
-    deliveryDay: DeliveryDay,
-    deliveryWindows: DeliveryWindow[]
 }
 
-interface State {
-    selectedDeliveryWindows: DeliveryWindow[],
-    availableDeliveryWindows: DeliveryWindow[]
-}
+export const DeliveryWindows = (props: Props): React.ReactElement => {
+    const [showLoading, setShowLoading] = useState(true);
+    const [deliveryWindows, setDeliveryWindows] = useState<DeliveryWindow[]>([])
+    const history = useHistory();
 
-export default class DeliveryWindows extends React.Component<Props, State> {
+    useEffect(() => {
+        deliveryWindowService.get<DeliveryWindow[]>()
+            .then((deliveryWindows: DeliveryWindow[]) => {
+                setShowLoading(false);
+                setDeliveryWindows(deliveryWindows);
+            })
+            .catch( err => window.alert('Unable to load delivery windows'))
+    }, [])
 
-    constructor(props: Props) {
-        super(props);
 
-        let selectedDeliveryWindows: DeliveryWindow[] = [];
-        let availableDeliveryWindows: DeliveryWindow[] = [];
+        if (showLoading)
+            return(<LoadingOverlay />)
 
-        // divide delivery windows into selected and available
-        /*
-        props.deliveryWindows.forEach((deliveryWindow: DeliveryWindow) => {console.log(props.deliveryDay);
-            if (props.deliveryDay.delivery_windows.indexOf(deliveryWindow.id) > -1) {
-                selectedDeliveryWindows.push(deliveryWindow);
-            } else
-                availableDeliveryWindows.push(deliveryWindow);
-        })
-        */
-
-        this.state = {
-            selectedDeliveryWindows,
-            availableDeliveryWindows
-        }
-
-    }
-
-    private deliveryWindowSelected = (deliveryWindow: DeliveryWindow): void => {
-        let availableDeliveryWindows: DeliveryWindow[] = this.state.availableDeliveryWindows;
-        let selectedDeliveryWindows: DeliveryWindow[] = this.state.selectedDeliveryWindows;
-
-        if (this.state.availableDeliveryWindows.indexOf(deliveryWindow) > -1) {
-            availableDeliveryWindows = availableDeliveryWindows.filter((window: DeliveryWindow) => 
-                window.id !== deliveryWindow.id)
-            selectedDeliveryWindows.push(deliveryWindow);
-            deliveryDayService.attachDeliveryWindow(this.props.deliveryDay, deliveryWindow);
-        } else {
-            selectedDeliveryWindows = selectedDeliveryWindows.filter((window: DeliveryWindow) => 
-                window.id !== deliveryWindow.id)
-            availableDeliveryWindows.push(deliveryWindow);
-            deliveryDayService.detachDeliveryWindow(this.props.deliveryDay, deliveryWindow);
-        } 
-
-        this.setState({availableDeliveryWindows, selectedDeliveryWindows});
-    }
-
-    public componentDidMount = (): void => {
-
-    }
-
-    render() {
         return (
-            <div className="row">
-                <div className="col-12">
-                    Selected Windows:
-                    <DeliveryWindowSelector deliveryWindows={this.state.selectedDeliveryWindows} windowSelected={this.deliveryWindowSelected} />
-                </div>
-                <div className="col-12">
-                    Available Windows:
-                    <DeliveryWindowSelector deliveryWindows={this.state.availableDeliveryWindows} windowSelected={this.deliveryWindowSelected} />
+            <div className="row delivery_windows">
+                <div className={'col-12'}>
+                    <table className={'table'}>
+                        <thead>
+                            <tr>
+                                <th>active</th>
+                                <th>name</th>
+                                <th>day</th>
+                                <th>time</th>
+                                <th>date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            deliveryWindows.map((window: DeliveryWindow) =>
+                                <tr
+                                    key={`dw_${window.id}`}
+                                    className={`delivery_windows__window ${window.active ? '' : 'delivery_windows__window-inactive'}`}
+                                    onClick={() => history.push({pathname: `/dashboard/delivery_window/edit/${window.id}`})}
+                                >
+                                    <td>{window.active ? 'yes' : 'no'}</td>
+                                    <td>{window.name}</td>
+                                    <td>{pythonDays[window.day]}</td>
+                                    <td>{window.start_time + ' - ' + window.end_time}</td>
+                                    <td>{window.one_off_date}</td>
+                                </tr>
+                            )
+                        }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )
-    }
-}
 
-const DeliveryWindowSelector = (props: {deliveryWindows: DeliveryWindow[],
-                                    windowSelected: (deliveryWindow: DeliveryWindow) => void}) => {
-    return(
-        <div className="row delivery-window-selector">
-            <div className="col-12">
-                {
-                    props.deliveryWindows.map((deliveryWindow: DeliveryWindow) =>
-                        <DeliveryWindowContainer
-                            deliveryWindow={deliveryWindow}
-                            key={deliveryWindow.id}
-                            windowSelected={props.windowSelected}/>
-                    )
-                }
-            </div>
-        </div>
-    )
-    
 }
 
 const DeliveryWindowContainer = (props: {deliveryWindow: DeliveryWindow, windowSelected: (deliveryWindow: DeliveryWindow) => void}): any => {

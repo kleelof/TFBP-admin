@@ -56,6 +56,10 @@ class Navigation extends React.Component<Props, State> {
                                 Delivery Days</Link>
                         </li>
                         <li className="nav-item">
+                            <Link className="nav-link" to="/dashboard/delivery_window">
+                                Delivery Windows</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link className="nav-link" to="/dashboard/coupons">
                                     Coupons</Link>
                         </li>
@@ -68,17 +72,7 @@ class Navigation extends React.Component<Props, State> {
                                     Newsletters</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/dashboard/production">
-                                    Production Tools</Link>
-                        </li>
-                        <li className="nav-item dropdown">
-                            <button className="nav-link dropdown-toggle" id="orderDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Orders
-                            </button>
-                            <div className="dropdown-menu" aria-labelledby="orderDropdown">
-                                <Link className="dropdown-item" to='/dashboard/orders/export'>Printouts and Router</Link>
-                                <Link className="dropdown-item" to='/dashboard/orders'>Manage Orders</Link>
-                            </div> 
+                            <Link className="nav-link" to='/dashboard/orders'>Orders</Link>
                         </li>
                     </ul>
                 </div>

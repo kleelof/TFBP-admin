@@ -73,7 +73,7 @@ describe('NewsletterAdd tests', () => {
 })
 
 describe('NewsletterEdit tests', () => {
-    beforeAll( async() => {
+    beforeEach( async() => {
         props = {
             match: {
                 params: {
@@ -94,16 +94,16 @@ describe('NewsletterEdit tests', () => {
     it('should set-up correctly', () => {
         expect(component.text()).toContain(newsletter.content);
         expect(component.find('.newsletter_edit_controls__save_btn').props().disabled).toBe(true);
-        expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(false);
-        expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(false);
+        // expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(false);
+        // expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(false);
         expect(component.text()).toContain(newsletter.title);
     })
 
     it('should enable save button and disable emailing if changes have been made', () => {
         component.find('.newsletter_edit__title_input').simulate('change', {target: {value: 'boogie_baby'}});
         expect(component.find('.newsletter_edit_controls__save_btn').props().disabled).toBe(false);
-        expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(true);
-        expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(true);
+        // expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(true);
+        // expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(true);
     })
 
     it('should submit correct data to API and reset buttons to correct states', () => {
@@ -116,11 +116,33 @@ describe('NewsletterEdit tests', () => {
         expect(updateNewsletterSpy.mock.calls[0][1]['content']).toBe('send_content');
     })
 
-    it('should send correct email and newsletter ID for email test', () => {
-
+    it('should show no errors if newsletter classes are present', () => {
+        expect(component.find('.newsletter_edit__error').length).toBe(0);
     })
 
-    it('should alert if no email address', () => {
-        
+    describe('missing newsletter classes tests', () => {
+        beforeEach(async () => {
+            props = {
+            match: {
+                params: {
+                    id: 1
+                }
+            }
+        }
+        newsletter = BuildNewsletter({count: 1});
+        newsletter.content="invalid content";
+        getNewslettersSpy.mockImplementation(() => Promise.resolve(newsletter));
+
+        component = await mount(
+            <NewsletterEdit {...props}/>
+        )
+
+        await component.update();
+
+        })
+
+        it('should show errors', () => {
+            expect(component.find('.newsletter_edit__error').length).toBe(2);
+        })
     })
 })

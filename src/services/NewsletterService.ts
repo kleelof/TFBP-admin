@@ -10,7 +10,7 @@ class NewsletterService extends Service {
     }
 
     sendEmailSample = (newsletterId: number, email: string, send_email?: boolean): Promise<any> => {
-        return this._get(`${this.appName}/${this.view}/send_email_sample/?id=${newsletterId}&email=${email}`);
+        return this._get(`${this.appName}/${this.view}/${newsletterId}/send_email_sample/?email=${email}`);
     }
 }
 

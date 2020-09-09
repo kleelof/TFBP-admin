@@ -159,7 +159,7 @@ describe('BrowserWindowTools tests', () => {
 
 
         it('should display all info', () => {
-            expect(component.find('.quarter-page').length).toBe(2);
+            expect(component.find('.quarter_print_page').length).toBe(2);
             expect(component.find('.delivery-tag-item').length).toBe(4);
 
             const component_text = component.text();
@@ -205,7 +205,7 @@ describe('BrowserWindowTools tests', () => {
         })
 
         it('should display all info', () => {
-            expect(component.find('.print-sheet-header').text()).toContain(3);
+            expect(component.find('.prep_list__header').text()).toContain(3);
             expect(component.text()).toContain('2020-07-04');
             expect(component.find('tbody tr').length).toBe(2);
         })

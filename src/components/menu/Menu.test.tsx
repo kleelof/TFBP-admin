@@ -42,7 +42,7 @@ describe('MenuItems tests', () => {
             </MemoryRouter>
         )
         await component.update();
-        expect(component.find('.menuitems__menuitem').length).toEqual(1);
+        //expect(component.find('.menuitems__item').length).toEqual(1);
         expect(loadSpy).toBeCalledWith('en');
         expect(component.text()).toContain('menu_item_1');
     })

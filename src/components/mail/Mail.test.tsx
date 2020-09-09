@@ -41,6 +41,7 @@ describe('MailTemplates tests', () => {
 
 describe('MailMassMailer tests', () => {
     describe('configuring from URL params', () => {
+
         it('should handle upcoming_delivery', async () => {
             getDeliveryDaySpy.mockImplementation(() => Promise.resolve(BuildDeliveryDay({count: 2})));
             getDeliveryWindowSpy.mockImplementation(() => Promise.resolve(BuildDeliveryWindowDTO({count: 2})));
@@ -56,7 +57,7 @@ describe('MailMassMailer tests', () => {
             await component.update();
 
             expect(component.find('#upcoming_delivery').instance().checked).toBe(true);
-            expect(component.find('.options__upcoming_delivery').instance().value).toBe('')
+            expect(component.find('.options__upcoming_delivery').instance().value).toBe('');
         })
     })
 

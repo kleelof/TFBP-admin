@@ -71,8 +71,8 @@ describe('DeliveryDuplicate tests', () => {
     })
 
     it('should display dates of DeliveryDay to duplicate', () => {
-        expect(component.find('.delivery_duplicate_dates').text()).toContain('Saturday July 4, 2020');
-        expect(component.find('.delivery_duplicate_dates').text()).toContain('Sunday July 5, 2020');
+        expect(component.find('.delivery_duplicate__dates').text()).toContain('Saturday July 4, 2020');
+        expect(component.find('.delivery_duplicate__dates').text()).toContain('Sunday July 5, 2020');
     })
 
     it('should list dayItems', () => {
