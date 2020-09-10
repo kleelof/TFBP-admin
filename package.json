@@ -33,6 +33,7 @@
     "test": "jest",
     "eject": "react-scripts eject"
   },
+  "homepage": "/dashboard/",
   "eslintConfig": {
     "extends": "react-app"
   },

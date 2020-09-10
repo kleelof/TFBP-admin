@@ -16,7 +16,7 @@ export default class Service {
 
     public _get<T>(path: string): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            axiosInstance.get(`${this._service_url}/${path}`)
+            axiosInstance.get(`${this._service_url}/api/${path}`)
                 .then ((resp: AxiosResponse) => {
                     resolve(resp.data);
                 })
@@ -26,7 +26,7 @@ export default class Service {
 
     public _post<T>(path: string, content: any, headers?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            axiosInstance.post(`${this._service_url}/${path}`, content, headers)
+            axiosInstance.post(`${this._service_url}/api/${path}`, content, headers)
                 .then((resp:AxiosResponse) => {
                     resolve(resp.data);
                 })
@@ -36,7 +36,7 @@ export default class Service {
 
     public _patch<T>(path: string, content: any, headers?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            axiosInstance.patch(`${this._service_url}/${path}`, content, headers)
+            axiosInstance.patch(`${this._service_url}/api/${path}`, content, headers)
                 .then((resp: AxiosResponse) => {
                     resolve(resp.data)
                 })
