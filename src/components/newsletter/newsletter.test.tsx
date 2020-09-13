@@ -9,6 +9,7 @@ import {Newsletters} from "./Newsletters";
 import {NewslettersNewsletter} from "./NewslettersNewsletter";
 import Newsletter from "../../models/Newsletter";
 import helpers from "../../helpers/helpers";
+import momentHelper from '../../helpers/MomentHelper';
 import NewsletterAdd from "./NewsletterAdd";
 import NewsletterEdit from "./NewsletterEdit";
 
@@ -43,7 +44,7 @@ describe('NewslettersNewsletter', () => {
     it('should display release_date if given', () => {
         const newsletter: Newsletter = BuildNewsletter({count: 1, release_date: '2020-07-04'});
         component = shallow(<NewslettersNewsletter newsletter={newsletter} />);
-        expect(component.text()).toContain(helpers.formatDate('2020-07-04'));
+        expect(component.text()).toContain(momentHelper.asFullDate('2020-07-04'));
     })
 })
 

@@ -3,6 +3,7 @@ import DeliveryDayItem from "../models/DeliveryDayItemModel";
 import CartItem from "../models/CartItemModel";
 import MenuItem from "../models/MenuItemModel";
 import {DeliveryWindowDTO} from "../models/DeliveryWindowModel";
+import momentHelper from './MomentHelper';
 
 export type OrderedItems = {[key: string]: any[]};
 
@@ -35,20 +36,7 @@ class Helpers {
         return `${hour.toString()}:${parts[1]}${amPm}`;
     }
 
-    public dateToShortISO = (date: Date): string => {
-        return new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
-                    .toISOString()
-                    .split("T")[0];
-        /*
-        const offset = date.getTimezoneOffset();
-        date = new Date(date.getTime() + (offset*60*1000));
-        const date_str = date.toISOString().split('T')[0];
-        return  date_str;
-
-         */
-    }
-
-    /*
+     /*
         Returns a string ex; Pad-Tai with Chicken, mild spicy
     */
     public extractCartItemDescription = (cartItem: CartItem): string => {
@@ -64,18 +52,9 @@ class Helpers {
         return description;
     }
 
-    public formatDate = (rawDate: string): string => {
-        const T: number = rawDate.indexOf('T');
-        if (T > -1) rawDate = rawDate.substr(0, T);
-        const dateParts: string[] = rawDate.split('-');
-        const date: Date = new Date(`${dateParts[0]}-${dateParts[1].padStart(2, '0')}-${dateParts[2].padStart(2, '0')}`);
-        date.setDate(date.getDate() + 1);
-        return `${this.days[date.getDay()]} ${this.months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
-    }
-
     public formatDeliveryWindow = (window: DeliveryWindowDTO, excludeDate: boolean = false, splitLines: boolean = false): string => {
         let windowText: string = excludeDate ? "" :
-            `${this.formatDate(window.date)} ${window.window.start_time !== window.window.end_time ? 'between ' : 'at '}`;
+            `${momentHelper.asFullDate(window.date)} ${window.window.start_time !== window.window.end_time ? 'between ' : 'at '}`;
 
         windowText += this.convertToTwelveHour(window.window.start_time);
 

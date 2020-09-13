@@ -4,6 +4,7 @@ import Order, { OrderDTO } from '../../models/OrderModel';
 import orderService from '../../services/OrderService';
 import OrderItem from '../../models/OrderItemModel';
 import helpers, {OrderedItems} from '../../helpers/helpers';
+import momentHelper from '../../helpers/MomentHelper';
 import { Link, Redirect } from 'react-router-dom';
 import OrderEmail from "./OrderEmail";
 
@@ -135,7 +136,7 @@ export default class OrderEdit extends React.Component<any, State> {
                             return (
                                 <div className="row mt-3">
                                     <div className="col-12">
-                                        <b>{helpers.formatDate(key)}</b>
+                                        <b>{momentHelper.asFullDate(key)}</b>
                                         {
                                             orderedItems[key].map((orderItem: OrderItem) =>
                                                 <div className="row">

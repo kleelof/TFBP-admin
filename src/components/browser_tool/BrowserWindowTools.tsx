@@ -2,6 +2,7 @@ import React, {Fragment} from 'react';
 import {DeliveryWindowWithCountsDTO} from "../../models/DeliveryWindowModel";
 import OrderItem from "../../models/OrderItemModel";
 import helpers from "../../helpers/helpers";
+import momentHelper from '../../helpers/MomentHelper';
 import Order from "../../models/OrderModel";
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import LoadingOverlay from "../overlays/LoadingOverlay";
@@ -42,7 +43,7 @@ class BrowserWindowTools extends React.Component<Props, State>{
         let orderItems: OrderItem[] = [];
 
         this.state.orders.forEach((order: Order) => {
-            orderItems = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === helpers.dateToShortISO(this.props.date));
+            orderItems = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === momentHelper.asDateSlug(this.props.date));
             if (orderItems.length > 0) {
                 fileContent += `${order.street_address}\t${order.unit}\t${order.city}\tCA\t${order.zip}\t${order.contact_name}\t${order.email}\t${order.phone_number}\t${order.public_id}\t${orderItems.length}\tLee\n`;
             }
@@ -50,7 +51,7 @@ class BrowserWindowTools extends React.Component<Props, State>{
 
         const bb = new Blob([fileContent ], { type: 'text/plain' });
         const a = document.createElement('a');
-        a.download = `delivery_route_${helpers.dateToShortISO(this.props.date)}.tsv`;
+        a.download = `delivery_route_${momentHelper.asDateSlug(this.props.date)}.tsv`;
         a.href = window.URL.createObjectURL(bb);
         a.click();
         console.log(a);
@@ -60,7 +61,7 @@ class BrowserWindowTools extends React.Component<Props, State>{
         let orderItems: OrderItem[] = [];
         for (let x: number = 0; x < this.state.orders.length; x ++)
             for (let y: number = 0; y < this.state.orders[x].items.length; y ++)
-                if (this.state.orders[x].items[y].cart_item.delivery_date === helpers.dateToShortISO(this.props.date))
+                if (this.state.orders[x].items[y].cart_item.delivery_date === momentHelper.asDateSlug(this.props.date))
                     orderItems.push(this.state.orders[x].items[y])
 
         switch(pullType) {
@@ -91,7 +92,7 @@ class BrowserWindowTools extends React.Component<Props, State>{
                                 className={'btn btn-outline-danger ml-3'}
                                 onClick={() =>
                                     this.props.history.push(
-                                        {pathname: `/dashboard/mail/mass_mailer/upcoming_delivery/${helpers.dateToShortISO(this.props.date)}`})}
+                                        {pathname: `/dashboard/mail/mass_mailer/upcoming_delivery/${momentHelper.asDateSlug(this.props.date)}`})}
                             disabled={this.state.orders.length === 0}>send mail</button>
                             <button className={'btn btn-success ml-3'} onClick={this.downloadDeliverySpreadsheet}
                             disabled={this.state.orders.length === 0}>download delivery spreadsheet</button>
@@ -111,7 +112,7 @@ interface DeliveryTagsDisplayProps {
 }
 
 export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.ReactElement => {
-    const target_date: string = helpers.dateToShortISO(props.date);
+    const target_date: string = momentHelper.asDateSlug(props.date);
     return (
         <div className='delivery_tags'>
             {
@@ -145,7 +146,6 @@ export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.Reac
                                         {order.notes}
                                     </div>
                                 </div>
-
                             }
                         </div>
                     )
@@ -188,7 +188,7 @@ export const PrepDisplay = (props: PrepDisplayProps): React.ReactElement => {
 
     return (
         <div className={'prep_list'}>
-            <span className='prep_list__header'>{helpers.dateToShortISO(props.date)} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
+            <span className='prep_list__header'>{momentHelper.asDateSlug(props.date)} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
             <table className='prep_list__list'>
                 <thead>
                     <tr>

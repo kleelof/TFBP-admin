@@ -35,7 +35,7 @@ describe('MailTemplates tests', () => {
         )
     })
     it('should list all templates', () => {
-        expect(component.find(MailTemplateComponent).length).toEqual(2);
+        expect(component.find(MailTemplateComponent).length).toEqual(3);
     })
 })
 
@@ -167,8 +167,9 @@ describe('MailTemplateComponent tests', () => {
         expect(component.find('.mail_template__body').text()).toEqual('template text 1')
     })
 
-    it('should submit updates', () => {
+    it('should submit updates', async () => {
         component.find('.mail_template__body').simulate('change', {target: {value: 'test_change_text'}});
+        await component.update();
         component.find('.btn').simulate('click');
         expect(updateTemplateSpy).toBeCalledTimes(1);
         expect(updateTemplateSpy.mock.calls[0][1]['text']).toBe('test_change_text');

@@ -23,10 +23,6 @@ describe('Helpers Tests', () => {
         expect(helpers.sortOrderItemsByDate(orderItems)['2020-07-06']).not.toBe({});
     })
 
-    it('should dateToShortISO correctly', () => {
-        expect(helpers.dateToShortISO(new Date('2020-07-04T17:59:21.409Z'))).toBe('2020-07-04');
-    })
-
     describe('format delivery window text', () => {
 
         it('should format delivery window text with date', () => {
@@ -61,20 +57,6 @@ describe('Helpers Tests', () => {
                 window: BuildDeliveryWindow({count: 1, start_time: '03:03:03', end_time: '04:03:03'})
             }
             expect(helpers.formatDeliveryWindow(tDeliveryWindow)).toContain('between');
-        })
-    })
-
-    describe('format date tests', () => {
-        it('should work with leading zeros on month or and day', () => {
-            expect(helpers.formatDate('2020-7-3')).toEqual('Friday July 3, 2020');
-        })
-
-        it('should work with no leading zeros', () => {
-            expect(helpers.formatDate('2020-07-03')).toEqual('Friday July 3, 2020');
-        })
-
-        it('should strip extra data from Django dB date', () => {
-            expect(helpers.formatDate('2020-7-3T16:57:53.762237-07:00')).toEqual('Friday July 3, 2020');
         })
     })
 })

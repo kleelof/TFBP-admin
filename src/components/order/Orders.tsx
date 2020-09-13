@@ -4,6 +4,7 @@ import Order from '../../models/OrderModel';
 import orderService from '../../services/OrderService';
 import OrderItem from '../../models/OrderItemModel';
 import helpers from '../../helpers/helpers';
+import momentHelper from '../../helpers/MomentHelper';
 import { Redirect } from 'react-router-dom';
 
 interface State {
@@ -106,7 +107,7 @@ export default class Orders extends React.Component<any, State> {
                                                         <td>{order.contact_name}</td>
                                                         <td>{order.public_id}</td>
                                                         <td>{order.email}<br/>{order.phone_number}</td>
-                                                        <td>{helpers.formatDate(order.created_at)}</td>
+                                                        <td>{momentHelper.asFullDate(order.created_at)}</td>
 
                                                         <td className={`order-status-${order.order_status}`}>
                                                             {this.orderStatuses[order.order_status]}

@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import Coupon from '../../models/Coupon';
-import helpers from '../../helpers/helpers';
-import moment from 'moment';
+import momentHelper from '../../helpers/MomentHelper';
 
 import './coupon.scss';
 import couponService from '../../services/CouponService';
@@ -62,7 +61,7 @@ export const CouponComponent = (props: Props): React.ReactElement => {
                 }
             </td>
             <td className={'coupon__expire'}>
-                {moment(coupon.expire).utc().format('MMMM D, YYYY')}
+                {momentHelper.asFullDate(coupon.expire)}
             </td>
             <td className={'coupon__email'}>
                 {coupon.email}

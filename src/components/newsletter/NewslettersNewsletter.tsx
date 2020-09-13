@@ -1,6 +1,7 @@
 import React from 'react';
 import Newsletter from "../../models/Newsletter";
 import helpers from '../../helpers/helpers';
+import momentHelper from '../../helpers/MomentHelper';
 import { useHistory } from 'react-router-dom';
 
 import './newsletter.scss';
@@ -18,7 +19,7 @@ export const NewslettersNewsletter = (props: Props): React.ReactElement => {
             <td>
                 {
                     props.newsletter.release_date !== null && props.newsletter.release_date !== undefined ?
-                        helpers.formatDate(props.newsletter.release_date)
+                        momentHelper.asFullDate(props.newsletter.release_date)
                         :
                         <span>click 'Edit' to release</span>
                 }
