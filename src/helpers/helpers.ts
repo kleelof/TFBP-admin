@@ -21,7 +21,8 @@ class Helpers {
     };
 
     public dateToShortISO = (date: Date): string => {
-        return date.toISOString().slice(0,10);
+        //return date.toISOString().slice(0,10);
+        return date.toDateString().slice(0,10);
     }
 
     /*

@@ -7,8 +7,6 @@ import {BuildDeliveryDay} from '../../../__mocks__/deliveryMocks';
 import { DeliveryDays } from './DeliveryDays';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import DeliveryDuplicate from './DeliveryDuplicate';
-import { assert } from 'console';
-import { MemoryRouter, Route } from 'react-router-dom';
 import {format} from "date-fns";
 
 configure({adapter: new Adapter()});

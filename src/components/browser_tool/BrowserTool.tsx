@@ -73,7 +73,7 @@ export default class BrowserTool extends React.Component<Props, State>{
                 if (dateNdx >= 1 && dateNdx <= daysInMonth) {
                     week.push(<BrowserDay date={new Date(this.state.year, this.state.month, dateNdx)} />)
                 } else {
-                    week.push(<div></div>)
+                    week.push(<div></div>) // TODO: Update this to show last and next month days faded
                 }
                 dateNdx ++;
             }
