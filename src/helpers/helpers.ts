@@ -21,8 +21,9 @@ class Helpers {
     };
 
     public dateToShortISO = (date: Date): string => {
-        //return date.toISOString().slice(0,10);
-        return date.toDateString().slice(0,10);
+        const offset = date.getTimezoneOffset();
+        date = new Date(date.getTime() + (offset*60*1000));
+        return date.toISOString().split('T')[0]
     }
 
     /*
