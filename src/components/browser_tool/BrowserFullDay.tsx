@@ -1,8 +1,8 @@
 import React from 'react';
+import moment from 'moment';
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import {DeliveryWindowWithCountsDTO} from "../../models/DeliveryWindowModel";
 import {RouteComponentProps} from 'react-router-dom';
-import helpers from "../../helpers/helpers";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import BrowserWindowTools, {PrepDisplay} from "./BrowserWindowTools";
 
@@ -31,7 +31,7 @@ export default class BrowserFullDay extends React.Component<Props, State> {
     public componentDidMount() {
         const { match: { params } } = this.props;
 
-        deliveryWindowService.listWithCounts(new Date(params.targetDate))
+        deliveryWindowService.listWithCounts(params.targetDate)
             .then((counts: DeliveryWindowWithCountsDTO[]) => this.setState({counts, targetDate: new Date(params.targetDate)}))
             .catch( err => console)
             .then(() => this.setState({loading: false}))
@@ -45,6 +45,8 @@ export default class BrowserFullDay extends React.Component<Props, State> {
         if (this.state.loading)
             return(<LoadingOverlay />)
 
+        const m = moment(this.state.targetDate);
+        console.log(m.zoneName());
         return(
             <div className={'row browser_full_day justify-content-center'}>
                 <div className={'col-12 col-md-7'}>
@@ -52,7 +54,9 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                         <button
                             onClick={() => this.props.history.goBack()}
                             >return to calendar</button>
-                        <div className={'col-12 row browser_full_day__date'}>{helpers.formatDate(helpers.dateToShortISO(this.state.targetDate))}</div>
+                        <div className={'col-12 row browser_full_day__date'}>
+                            {m.utc().format('YYYY-MM/DD')}
+                        </div>
                         <div className={'col-12'}>
                             <div className={'row'}>
                                 {

@@ -6,7 +6,7 @@ import MenuItem from '../../models/MenuItemModel';
 import menuItemService from '../../services/MenuItemService';
 import deliveryDayItemService from '../../services/DeliveryDayItemService';
 import deliveryDayService from '../../services/DeliveryDayService';
-import helpers from '../../helpers/helpers';
+import momentHelper from '../../helpers/MomentHelper';
 import DeliveryWindow from '../../models/DeliveryWindowModel';
 import SearchWidget from '../widgets/searchWidget/SearchWidget';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
@@ -60,7 +60,7 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
         return(
             <div className="row delivery_day_component">
                 <div className="col-12 col-md-6">
-                    {helpers.formatDate(this.state.deliveryDay.date)} - {helpers.formatDate(this.state.deliveryDay.end_date)}
+                    {momentHelper.asFullDate(this.state.deliveryDay.date)} - {momentHelper.asFullDate(this.state.deliveryDay.end_date)}
                     <hr/>
                 </div>
                 <div className="col-12 col-md-6 delivery_day_component__search_widget">

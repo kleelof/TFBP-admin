@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import Coupon from '../../models/Coupon';
 import helpers from '../../helpers/helpers';
+import moment from 'moment';
 
 import './coupon.scss';
 import couponService from '../../services/CouponService';
@@ -61,7 +62,7 @@ export const CouponComponent = (props: Props): React.ReactElement => {
                 }
             </td>
             <td className={'coupon__expire'}>
-                {helpers.formatDate(coupon.expire)}
+                {moment(coupon.expire).utc().format('MMMM D, YYYY')}
             </td>
             <td className={'coupon__email'}>
                 {coupon.email}

@@ -2,6 +2,7 @@ import OrderItem from "../models/OrderItemModel";
 import DeliveryDayItem from "../models/DeliveryDayItemModel";
 import CartItem from "../models/CartItemModel";
 import MenuItem from "../models/MenuItemModel";
+import {DeliveryWindowDTO} from "../models/DeliveryWindowModel";
 
 export type OrderedItems = {[key: string]: any[]};
 
@@ -20,10 +21,31 @@ class Helpers {
         'shrimp' : 'Shrimp'
     };
 
+    public convertToTwelveHour = (twentyFourHourTime: string): string => {
+        let parts: string[] = twentyFourHourTime.split(':');
+        let hour: number = parseInt(parts[0]);
+        let amPm: string = ' am';
+        if (hour > 11) {
+            amPm = ' pm';
+            hour -= hour > 12 ? 12 : 0;
+        }
+
+        if (hour === 0) hour = 12;
+
+        return `${hour.toString()}:${parts[1]}${amPm}`;
+    }
+
     public dateToShortISO = (date: Date): string => {
+        return new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
+                    .toISOString()
+                    .split("T")[0];
+        /*
         const offset = date.getTimezoneOffset();
         date = new Date(date.getTime() + (offset*60*1000));
-        return date.toISOString().split('T')[0]
+        const date_str = date.toISOString().split('T')[0];
+        return  date_str;
+
+         */
     }
 
     /*
@@ -43,9 +65,22 @@ class Helpers {
     }
 
     public formatDate = (rawDate: string): string => {
-        if (rawDate.indexOf('T') === -1) rawDate += 'T16:57:53.762237-07:00';// the leading 0 in some formats cause miscalculation. Adding this prevents that
-        const date: Date = new Date(rawDate);
+        const T: number = rawDate.indexOf('T');
+        if (T > -1) rawDate = rawDate.substr(0, T);
+        const dateParts: string[] = rawDate.split('-');
+        const date: Date = new Date(`${dateParts[0]}-${dateParts[1].padStart(2, '0')}-${dateParts[2].padStart(2, '0')}`);
+        date.setDate(date.getDate() + 1);
         return `${this.days[date.getDay()]} ${this.months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+    }
+
+    public formatDeliveryWindow = (window: DeliveryWindowDTO, excludeDate: boolean = false, splitLines: boolean = false): string => {
+        let windowText: string = excludeDate ? "" :
+            `${this.formatDate(window.date)} ${window.window.start_time !== window.window.end_time ? 'between ' : 'at '}`;
+
+        windowText += this.convertToTwelveHour(window.window.start_time);
+
+        return windowText += window.window.start_time !== window.window.end_time ?
+                ` and ${this.convertToTwelveHour(window.window.end_time)}` : ''
     }
 
 

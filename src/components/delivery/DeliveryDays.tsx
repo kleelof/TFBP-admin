@@ -1,5 +1,6 @@
 import React from 'react';
 import DeliveryDay from '../../models/DeliveryDayModel';
+import momentHelper from '../../helpers/MomentHelper';
 import helpers from '../../helpers/helpers';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import { config } from '../../config';
@@ -17,10 +18,10 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
     return(
         <div className="row delivery_days" key={`days_${props.deliveryDay.id}`}>
             <div className="col-12 col-md-6 delivery_days__date">
-                {helpers.formatDate(props.deliveryDay.date)}
+                {momentHelper.asFullDate(props.deliveryDay.date)}
             </div>
             <div className="col-12 col-md-6 delivery_days__end_date">
-                {helpers.formatDate(props.deliveryDay.end_date)}
+                {momentHelper.asFullDate(props.deliveryDay.end_date)}
             </div>
             <div className="col-12">
                 <div className="row">

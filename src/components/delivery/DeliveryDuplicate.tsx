@@ -3,6 +3,7 @@ import React from 'react';
 import deliveryDayService from '../../services/DeliveryDayService';
 import DeliveryDay from '../../models/DeliveryDayModel';
 import helpers from '../../helpers/helpers';
+import momentHelper from '../../helpers/MomentHelper';
 import LoadingOverlay from '../overlays/LoadingOverlay';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import {RouteComponentProps} from 'react-router-dom';
@@ -69,7 +70,7 @@ export default class DeliveryDuplicate extends React.Component<Props, State> {
         return(
             <div className="row delivery_duplicate">
                 <div className="col-12 delivery_duplicate__dates">
-                    {helpers.formatDate(this.state.deliveryDay.date)} - {helpers.formatDate(this.state.deliveryDay.end_date)}
+                    {momentHelper.asFullDate(this.state.deliveryDay.date)} - {momentHelper.asFullDate(this.state.deliveryDay.end_date)}
                     <hr/>
                 </div>
                 <div className="col-12">

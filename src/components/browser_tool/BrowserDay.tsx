@@ -15,13 +15,16 @@ export const BrowserDay = (props: Props): React.ReactElement => {
     const history = useHistory();
 
     useEffect(() => {
-        deliveryWindowService.listWithCounts(props.date)
+
+        deliveryWindowService.listWithCounts(helpers.dateToShortISO(props.date))
             .then((countsData: DeliveryWindowWithCountsDTO[]) => {
                 setCountsData(countsData);
             })
             .catch( err => window.alert(`unable to load date: ${props.date.toISOString().slice(0,10)}`))
 
     }, []);
+
+
 
     return(
         <div
