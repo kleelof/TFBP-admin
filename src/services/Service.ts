@@ -45,7 +45,7 @@ export default class Service {
     }
 
     public _delete<T>(path: string): Promise<T> {
-        return axiosInstance.delete(`${this._service_url}/${path}`)
+        return axiosInstance.delete(`${this._service_url}/api/${path}`)
     }
 
     public add<T>(DTO: T, useFormData: boolean = false): Promise<T> {

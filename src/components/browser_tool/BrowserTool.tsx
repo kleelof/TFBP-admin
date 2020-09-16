@@ -18,9 +18,11 @@ interface State {
 
 export default class BrowserTool extends React.Component<Props, State>{
 
+    today: Date = new Date();
+
     state = {
-        month: 0,
-        year: 0,
+        month: this.today.getMonth(),
+        year: this.today.getFullYear(),
         viewDay: 0
     }
 
@@ -65,7 +67,7 @@ export default class BrowserTool extends React.Component<Props, State>{
         const startDate: Date = new Date(this.state.year, this.state.month, 1);
         const daysInMonth: number = new Date(this.state.year, this.state.month + 1, 0).getDate();
         let dateNdx: number = -startDate.getDay() + 1;
-
+        console.log(startDate, this.state.year, this.state.month)
         let weeks: any = []
         let week: any;
         while (dateNdx <= daysInMonth) {

@@ -8,3 +8,9 @@
   cursor: pointer;
   background-color: $highlight_success_background;
 }
+
+.delivery_window_edit {
+  &__prompt {
+    font-weight: bold;
+  }
+}

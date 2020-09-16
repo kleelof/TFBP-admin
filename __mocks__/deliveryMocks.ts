@@ -116,7 +116,11 @@ export const BuildDeliveryDayItem = (params: IBuildDeliveryDayItem): any => {
 interface IBuildDeliveryWindow {
     count: number,
     start_time?: string,
-    end_time?: string
+    end_time?: string,
+    start_date?: string | null,
+    end_date?: string | null,
+    day?: number,
+    active?: boolean
 }
 
 export const BuildDeliveryWindow = (params: IBuildDeliveryWindow): any => {
@@ -128,7 +132,11 @@ export const BuildDeliveryWindow = (params: IBuildDeliveryWindow): any => {
                 x + 1,
                 `delivery_window_${x}`,
                 params.start_time || "01:01:01",
-                params.end_time || "02:02:02"
+                params.end_time || "02:02:02",
+                params.day || 0,
+                params.active || true,
+                params.start_date || '2020-07-04',
+                params.end_date || '2020-07-11'
                 )
         )
     }

@@ -4,9 +4,10 @@ import deliveryWindowService from '../../services/DeliveryWindowService';
 
 import './delivery_windows.scss';
 import LoadingOverlay from "../overlays/LoadingOverlay";
+import { DeliveryWindowsWindow } from './DeliveryWindowsWindow';
 
 import { pythonDays } from '../../constants';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 interface Props {
 }
@@ -32,6 +33,9 @@ export const DeliveryWindows = (props: Props): React.ReactElement => {
         return (
             <div className="row delivery_windows">
                 <div className={'col-12'}>
+                    <Link className={'btn btn-outline-info'} to={'/dashboard/delivery_window/add'}>add new delivery window</Link>
+                </div>
+                <div className={'col-12 mt-2'}>
                     <table className={'table'}>
                         <thead>
                             <tr>
@@ -39,23 +43,13 @@ export const DeliveryWindows = (props: Props): React.ReactElement => {
                                 <th>name</th>
                                 <th>day</th>
                                 <th>time</th>
-                                <th>date</th>
+                                <th>run</th>
                             </tr>
                         </thead>
                         <tbody>
                         {
                             deliveryWindows.map((window: DeliveryWindow) =>
-                                <tr
-                                    key={`dw_${window.id}`}
-                                    className={`delivery_windows__window ${window.active ? '' : 'delivery_windows__window-inactive'}`}
-                                    onClick={() => history.push({pathname: `/dashboard/delivery_window/edit/${window.id}`})}
-                                >
-                                    <td>{window.active ? 'yes' : 'no'}</td>
-                                    <td>{window.name}</td>
-                                    <td>{pythonDays[window.day]}</td>
-                                    <td>{window.start_time + ' - ' + window.end_time}</td>
-                                    <td>{window.one_off_date}</td>
-                                </tr>
+                                <DeliveryWindowsWindow window={window}/>
                             )
                         }
                         </tbody>

@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import momentHelper from '../../helpers/MomentHelper';
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import {DeliveryWindowWithCountsDTO} from "../../models/DeliveryWindowModel";
 import {RouteComponentProps} from 'react-router-dom';
@@ -45,8 +45,6 @@ export default class BrowserFullDay extends React.Component<Props, State> {
         if (this.state.loading)
             return(<LoadingOverlay />)
 
-        const m = moment(this.state.targetDate);
-        console.log(m.zoneName());
         return(
             <div className={'row browser_full_day justify-content-center'}>
                 <div className={'col-12 col-md-7'}>
@@ -55,7 +53,7 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                             onClick={() => this.props.history.goBack()}
                             >return to calendar</button>
                         <div className={'col-12 row browser_full_day__date'}>
-                            {m.utc().format('YYYY-MM/DD')}
+                            {momentHelper.asFullDate(this.state.targetDate)}
                         </div>
                         <div className={'col-12'}>
                             <div className={'row'}>
