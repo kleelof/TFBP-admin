@@ -26,6 +26,10 @@ export const Newsletters = (): React.ReactElement => {
     return(
         <div className={'row newsletters'}>
             <div className={'col-12'}>
+                <h3>newsletters</h3>
+                <hr/>
+            </div>
+            <div className={'col-12 mb-2'}>
                 <NewsletterAdd />
             </div>
             <div className={'col-12'}>

@@ -23,6 +23,13 @@ export default class MailingList extends React.Component<any, State> {
             .then((mailingList: MailingListDTO[]) => this.setState({mailingList, loaded: true}))
     }
 
+    private toggleActive = (dto: MailingListDTO): void => {
+        dto.active = !dto.active;
+        mailingListService.update<MailingListDTO>(dto.id, dto)
+            .then(() => this.forceUpdate())
+            .catch( err => window.alert('unable to update email address'))
+    }
+
     public render() {
         if (!this.state.loaded)
             return <div>Loading...</div>
@@ -30,10 +37,39 @@ export default class MailingList extends React.Component<any, State> {
         return(
             <div className="row">
                 <div className="col-12">
-                    {
-                        this.state.mailingList.map((dto: MailingListDTO) => 
-                            <h3>{dto.email}</h3>)
-                    }
+                    <table className={'table'}>
+                        <thead>
+                            <tr>
+                                <th>zip</th>
+                                <th></th>
+                                <th>email address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.mailingList.sort((a,b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((dto: MailingListDTO) =>
+                                    <tr>
+                                        <td>{dto.code}</td>
+                                        <td>
+                                            {
+                                                dto.active ?
+                                                    <button
+                                                        className={'btn btn-outline-danger'}
+                                                        onClick={() => this.toggleActive(dto)}
+                                                        >deactivate</button>
+                                                    :
+                                                    <button
+                                                        className={'btn btn-outline-success'}
+                                                        onClick={() => this.toggleActive(dto)}
+                                                        >activate</button>
+                                            }
+                                        </td>
+                                        <td>{dto.email}</td>
+                                    </tr>
+                                )
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )

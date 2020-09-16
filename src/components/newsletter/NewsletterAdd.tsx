@@ -32,17 +32,18 @@ class NewsletterAdd extends React.Component<any, State> {
         return(
             <div className={'row newsletter_add'}>
                 <div className={'col-12'}>
+                    <h5>create newsletter</h5>
                     <input
-                        placeholder={'new newsletter title'}
+                        placeholder={'title'}
                         value={this.state.title}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             this.setState(({title: e.target.value}))}
                         />
                     <button
-                        className={'btn btn-success'}
+                        className={'btn btn-success ml-2'}
                         disabled={this.state.title === '' || this.state.creating}
                         onClick={createNewsletter}
-                        >Create Newsletter</button>
+                        >create</button>
                 </div>
             </div>
         )

@@ -69,8 +69,12 @@ export default class Deliveries extends React.Component<any, State> {
 
         return(
             <div className="row weeks">
+                <div className={'col-12'}>
+                    <h3>delivery menus</h3>
+                    <hr/>
+                </div>
                 <div className="col-12">
-                    <h5>Add A Delivery Menu:</h5>
+                    <h5>create delivery menu</h5>
                     <input
                         type="date"
                         id="startDate"
@@ -79,6 +83,7 @@ export default class Deliveries extends React.Component<any, State> {
                         onChange={this.updateData} />
 
                     <input
+                        className={'ml-2'}
                         type="date"
                         id="endDate"
                         value={this.state.endDate}
@@ -86,15 +91,15 @@ export default class Deliveries extends React.Component<any, State> {
                         onChange={this.updateData} />
 
                     <button 
-                        className="btn btn-success ml-2"
+                        className="btn btn-success ml-2 mt-2 mt-m-0"
                         onClick={this.createDeliveryDay}
                         disabled={this.state.creatingDeliveryDay}
-                        >Add</button> 
+                        >create</button>
                     <hr/>
                 </div>
                 {
                     deliveries.map((deliveryDay: DeliveryDay) =>
-                        <div className="col-12 col-md-6 deliveries__delivery_days" key={`dd_${deliveryDay.id}`}>
+                        <div className="col-12 deliveries__delivery_days" key={`dd_${deliveryDay.id}`}>
                             <DeliveryDays 
                                 deliveryDay={deliveryDay}
                                 key={`dd_${deliveryDay.id}`}/>

@@ -17,17 +17,17 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
 
     return(
         <div className="row delivery_days" key={`days_${props.deliveryDay.id}`}>
-            <div className="col-12 col-md-6 delivery_days__date">
+            <div className="col-12 col-md-3 delivery_days__date">
                 {momentHelper.asFullDate(props.deliveryDay.date)}
             </div>
-            <div className="col-12 col-md-6 delivery_days__end_date">
+            <div className="col-12 col-md-3 delivery_days__end_date">
                 {momentHelper.asFullDate(props.deliveryDay.end_date)}
             </div>
-            <div className="col-12">
-                <div className="row">
+            <div className="col-12" style={{whiteSpace: "nowrap"}}>
+                <div className="delivery_days__menu_items">
                     {
                         helpers.sortDeliveryDayItemsByCategory(props.deliveryDay.day_items).map((item: DeliveryDayItem) =>
-                                <div className="col-4 delivery_days_item" key={`ddi_${item.id}`}>
+                                <div className="delivery_days__item" key={`ddi_${item.id}`}>
                                     <small>{item.menu_item.name}</small>
                                     <div>
                                         <img
@@ -39,16 +39,16 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
                     }
                 </div>
             </div>
-            <div className="col-12 text-center mt-3">
+            <div className="col-12 mt-3">
                 <button
                     className="btn btn-success"
                     onClick={()=> {history.push({pathname: `/dashboard/delivery/edit/${props.deliveryDay.id}/`})}}>
-                        Edit
+                        edit
                     </button>
                 <button
                     className="btn btn-warning ml-2"
                     onClick={()=> {history.push({pathname: `/dashboard/delivery/duplicate/${props.deliveryDay.id}`})}}>
-                        Duplicate
+                        duplicate
                     </button>
             </div>
         </div>

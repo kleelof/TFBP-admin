@@ -22,6 +22,21 @@
     & .delivery_days_item img, .delivery_day_item__img {
         width: 100%;
     }
+
+    &__menu_items {
+        white-space: nowrap;
+        width: 100%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+    &__item {
+        display: inline-block;
+        vertical-align: top;
+        white-space: normal;
+        width: 200px;
+        margin: 5px;
+    }
 }
 
 .delivery_duplicate {
@@ -30,6 +45,18 @@
     }
 }
 
+.delivery_day_item {
+      padding: 5px;
+
+    &__inner{
+      border: 2px solid rgba(0, 0, 0, .5);
+      padding: 5px;
+    }
+
+    &__img {
+      width: 100%;
+    }
+}
 
 @media(min-width: 576px) {
 }

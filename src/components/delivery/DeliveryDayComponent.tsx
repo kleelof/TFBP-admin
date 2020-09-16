@@ -12,6 +12,7 @@ import SearchWidget from '../widgets/searchWidget/SearchWidget';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 import { DeliveryDayItemComponent } from './DeliveryDayItemComponent';
 import './delivery.scss';
+import { Link } from 'react-router-dom';
 
 interface State {
     loading: boolean,   //TODO: FINISH ADDING LOAD ALL MENU ITEMS, have MenuItems confirm if 
@@ -59,11 +60,16 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
 
         return(
             <div className="row delivery_day_component">
+                <div className={"col-12 mb-2"}>
+                    <Link className={'btn btn-outline-info'} to={'/dashboard/deliveries'}>return to delivery menus</Link>
+                </div>
                 <div className="col-12 col-md-6">
-                    {momentHelper.asFullDate(this.state.deliveryDay.date)} - {momentHelper.asFullDate(this.state.deliveryDay.end_date)}
+                    <h5>
+                        {momentHelper.asFullDate(this.state.deliveryDay.date)} - {momentHelper.asFullDate(this.state.deliveryDay.end_date)}
+                    </h5>
                     <hr/>
                 </div>
-                <div className="col-12 col-md-6 delivery_day_component__search_widget">
+                <div className="col-12 col-md-6 delivery_day_component__search_widget mb-2">
                     <SearchWidget service={menuItemService} itemSelected={this.itemSelected} />
                 </div>
                     {

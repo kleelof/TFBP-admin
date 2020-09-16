@@ -53,7 +53,7 @@ class Navigation extends React.Component<Props, State> {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/dashboard/deliveries">
-                                Delivery Days</Link>
+                                Delivery Menus</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/dashboard/delivery_window">

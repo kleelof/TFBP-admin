@@ -4,7 +4,7 @@ import MenuItem, {MenuItemDTO} from '../../models/MenuItemModel';
 import menuItemService from '../../services/MenuItemService';
 import ImageUploader from '../widgets/imageUploader/ImageUploader';
 
-import './edit_menu.scss';
+import './menu.scss';
 import LoadingOverlay from '../overlays/LoadingOverlay';
 
 interface State {
@@ -222,8 +222,8 @@ export default class MenuItemEdit extends React.Component<any, State> {
                         </div>
                         <div className="col-12">
                             <div className="row">
-                                <div className="col-12">
-                                    <h3>Allergens:</h3>
+                                <div className="col-12 col-md-6 mt-2">
+                                    <h5>Allergens:</h5>
                                         {
                                             allergens.map((allergen: any) => 
                                                 {
@@ -256,8 +256,8 @@ export default class MenuItemEdit extends React.Component<any, State> {
                                             )
                                         }
                                 </div>
-                                <div className="col-12">
-                                    <h3>Proteins:</h3>
+                                <div className="col-12 col-md-6 mt-2">
+                                    <h5>Proteins:</h5>
                                         {
                                             proteins.map((protein: any) => {
                                                 if (this.props.mode === ItemModes.deliveryDay){
@@ -289,7 +289,8 @@ export default class MenuItemEdit extends React.Component<any, State> {
                                             )
                                         }
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 col-md-6 mt-2">
+                                    <hr/>
                                     {
                                         this.props.mode === ItemModes.deliveryDay ?
                                             this.state.menuItem.spicy ?

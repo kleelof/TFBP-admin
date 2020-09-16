@@ -81,21 +81,25 @@ class BrowserWindowTools extends React.Component<Props, State>{
                 <div className={'col-12 browser_window_tools__inner'}>
                     <div className={'row'}>
                         <div className={'col-12'}>{this.props.dto.window.name}</div>
-                        <div className={'col-6'}>Deliveries: {this.props.dto.order_count}</div>
-                        <div className={'col-6'}>Dishes: {this.props.dto.dish_count}</div>
-                        <div className={'d-none d-md-block col-md-12 browser_window_tools__controls'}>
-                            <button className={'btn btn-success'} onClick={() => this.print('prep')}
-                            disabled={this.state.orders.length === 0}>print prep list</button>
-                            <button className={'btn btn-info ml-3'} onClick={() => this.print('delivery_tags')}
-                            disabled={this.state.orders.length === 0}>print delivery tags</button>
+                        <div className={'col-6 mt-2'}>Deliveries: {this.props.dto.order_count}</div>
+                        <div className={'col-6 mt-2'}>Dishes: {this.props.dto.dish_count}</div>
+                        <div className={'col-12'}><hr/></div>
+                        <div className={'d-none d-md-block col-md-12 browser_window_tools__controls mt-2'}>
+                                <button className={'btn-block btn-success'} onClick={() => this.print('prep')}
+                                disabled={this.state.orders.length === 0}>print prep list</button>
+                                <button className={'btn-block btn-success'} onClick={() => this.print('delivery_tags')}
+                                disabled={this.state.orders.length === 0}>print delivery tags</button>
+                                <button className={'btn-block btn-success'} onClick={this.downloadDeliverySpreadsheet}
+                                disabled={this.state.orders.length === 0}>download delivery spreadsheet</button>
+
+                        </div>
+                        <div className={'col-12 mt-2'}>
                             <button
-                                className={'btn btn-outline-danger ml-3'}
+                                className={'btn-block btn-info'}
                                 onClick={() =>
                                     this.props.history.push(
                                         {pathname: `/dashboard/mail/mass_mailer/upcoming_delivery/${momentHelper.asDateSlug(this.props.date)}`})}
                             disabled={this.state.orders.length === 0}>send mail</button>
-                            <button className={'btn btn-success ml-3'} onClick={this.downloadDeliverySpreadsheet}
-                            disabled={this.state.orders.length === 0}>download delivery spreadsheet</button>
                         </div>
                     </div>
                 </div>

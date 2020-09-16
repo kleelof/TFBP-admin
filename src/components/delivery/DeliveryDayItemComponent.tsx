@@ -11,18 +11,22 @@ interface Props {
 export const DeliveryDayItemComponent = (props:Props) => {
     return(
         <div className="row delivery_day_item">
-            <div className="col-12 delivery_day_item__name">{props.item.menu_item.name}</div>
-            <div className="col-12">
-                <img
-                    className={'delivery_day_item__img'}
-                    src={
-                        props.item.menu_item.image.indexOf('http') === -1 ?
-                        config.API_URL + props.item.menu_item.image : props.item.menu_item.image
-                    }
-                    alt={props.item.menu_item.name} />
-            </div>
-            <div className="col-12">
-                <DeliveryDayItemOptionsComponent deliveryDayItem={props.item} refreshItems={async () => props.refreshItems()} />
+            <div className={'col-12'}>
+                <div className={'row delivery_day_item__inner'}>
+                    <div className="col-12 delivery_day_item__name">{props.item.menu_item.name}</div>
+                    <div className="col-12">
+                        <img
+                            className={'delivery_day_item__img'}
+                            src={
+                                props.item.menu_item.image.indexOf('http') === -1 ?
+                                config.API_URL + props.item.menu_item.image : props.item.menu_item.image
+                            }
+                            alt={props.item.menu_item.name} />
+                    </div>
+                    <div className="col-12">
+                        <DeliveryDayItemOptionsComponent deliveryDayItem={props.item} refreshItems={async () => props.refreshItems()} />
+                    </div>
+                </div>
             </div>
         </div>
     )

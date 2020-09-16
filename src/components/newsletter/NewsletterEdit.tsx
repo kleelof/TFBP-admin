@@ -4,6 +4,7 @@ import LoadingOverlay from "../overlays/LoadingOverlay";
 import newsletterService from '../../services/NewsletterService';
 
 import Newsletter from "../../models/Newsletter";
+import { Link } from 'react-router-dom';
 
 interface State {
     loading: boolean,
@@ -109,47 +110,48 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                             this.state.content === this.state.newsletter.content) ||
                                                 this.state.saving
         return (
-            <div className={'row newsletter_edit'}>
-                <div className={'col-12 newsletter_edit__title'}>
-                    title: <br/>
-                    <input
-                        value={this.state.title}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    this.setState({title: e.target.value})}
-                        className={'form-control newsletter_edit__title_input'}
-                        disabled={this.state.saving}
-                        />
-                </div>
-                <div className={'col-12 newsletter_edit__content'}>
-                    content:
-                    <textarea
-                        className={'form-control newsletter_edit__content_input'}
-                        value={this.state.content}
-                        rows={10}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                                        this.setState({content: e.target.value})}
-                        disabled={this.state.saving}
-                        ></textarea>
-                    ({this.state.content.length} characters)
-                </div>
-                <div className={'col-12 newsletter_edit_controls mt-3'}>
+            <div className={'row newsletter_edit justify-content-center'}>
+                <div className={'col-12 col-md-5'}>
                     <div className={'row'}>
-                        <div className={'col-12 col-md-6'}>
+                        <div className={'col-12'}>
+                            <h3>edit newsletter</h3>
+                            <hr/>
+                        </div>
+                        <div className={'col-12 basic_form__label'}>
+                            title: <br/>
+                            <input
+                                value={this.state.title}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            this.setState({title: e.target.value})}
+                                className={'form-control newsletter_edit__title_input'}
+                                disabled={this.state.saving}
+                                />
+                        </div>
+                        <div className={'col-12 newsletter_edit__content basic_form__label mt-2'}>
+                            content:
+                            <textarea
+                                className={'form-control newsletter_edit__content_input'}
+                                value={this.state.content}
+                                rows={10}
+                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                                this.setState({content: e.target.value})}
+                                disabled={this.state.saving}
+                                ></textarea>
+                            ({this.state.content.length} characters)
                             <button
-                                className={'btn btn-success newsletter_edit_controls__save_btn'}
+                                className={'btn btn-success newsletter_edit__control_btn mt-2'}
                                 disabled={saveDisabled}
                                 onClick={this.saveNewsletter}
                                 >save</button>
-
                             {this.state.newsletter.release_date === null &&
                                 <button
-                                    className={'btn btn-outline-warning newsletter_edit_controls__release_btn ml-3'}
+                                    className={'btn btn-outline-warning newsletter_edit__control_btn mt-2 mr-2'}
                                     disabled={!saveDisabled}
                                     onClick={this.release}
                                     >release</button>
                             }
                         </div>
-                        <div className={'col-12 col-md-6'}>
+                        <div className={'col-12'}>
                             {this.state.content.indexOf('newsletter__email_title') === -1 &&
                                 <div className={'newsletter_edit__error'}>
                                     Missing 'newsletter__email_title' class
@@ -161,21 +163,39 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                 </div>
                             }
                         </div>
-                        <div className={'col-12'}>
-                            <button
-                                className={'btn btn-outline-success newsletter_edit_controls__email_btn'}
-                                disabled={!saveDisabled || this.state.sendingEmail}
-                                onClick={this.sendTestEmail}
-                                >Send Email Test</button>
-                            <input
-                                className={'form-control mt-3 newsletter_edit_controls__email_input'}
-                                placeholder={'enter email address'}
-                                type={'email'}
-                                value={this.state.email}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    this.setState({email: e.target.value})}
-                                disabled={!saveDisabled || this.state.sendingEmail}
-                                   />
+                        <div className={'col-12 newsletter_edit_controls mt-3'}>
+                            <div className={'row'}>
+                                <div className={'col-12 col-md-6 mb-2'}>
+
+
+
+                                </div>
+                                <div className={'col-12'}>
+                                    <h5>test email</h5>
+                                    <input
+                                        className={'form-control newsletter_edit_controls__email_input'}
+                                        placeholder={'enter email address'}
+                                        type={'email'}
+                                        value={this.state.email}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            this.setState({email: e.target.value})}
+                                        disabled={!saveDisabled || this.state.sendingEmail}
+                                           />
+                                    <button
+                                        className={'btn btn-outline-success mt-2 newsletter_edit_controls__email_btn'}
+                                        disabled={!saveDisabled || this.state.sendingEmail}
+                                        onClick={this.sendTestEmail}
+                                        >Send Email Test</button>
+
+                                    <Link
+                                        className={'btn btn-outline-info newsletter_edit__control_btn mt-2 mr-2'}
+                                        to={'/dashboard/newsletter'}
+                                        >return to newsletters</Link>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={'col-12 text-center'}>
+
                         </div>
                     </div>
                 </div>

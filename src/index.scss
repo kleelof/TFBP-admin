@@ -32,3 +32,15 @@ input[type=checkbox]
    padding: 0 !important;
    margin: 0 !important;
 }
+
+.no_wrap_text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.basic_form {
+  &__label {
+    font-weight: bold;
+  }
+}

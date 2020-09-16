@@ -66,29 +66,28 @@ export default class MailTemplateComponent extends React.Component<Props, State>
             return <LoadingOverlay />
 
         return(
-            <div className={'row mail_template'}>
-                <div className={'col-12'}>
-                    <hr/>
-                </div>
-                <div className={'col-12'}>
-                    {this.props.templateSlug.replace(/-/g, ' ')}
-                </div>
-                <div
-                    className={'col-12 '}>
-                    <textarea
-                        className={'mail_template__body'}
-                        value={this.state.text}
-                        onChange={(e: any) => this.setState({text:e.target.value})}
-                        disabled={this.state.updating}
-                    ></textarea>
-                    ({this.state.text.length} characters)
-                </div>
-                <div className={'col-12'}>
-                    <button className={`btn btn-${this.state.updating || this.state.text === this.state.originalText ? 
-                        'default' : 'success'}`}
-                            onClick={() => this.saveUpdates()}
-                            disabled={this.state.updating || this.state.text === this.state.originalText}
-                            >Update</button>
+            <div className={'col-12 col-md-6'}>
+                <div className={'row mail_template'}>
+                    <div className={'col-12'}>
+                        {this.props.templateSlug.replace(/-/g, ' ')}
+                    </div>
+                    <div
+                        className={'col-12 '}>
+                        <textarea
+                            className={'mail_template__body'}
+                            value={this.state.text}
+                            onChange={(e: any) => this.setState({text:e.target.value})}
+                            disabled={this.state.updating}
+                        ></textarea>
+                        ({this.state.text.length} characters)
+                    </div>
+                    <div className={'col-12'}>
+                        <button className={`btn btn-${this.state.updating || this.state.text === this.state.originalText ? 
+                            'default' : 'success'}`}
+                                onClick={() => this.saveUpdates()}
+                                disabled={this.state.updating || this.state.text === this.state.originalText}
+                                >Update</button>
+                    </div>
                 </div>
             </div>
         )

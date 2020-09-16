@@ -49,9 +49,6 @@ export default class BrowserFullDay extends React.Component<Props, State> {
             <div className={'row browser_full_day justify-content-center'}>
                 <div className={'col-12 col-md-7'}>
                     <div className={'col-12'}>
-                        <button
-                            onClick={() => this.props.history.goBack()}
-                            >return to calendar</button>
                         <div className={'col-12 row browser_full_day__date'}>
                             {momentHelper.asFullDate(this.state.targetDate)}
                         </div>
@@ -69,6 +66,12 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                                     )
                                 }
                             </div>
+                        </div>
+                        <div className={'col-12 text-center'}>
+                            <button
+                                className={'btn btn-outline-info'}
+                                onClick={() => this.props.history.goBack()}
+                                >return to calendar</button>
                         </div>
                     </div>
                 </div>

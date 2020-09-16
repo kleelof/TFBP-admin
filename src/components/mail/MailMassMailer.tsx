@@ -130,112 +130,118 @@ export default class MailMassMailer extends React.Component<Props, State> {
         return(
             <div className={'row mass_mailer justify-content-center'}>
                 <div className={'col-12 col-md-6'}>
-                    <div className={'col-12'}>
-                        <label>message:</label>
-                        <textarea
-                            className={'mass_mailer__message form-control'}
-                            value={this.state.message}
-                            onChange={(e) => this.setState({message: e.target.value})}
-                        ></textarea>
-                        ({this.state.message.length} characters)
-                    </div>
-                    <div className={'col-12 mt-3 mass_mailer_send_to'}>
-                        send to:<br/>
-                        <div className={'mass_mailer_send_to__option'}>
-                            <input type={'radio'}
-                                   name={'to'}
-                                   id={'all_customers'}
-                                   checked={this.state.who === 'all_customers'}
-                                   onChange={() => this.setState({who: 'all_customers'})}/> all customers<br/>
-                                   <span>anyone who has completed an order</span>
+                    <div className={'row'}>
+                        <div className={'col-12'}>
+                            <h3>mass mailer</h3>
+                            <hr/>
                         </div>
-                        <div className={'mass_mailer_send_to__option'}>
-                            <input type={'radio'} name={'to'}
-                                   id={'delivery_window'}
-                                   disabled={this.state.deliveryWindows.length === 0}
-                                   checked={this.state.who === 'delivery_window'}
-                                   onChange={() => this.setState({who: 'delivery_window'})}/> delivery window<br/>
-                                   <span>customers in the window selected below</span>
+                        <div className={'col-12'}>
+                            <label>message:</label>
+                            <textarea
+                                className={'mass_mailer__message form-control'}
+                                value={this.state.message}
+                                onChange={(e) => this.setState({message: e.target.value})}
+                            ></textarea>
+                            ({this.state.message.length} characters)
                         </div>
-                        <div className={'mass_mailer_send_to__option'}>
-                            <input type={'radio'} name={'to'}
-                               id={'upcoming_delivery'}
-                               checked={this.state.who === 'upcoming_delivery'}
-                               onChange={() => this.setState({who: 'upcoming_delivery'})} /> upcoming delivery<br/>
-                               <span>customers receiving a delivery on the date selected below</span>
-                        </div>
-                        <div className={'mass_mailer_send_to__option'}>
-                            <input type={'radio'} name={'to'}
-                               id={'upcoming_delivery_days'}
-                               disabled={this.state.deliveryDays.length === 0}
-                               checked={this.state.who === 'upcoming_delivery_days'}
-                               onChange={() => this.setState({who: 'upcoming_delivery_days'})} /> upcoming delivery days<br/>
-                               <span>customers receiving an order during the deliver days selected below</span>
-                        </div>
+                        <div className={'col-12 mt-3 mass_mailer_send_to'}>
+                            send to:<br/>
+                            <div className={'mass_mailer_send_to__option'}>
+                                <input type={'radio'}
+                                       name={'to'}
+                                       id={'all_customers'}
+                                       checked={this.state.who === 'all_customers'}
+                                       onChange={() => this.setState({who: 'all_customers'})}/> all customers<br/>
+                                       <span>anyone who has completed an order</span>
+                            </div>
+                            <div className={'mass_mailer_send_to__option'}>
+                                <input type={'radio'} name={'to'}
+                                       id={'delivery_window'}
+                                       disabled={this.state.deliveryWindows.length === 0}
+                                       checked={this.state.who === 'delivery_window'}
+                                       onChange={() => this.setState({who: 'delivery_window'})}/> delivery window<br/>
+                                       <span>customers in the window selected below</span>
+                            </div>
+                            <div className={'mass_mailer_send_to__option'}>
+                                <input type={'radio'} name={'to'}
+                                   id={'upcoming_delivery'}
+                                   checked={this.state.who === 'upcoming_delivery'}
+                                   onChange={() => this.setState({who: 'upcoming_delivery'})} /> upcoming delivery<br/>
+                                   <span>customers receiving a delivery on the date selected below</span>
+                            </div>
+                            <div className={'mass_mailer_send_to__option'}>
+                                <input type={'radio'} name={'to'}
+                                   id={'upcoming_delivery_days'}
+                                   disabled={this.state.deliveryDays.length === 0}
+                                   checked={this.state.who === 'upcoming_delivery_days'}
+                                   onChange={() => this.setState({who: 'upcoming_delivery_days'})} /> upcoming delivery days<br/>
+                                   <span>customers receiving an order during the deliver days selected below</span>
+                            </div>
 
-                    </div>
-                    <div className={'col-12 mt-3 mass_mailer__options'}>
-                        {this.state.who === 'upcoming_delivery' &&
-                            <Fragment>
-                                select a delivery day:
-                                <input
-                                    type={'date'}
-                                    value={this.state.deliveryDate}
-                                    onChange={(e) =>
-                                        this.setState({deliveryDate: e.target.value})}
-                                    className={'form-control options__upcoming_delivery'} />
-                            </Fragment>
-                        }
-                        {this.state.who === 'upcoming_delivery_days' &&
-                            <Fragment>
-                                select delivery days:
-                                <select className={'form-control options__upcoming_delivery_days'}>
-                                    {
-                                        this.state.deliveryDays.map((deliveryDay: DeliveryDay) =>
-                                            <option key={`dd_${deliveryDay.id}`}>
-                                                {`${deliveryDay.date} to ${deliveryDay.end_date}`}
-                                            </option>
-                                        )
-                                    }
-                                </select>
-                            </Fragment>
-                        }
-                        {this.state.who === 'delivery_window' &&
-                            <Fragment>
-                                select delivery window:
-                                <select
-                                    className={'form-control options__delivery_windows'}
-                                    onChange={(e) =>
-                                        this.setState({deliveryWindowId: parseInt(e.target.value)})}>
-                                    {
-                                        this.state.deliveryWindows.map((window: DeliveryWindow) =>
-                                            <option key={`wi_${window.id}`} value={window.id}>
-                                                {window.name}
-                                            </option>
-                                        )
-                                    }
-                                </select>
-                            </Fragment>
-                        }
-                    </div>
-                    <div className={'col-12 mt-3 mass_mailer__includes'}>
-                        {this.state.who !== 'upcoming_delivery_days'&&
-                            <Fragment>
-                                <input
-                                    type={'checkbox'}
-                                    className={'includes__include_samples'}
-                                    checked={this.state.includeSamples}
-                                    onChange={(e) => this.setState(({includeSamples: !this.state.includeSamples}))}
-                                /> &nbsp;&nbsp;Include Upcoming Menu Samples
-                            </Fragment>
-                        }
-                    </div>
-                    <div className={'col-12 mt-3 mass_mailer__buttons text-center'}>
-                        <button
-                            className={'btn btn-success buttons__send'}
-                            disabled={!this.goodToSend()}
-                            onClick={this.sendMail}
-                            >Send Mass Mail</button>
+                        </div>
+                        <div className={'col-12 mt-3 mass_mailer__options'}>
+                            {this.state.who === 'upcoming_delivery' &&
+                                <Fragment>
+                                    select a delivery day:
+                                    <input
+                                        type={'date'}
+                                        value={this.state.deliveryDate}
+                                        onChange={(e) =>
+                                            this.setState({deliveryDate: e.target.value})}
+                                        className={'form-control options__upcoming_delivery'} />
+                                </Fragment>
+                            }
+                            {this.state.who === 'upcoming_delivery_days' &&
+                                <Fragment>
+                                    select delivery days:
+                                    <select className={'form-control options__upcoming_delivery_days'}>
+                                        {
+                                            this.state.deliveryDays.map((deliveryDay: DeliveryDay) =>
+                                                <option key={`dd_${deliveryDay.id}`}>
+                                                    {`${deliveryDay.date} to ${deliveryDay.end_date}`}
+                                                </option>
+                                            )
+                                        }
+                                    </select>
+                                </Fragment>
+                            }
+                            {this.state.who === 'delivery_window' &&
+                                <Fragment>
+                                    select delivery window:
+                                    <select
+                                        className={'form-control options__delivery_windows'}
+                                        onChange={(e) =>
+                                            this.setState({deliveryWindowId: parseInt(e.target.value)})}>
+                                        {
+                                            this.state.deliveryWindows.map((window: DeliveryWindow) =>
+                                                <option key={`wi_${window.id}`} value={window.id}>
+                                                    {window.name}
+                                                </option>
+                                            )
+                                        }
+                                    </select>
+                                </Fragment>
+                            }
+                        </div>
+                        <div className={'col-12 mt-3 mass_mailer__includes'}>
+                            {this.state.who !== 'upcoming_delivery_days'&&
+                                <Fragment>
+                                    <input
+                                        type={'checkbox'}
+                                        className={'includes__include_samples'}
+                                        checked={this.state.includeSamples}
+                                        onChange={(e) => this.setState(({includeSamples: !this.state.includeSamples}))}
+                                    /> &nbsp;&nbsp;Include Upcoming Menu Samples
+                                </Fragment>
+                            }
+                        </div>
+                        <div className={'col-12 mt-3 mass_mailer__buttons text-center'}>
+                            <button
+                                className={'btn btn-success buttons__send'}
+                                disabled={!this.goodToSend()}
+                                onClick={this.sendMail}
+                                >Send Mass Mail</button>
+                        </div>
                     </div>
                 </div>
             </div>

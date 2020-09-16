@@ -50,6 +50,7 @@ export default class CouponAdd extends React.Component<RouteComponentProps, Stat
             <div className={'row justify-content-center edit_coupon'}>
                 <div className={'col-12 col-md-4'}>
                     <h3>Add Coupon</h3>
+                    <hr/>
                     <div className={'row'}>
                         <div className={'col-12 col-6 mt-3'}>
                             Mode:

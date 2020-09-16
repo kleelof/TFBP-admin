@@ -1,9 +1,16 @@
 @import '../../scss_variables';
 
+.newsletter_add {
+
+}
 .newsletter_edit{
 
   &__error {
     color: red;
     font-size: .9em;
+  }
+
+  &__control_btn {
+    float: right;
   }
 }

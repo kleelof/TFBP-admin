@@ -55,6 +55,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
         <div className={'row delivery_window_edit justify-content-center'}>
             <div className={'col-12 col-md-5'}>
                 <h3>Edit Delivery Window</h3>
+                <hr/>
                 <div className={'row'}>
                     <div className={'col-12'}>
                         <div className={'delivery_window_edit__prompt'}>name:</div>

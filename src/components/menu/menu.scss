@@ -9,19 +9,123 @@
             cursor: pointer;
         }
 
-        &__menuitem__name {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: black;
-        }
-
         img {
             width: 100%;
         }
+    }
+
+    &__menuitem_name {
+        font-size: .9em;
+        font-weight: bold;
+        color: black;
+        decoration: none;
     }
 }
 
 .new_menu_item {
     padding: 5px;
     border: 2px solid rgba(0, 0, 0, .2);
+}
+
+.menuedititem {
+
+    & textarea {
+        resize: none;
+        height: 100px;
+    }
+
+    &__unsaved_updates {
+        border-color: yellow;
+    }
+
+    &__controls_area {
+        height: 40px;
+    }
+
+    &__header {
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    &__header span {
+        color: rgba(255, 255, 255, .7);
+        cursor: pointer;
+    }
+
+    &__header span:hover {
+        color: rgba(255, 255, 255, 1);
+        cursor: pointer;
+    }
+
+    &__header &__header-add {
+        background-color: rgb(53, 163, 163);
+    }
+
+    &__header &__header-edit {
+        background-color: green;
+    }
+
+    &__header &__header-view {
+        background-color: blue;
+    }
+
+    &__header &__header-view-deactivated {
+        background-color: red;
+    }
+
+    &__header &__header-edit a{
+        text-decoration: none;
+        color: rgba(255, 255, 255, .7);
+        margin: 0, 3px;
+    }
+
+    &__header &__header-edit a:hover {
+        color: rgba(255, 255, 255, 1);
+    }
+
+    &__imagearea {
+        display: block;
+        max-width: 97%;
+        //height: 100%;
+        border: 2px solid rgba(0, 0, 0, .7);
+    }
+
+    &__overlay {
+        position: absolute;
+        background-color: rgba(0, 0, 0, .5);
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    &__checker {
+        display: inline-block;
+        margin: 5px 11px;
+
+    }
+
+    &__checker input {
+        -ms-transform: scale(2); /* IE */
+        -moz-transform: scale(2); /* FF */
+        -webkit-transform: scale(2); /* Safari and Chrome */
+        -o-transform: scale(2); /* Opera */
+        transform: scale(2);
+        padding: 10px;
+        margin: 0 7px;
+    }
+
+    &__checker-week {
+        display: inline;
+        margin: 0 7px;
+    }
+}
+
+.new_menu_item__add_link {
+    font-weight: bold;
+}
+
+.new_menu_item__add_link:hover {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 1);
 }
