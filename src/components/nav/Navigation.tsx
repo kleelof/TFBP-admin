@@ -60,6 +60,10 @@ class Navigation extends React.Component<Props, State> {
                                 Delivery Windows</Link>
                         </li>
                         <li className="nav-item">
+                            <Link className="nav-link" to="/dashboard/zone">
+                                Delivery Zones</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link className="nav-link" to="/dashboard/coupons">
                                     Coupons</Link>
                         </li>

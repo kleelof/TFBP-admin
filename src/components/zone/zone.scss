@@ -1,0 +1,27 @@
+@import '../../css_variables';
+
+.zones {
+}
+
+.zone_tool {
+  margin: 5px;
+  padding: 5px;
+  border: 2px solid rgba(0, 0, 0, .5);
+
+  &__codes {
+    display: block;
+    height: 200px;
+    padding: 3px 6px;
+    border: 2px solid rgba(0, 0, 0, .7);
+    text-align: left;
+  }
+}
+
+.zone_code {
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $highlight_success_background;
+  }
+}

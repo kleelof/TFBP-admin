@@ -6,6 +6,9 @@ import MenuItem from "../src/models/MenuItemModel";
 import Coupon from "../src/models/Coupon";
 import MailTemplate from "../src/models/MailTemplate";
 import Newsletter from "../src/models/Newsletter";
+import MailingListModel from "../src/models/MailingListModel";
+import Zipcode from "../src/models/ZipcodeModel";
+import Zone from "../src/models/ZoneModel";
 
 interface BuildCoupon {
     count: number,
@@ -161,6 +164,72 @@ export const BuildNewsletter = (params: IBuildNewsletter):any => {
                 params.title || `newsletter_title_${x}`,
                 params.content || 'Newsletter Content newsletter__email_title  newsletter__email_content',
                 params.release_date || null
+            )
+        )
+    }
+
+    return items.length > 1 ? items : items[0];
+}
+
+interface IBuildMailingListEntry {
+    count: number,
+    code?: string,
+    email?: string,
+    active?: boolean
+}
+
+export const BuildMailingList = (params: IBuildMailingListEntry): any => {
+    let items: MailingListModel[] = [];
+
+    for (let x: number =1; x <= params.count; x ++) {
+        items.push(
+            new MailingListModel(
+                params.email || `email_${x}@mail.com`,
+                params.code || x.toString(),
+                params.active || true
+            )
+        )
+    }
+
+    return items.length > 1 ? items : items[0];
+}
+
+interface IBuildZone {
+    count: number,
+    name?: string,
+    zip_codes?: Zipcode[]
+}
+
+export const BuildZone = (params: IBuildZone): any =>  {
+    let items: Zone[] = [];
+
+    for (let x: number =1; x <= params.count; x ++) {
+        items.push(
+            new Zone(
+                params.name || `zone_${x}`,
+                params.zip_codes || []
+            )
+        )
+    }
+
+    return items.length > 1 ? items: items[0];
+}
+
+interface IBuildZipcode {
+    count: number,
+    code?: string,
+    zone?: Zone
+}
+
+export const BuildZipcode = (params: IBuildZipcode): any => {
+    let items: Zipcode[] = [];
+
+    for (let x: number = 1; x <= params.count; x ++) {
+        items.push(
+            new Zipcode(
+                x,
+                params.code || x.toString(),
+                params.zone || BuildZone({count: 1})
             )
         )
     }

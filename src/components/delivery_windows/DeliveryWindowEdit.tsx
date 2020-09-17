@@ -96,7 +96,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                         <input type={'time'} className={'form-control'} id={'end_time'}
                         value={deliveryWindow.end_time} onChange={updateData}/>
                     </div>
-                    <div className={'col-10 mt-2'}>
+                    <div className={'col-9 mt-2'}>
                         <div className={'delivery_window_edit__prompt'}>start date:</div>
                         <input type={'date'} className={'form-control'} id={'start_date'}
                                value={deliveryWindow.start_date || ''} onChange={updateData}/>
@@ -106,7 +106,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                                 onClick={() => setWindow({...deliveryWindow, start_date: null})}
                         >clear</button>
                     </div>
-                    <div className={'col-10 mt-2'}>
+                    <div className={'col-9 mt-2'}>
                         <div className={'delivery_window_edit__prompt'}>end date:</div>
                         <input type={'date'} className={'form-control'} id={'end_date'}
                                value={deliveryWindow.end_date || ''} onChange={updateData} />

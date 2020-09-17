@@ -10,6 +10,9 @@ import MailMassMailer from "./MailMassMailer";
 import deliveryDayService from '../../services/DeliveryDayService';
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import {BuildDeliveryDay, BuildDeliveryDaysDTO, BuildDeliveryWindowDTO} from "../../../__mocks__/deliveryMocks";
+import {BuildMailingList} from '../../../__mocks__/mockFactories';
+import MailingListModel from "../../models/MailingListModel";
+import {MailingListEntry} from "./MailingListEntry";
 
 configure({adapter: new Adapter()});
 
@@ -150,6 +153,32 @@ describe('MailMassMailer tests', () => {
             //expect(confirmSpy).toBeCalledWith('Send to all customers');
         })
     })
+})
+
+describe('MailingList tests', () => {
+
+})
+
+describe('MailingListEntry', () => {
+    beforeAll(() => {
+        const dto: MailingListModel = BuildMailingList({count: 1, email: 'fred@bedrock.com', code: '94610'});
+        component = mount(
+            <MailingListEntry dto={dto} />
+        )
+    })
+
+    it('should setup correctly', () => {
+        expect(component.find('.mailing_list__code').instance().value).toBe('94610');
+        expect(component.find('.mailing_list__email').instance().value).toBe('fred@bedrock.com');
+        expect(component.find('.mailing_list__active').props().checked).toBe(true);
+        expect(component.find('.mailing_list__save_btn').props().disabled).toBe(true);
+    })
+
+    it('should enable save btn if something changes', () => {
+        component.find('.mailing_list__code').simulate('change', {target: {value: '123'}});
+        expect(component.find('.mailing_list__save_btn').props().disabled).toBe(false);
+    })
+
 })
 
 describe('MailTemplateComponent tests', () => {
