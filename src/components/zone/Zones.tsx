@@ -29,10 +29,13 @@ export const Zones = (): React.ReactElement => {
                         <h3>delivery zones</h3>
                         <hr/>
                     </div>
+                    <div className={'col-12'}>
+
+                    </div>
                     {
                         zones.map((zone: Zone) => {
                             return(
-                                    <div className={'col-12 col-md-4 zones__zone_wrapper'} key={`zone_${zone.id}`}>
+                                    <div className={'col-12 col-md-6 zones__zone_wrapper'} key={`zone_${zone.id}`}>
                                         <ZoneTool zone={zone}/>
                                     </div>
                                 )

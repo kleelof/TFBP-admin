@@ -1,4 +1,5 @@
 import ModelBase from "./ModelBase";
+import Zone from "./ZoneModel";
 
 export class DeliveryWindowDTO {
     public date!: string;
@@ -11,8 +12,9 @@ export default class DeliveryWindow extends ModelBase {
     public start_time!: string;
     public end_time!: string;
     public day!:number; // 0 = Monday
-    public start_date?: string | null;
-    public end_date?: string | null;
+    public start_date!: string | null;
+    public end_date!: string | null;
+    public zones!: Zone[];
 
     constructor(id?: number, name?: string, start_time?: string, end_time?: string, day?: number, active?: boolean,
                 start_date?: string | null, end_date?: string | null) {

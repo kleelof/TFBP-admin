@@ -15,6 +15,12 @@
     border: 2px solid rgba(0, 0, 0, .7);
     text-align: left;
   }
+
+  &__note {
+    text-align: center;
+    font-size: .7em;
+    color: rgba(0, 0, 0, .7);
+  }
 }
 
 .zone_code {

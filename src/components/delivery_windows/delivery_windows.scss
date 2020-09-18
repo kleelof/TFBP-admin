@@ -14,3 +14,11 @@
     font-weight: bold;
   }
 }
+
+.dwe_zones {
+  &__zone {
+    & button {
+      font-size: .7em;
+    }
+  }
+}

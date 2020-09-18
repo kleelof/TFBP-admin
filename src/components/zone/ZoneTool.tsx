@@ -4,6 +4,7 @@ import './zone.scss';
 import Zipcode from "../../models/ZipcodeModel";
 import {ZoneCode} from "./ZoneCode";
 import zipService from '../../services/ZipService';
+import zoneService from '../../services/ZoneService';
 
 interface Props {
     zone: Zone
@@ -12,6 +13,7 @@ interface Props {
 export const ZoneTool = (props: Props): React.ReactElement => {
     const [codes, setCodes] = useState<Zipcode[]>(props.zone.zip_codes);
     const [newCode, setNewCode] = useState<string>('');
+    const [zoneName, setZoneName] = useState<string>(props.zone.name)
 
     const removeCode = (code: Zipcode): void => {
         if (!window.confirm(`Are you sure you want to remove: ${code.code}?`)) return
@@ -35,13 +37,24 @@ export const ZoneTool = (props: Props): React.ReactElement => {
             .catch(() => window.alert('unable to add code'));
     }
 
+    const updateZone = (): void => {
+        zoneService.update<Zone>(props.zone.id, new Zone(zoneName))
+            .then(() => {})
+    }
+
     return (
         <div className={'row zone_tool'}>
             <div className={'col-12'}>
-                <h3>{props.zone.name}</h3>
+                <input className={'form-control'} type={'text'} value={zoneName}
+                       onChange={(e:ChangeEvent<HTMLInputElement>) => setZoneName(e.target.value)}
+                />
+                <button className='btn btn-success mt-2' style={{float: 'right'}}
+                        onClick={updateZone}
+                >update name</button>
                 <hr/>
             </div>
             <div className={'col-6'}>
+                <div className={'zone_tool__note'}>select code to remove</div>
                 <div className={'zone_tool__codes'}>
                     {
                         codes.map((code: Zipcode) => <ZoneCode code={code} removeCode={removeCode} key={code.code} />)
@@ -49,6 +62,7 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                 </div>
             </div>
             <div className={'col-6'}>
+                <br/>
                 <input className={'form-control'} placeholder={'new code'} value={newCode}
                        onChange={(e:ChangeEvent<HTMLInputElement>) => setNewCode(e.target.value)}
                 />

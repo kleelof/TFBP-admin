@@ -15,6 +15,14 @@ class DeliveryWindowService extends Service {
         return this._get(`${this.appName}/${this.view}/${deliveryWindowId}/retrieve_orders/?target_date=${
             moment(targetDate).utc().format('YYYY-MM-DD')}`)
     }
+
+    public addZone = (deliveryWindowId: number, zoneId: number): Promise<any> => {
+        return this._get(`${this.appName}/${this.view}/add_zone/${deliveryWindowId}/${zoneId}/`);
+    }
+
+    public removeZone = (deliveryWindowId: number, zoneId: number): Promise<any> => {
+        return this._get(`${this.appName}/${this.view}/remove_zone/${deliveryWindowId}/${zoneId}/`);
+    }
 }
 
 export default new DeliveryWindowService()
