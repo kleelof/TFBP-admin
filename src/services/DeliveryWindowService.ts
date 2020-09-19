@@ -2,6 +2,7 @@ import Service from './Service';
 import {DeliveryWindowWithCountsDTO} from "../models/DeliveryWindowModel";
 import Order from "../models/OrderModel";
 import moment from 'moment';
+import DeliveryRouteDTO from "../dto/DeliveryRouteDTO";
 
 class DeliveryWindowService extends Service {
     appName = 'dashboard';
@@ -13,6 +14,11 @@ class DeliveryWindowService extends Service {
 
     public retrieveOrders = (deliveryWindowId: number, targetDate: Date): Promise<Order[]> => {
         return this._get(`${this.appName}/${this.view}/${deliveryWindowId}/retrieve_orders/?target_date=${
+            moment(targetDate).utc().format('YYYY-MM-DD')}`)
+    }
+
+    public retrieveRoute = (deliveryWindowId: number, targetDate: Date): Promise<DeliveryRouteDTO> => {
+        return this._get(`${this.appName}/${this.view}/${deliveryWindowId}/retrieve_route/?target_date=${
             moment(targetDate).utc().format('YYYY-MM-DD')}`)
     }
 

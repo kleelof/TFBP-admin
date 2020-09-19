@@ -89,8 +89,10 @@ class BrowserWindowTools extends React.Component<Props, State>{
                                 disabled={this.state.orders.length === 0}>print prep list</button>
                                 <button className={'btn-block btn-outline-success'} onClick={() => this.print('delivery_tags')}
                                 disabled={this.state.orders.length === 0}>print delivery tags</button>
-                                <button className={'btn-block btn-outline-success'} onClick={this.downloadDeliverySpreadsheet}
-                                disabled={this.state.orders.length === 0}>download delivery spreadsheet</button>
+                                <button className={'btn-block btn-outline-success'}
+                                        onClick={() => this.props.history.push({
+                                            pathname:`/dashboard/delivery_planner/${this.props.dto.window.id}/${momentHelper.asDateSlug(this.props.date)}`})}
+                                disabled={this.state.orders.length === 0}>route planner</button>
 
                         </div>
                         <div className={'col-12 mt-2'}>

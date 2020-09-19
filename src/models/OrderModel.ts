@@ -19,6 +19,8 @@ export default class Order extends ModelBase {
     public public_id!: string;
     public nonce!: string;
     public tip!:number;
+    public latitude!: string;
+    public longitude!: string;
 
     constructor(
         id: number = -1,

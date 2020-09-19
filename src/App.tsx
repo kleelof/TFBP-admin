@@ -34,6 +34,7 @@ import BrowserFullDay from "./components/browser_tool/BrowserFullDay";
 import {DeliveryWindows} from "./components/delivery_windows/DeliveryWindows";
 import {DeliveryWindowEdit} from "./components/delivery_windows/DeliveryWindowEdit";
 import {Zones} from "./components/zone/Zones";
+import {DeliveryPlanner} from "./components/delivery_planner/DeliveryPlanner";
 
 interface LinkStateProps {
   auth: AuthState
@@ -114,6 +115,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/delivery_window/edit/:id' component={DeliveryWindowEdit} />
                         <PrivateRoute path='/dashboard/delivery_window/add' component={DeliveryWindowEdit} />
                         <PrivateRoute path="/dashboard/delivery_window" component={DeliveryWindows} />
+                        <PrivateRoute path='/dashboard/delivery_planner/:delivery_window/:target_date' component={DeliveryPlanner} />
                         <PrivateRoute path="/dashboard/mail" component={Mail} />
                         <PrivateRoute path="/dashboard/menu" component={Menu} />
                         <PrivateRoute path='/dashboard/newsletter/edit/:id' component={NewsletterEdit} />
