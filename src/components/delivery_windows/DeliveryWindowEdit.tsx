@@ -142,7 +142,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                     </div>
                     <div className={'col-12 mt-2 text-right'}>
                         <button
-                            className={'btn btn-success'}
+                            className={'btn btn-outline-success'}
                             disabled={disabled}
                             onClick={saveWindow}
                         >

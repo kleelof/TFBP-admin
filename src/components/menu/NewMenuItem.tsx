@@ -47,7 +47,7 @@ export const NewMenuItem = (): React.ReactElement => {
                             </select>
                         </div>
                         <div className="col-12 mt-1 text-center">
-                            <button className="btn btn-success new_menu_item__submit"
+                            <button className="btn btn-outline-success new_menu_item__submit"
                                 disabled={name === ""} onClick={()=> createNewMenuItem()}>
                                 Add New Item</button>
                         </div>

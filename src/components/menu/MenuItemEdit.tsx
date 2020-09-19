@@ -316,7 +316,7 @@ export default class MenuItemEdit extends React.Component<any, State> {
                         <div className="col-12 menuedititem__controls_area menuedititem__area text-center mt-2">
                             <hr/>
                             <button 
-                                className="btn btn-success"
+                                className="btn btn-outline-success"
                                 disabled={saveBtnDisabled} 
                                 onClick={this.save}
                                 >Save</button>

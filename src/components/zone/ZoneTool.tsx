@@ -5,6 +5,7 @@ import Zipcode from "../../models/ZipcodeModel";
 import {ZoneCode} from "./ZoneCode";
 import zipService from '../../services/ZipService';
 import zoneService from '../../services/ZoneService';
+import {SpinnerButton} from "../widgets/spinnerButton/SpinnerButton";
 
 interface Props {
     zone: Zone
@@ -13,7 +14,8 @@ interface Props {
 export const ZoneTool = (props: Props): React.ReactElement => {
     const [codes, setCodes] = useState<Zipcode[]>(props.zone.zip_codes);
     const [newCode, setNewCode] = useState<string>('');
-    const [zoneName, setZoneName] = useState<string>(props.zone.name)
+    const [zoneName, setZoneName] = useState<string>(props.zone.name);
+    const [updating, setUpdating] = useState<boolean>(false);
 
     const removeCode = (code: Zipcode): void => {
         if (!window.confirm(`Are you sure you want to remove: ${code.code}?`)) return
@@ -38,19 +40,26 @@ export const ZoneTool = (props: Props): React.ReactElement => {
     }
 
     const updateZone = (): void => {
+        setUpdating(true)
         zoneService.update<Zone>(props.zone.id, new Zone(zoneName))
-            .then(() => {})
+            .then(() => setUpdating(false))
     }
 
     return (
         <div className={'row zone_tool'}>
             <div className={'col-12'}>
-                <input className={'form-control'} type={'text'} value={zoneName}
-                       onChange={(e:ChangeEvent<HTMLInputElement>) => setZoneName(e.target.value)}
-                />
-                <button className='btn btn-success mt-2' style={{float: 'right'}}
-                        onClick={updateZone}
-                >update name</button>
+                <div className='row'>
+                    <div className='col-10'>
+                        <input className={'form-control zone_tool__name'} type={'text'} value={zoneName}
+                               onChange={(e:ChangeEvent<HTMLInputElement>) => setZoneName(e.target.value)}
+                        />
+                    </div>
+                    <div className='col-1'>
+                        <div onClick={updateZone}>
+                            <SpinnerButton active={updating} />
+                        </div>
+                    </div>
+                </div>
                 <hr/>
             </div>
             <div className={'col-6'}>
@@ -66,7 +75,7 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                 <input className={'form-control'} placeholder={'new code'} value={newCode}
                        onChange={(e:ChangeEvent<HTMLInputElement>) => setNewCode(e.target.value)}
                 />
-                <div className={'btn btn-success zone_tool__add_btn mt-2'} onClick={addCode}>add code</div>
+                <div className={'btn btn-outline-success zone_tool__add_btn mt-2'} onClick={addCode}>add code</div>
             </div>
         </div>
     )

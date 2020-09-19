@@ -22,12 +22,12 @@ describe('Zones tests', () => {
     describe('ZoneTool tests', () => {
         beforeEach(() => {
             zone = BuildZone({count: 1, zip_codes: BuildZipcode({count: 5})});
-            component = shallow(
+            component = mount(
                 <ZoneTool zone={zone} />
             )
         })
         it('should setup correctly', () => {
-            expect(component.text()).toContain(zone.name);
+            expect(component.find('.zone_tool__name').instance().value).toContain(zone.name);
         })
 
         it('should list all codes', () => {
@@ -36,18 +36,20 @@ describe('Zones tests', () => {
 
         it('should call API to remove code; remove code', async () => {
             const zip: Zipcode = BuildZipcode({count: 1});
+            window.confirm = () => true;
             deleteZipSpy.mockImplementation(() => Promise.resolve());
             zone = BuildZone({count: 1, zip_codes: [zip]});
             component = await mount(
                 <ZoneTool zone={zone} />
             )
-            await component.update();
+
 
             const code: any = component.find(ZoneCode);
             code.simulate('click');
-
             expect(deleteZipSpy).toHaveBeenCalledTimes(1);
             expect(deleteZipSpy).toHaveBeenCalledWith(1);
+
+            await component.update();
             expect(component.find(ZoneCode).length).toBe(0);
         })
     })

@@ -25,7 +25,12 @@ export default class MailingList extends React.Component<any, State> {
 
     private addNewEntry = (): void => {
         mailingListService.add<MailingListModel>(new MailingListModel(this.state.newEmail, this.state.newCode, true))
-            .then((entry: MailingListModel) => this.setState({...this.state, mailingList: [...this.state.mailingList, entry]}))
+            .then((entry: MailingListModel) => this.setState({
+                ...this.state,
+                mailingList: [...this.state.mailingList, entry],
+                newCode: '',
+                newEmail: ''
+            }))
             .catch( err => window.alert('unable to add email \n\n this email address may already exist'))
     }
 
@@ -60,7 +65,7 @@ export default class MailingList extends React.Component<any, State> {
                             />
                         </div>
                         <div className={'col-12 col-md-3'}>
-                            <button className={'btn btn-success'} onClick={this.addNewEntry}>add</button>
+                            <button className={'btn btn-outline-success'} onClick={this.addNewEntry}>add</button>
                         </div>
                     </div>
                 </div>

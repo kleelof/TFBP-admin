@@ -106,7 +106,7 @@ export default class CouponAdd extends React.Component<RouteComponentProps, Stat
                         </div>
                         <div className={'col-12 mt-3'}>
                             <div className={'row justify-content-center'}>
-                                <button className={'btn btn-success mr-3'} onClick={this.save}>
+                                <button className={'btn btn-outline-success mr-3'} onClick={this.save}>
                                     save
                                 </button>
                                 <button className={'btn btn-outline-default edit_coupon__cancel'} onClick={this.cancel}>

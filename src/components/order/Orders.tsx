@@ -68,7 +68,7 @@ export default class Orders extends React.Component<any, State> {
                         <div className={'col-12 col-md-9'}>
                             End Date: <input type="date" id="endDate" value={this.state.endDate} onChange={this.updateData} />
                             &nbsp;&nbsp;
-                            <button className="btn btn-success" onClick={this.searchByOrderDateRange}>Search</button>
+                            <button className="btn btn-outline-success" onClick={this.searchByOrderDateRange}>Search</button>
                         </div>
                     </div>
                     {

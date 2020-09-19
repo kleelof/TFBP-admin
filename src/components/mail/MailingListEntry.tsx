@@ -14,7 +14,9 @@ export const MailingListEntry = (props: Props): React.ReactElement => {
 
     const save = (): void => {
         mailingListService.update<MailingListModel>(checkDTO.id, new MailingListModel(email, code, active))
-            .then((dto:MailingListModel) => checkDTO = dto)
+            .then((dto:MailingListModel) => {
+                checkDTO = dto;
+            })
             .catch( err => window.alert('unable to update entry'))
     }
 
@@ -35,7 +37,7 @@ export const MailingListEntry = (props: Props): React.ReactElement => {
                        onChange={() => setActive(!active)} />
             </td>
             <td>
-                <button className={'btn btn-success mailing_list__save_btn'} disabled={disabled} onClick={save}
+                <button className={'btn btn-outline-success mailing_list__save_btn'} disabled={disabled} onClick={save}
                 >save</button>
             </td>
         </tr>

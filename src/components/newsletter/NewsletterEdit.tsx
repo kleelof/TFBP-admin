@@ -139,7 +139,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                 ></textarea>
                             ({this.state.content.length} characters)
                             <button
-                                className={'btn btn-success newsletter_edit__control_btn mt-2'}
+                                className={'btn btn-outline-success newsletter_edit__control_btn mt-2'}
                                 disabled={saveDisabled}
                                 onClick={this.saveNewsletter}
                                 >save</button>

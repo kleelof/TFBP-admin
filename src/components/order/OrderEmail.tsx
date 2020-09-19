@@ -72,7 +72,7 @@ export default class OrderEmail extends React.Component<Props, State> {
                 </div>
                 <div className={'col-12 mt-3'}>
                     <button
-                        className={'btn btn-success order_email__submit'}
+                        className={'btn btn-outline-success order_email__submit'}
                         disabled={this.state.subject === '' || this.state.body === '' || this.state.submitting}
                         onClick={this.submit}
                         >Send Email</button>

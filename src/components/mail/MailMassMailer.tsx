@@ -237,7 +237,7 @@ export default class MailMassMailer extends React.Component<Props, State> {
                         </div>
                         <div className={'col-12 mt-3 mass_mailer__buttons text-center'}>
                             <button
-                                className={'btn btn-success buttons__send'}
+                                className={'btn btn-outline-success buttons__send'}
                                 disabled={!this.goodToSend()}
                                 onClick={this.sendMail}
                                 >Send Mass Mail</button>

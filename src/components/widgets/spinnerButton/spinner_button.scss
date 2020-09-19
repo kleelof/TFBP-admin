@@ -1,0 +1,40 @@
+@import '../../../css_variables';
+
+.spinner_button {
+  width: 35px;
+  height: 35px;
+  border: 2px solid $info_highlight;
+  padding: 3px;
+
+  &--inactive {
+    &:hover {
+      cursor: pointer;
+      border-color: $info_fill;
+    }
+  }
+
+  &__loader {
+    background-color: rgba(255, 255, 255, 1);
+    border: 5px solid $info_highlight;
+    border-top: 5px solid rgba(0, 0, 0, 1);
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    animation: spin 2s linear infinite;
+  }
+
+  &__checkmark {
+    display: inline-block;
+
+    & img {
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}

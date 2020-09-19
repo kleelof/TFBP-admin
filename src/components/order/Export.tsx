@@ -108,7 +108,7 @@ export default class Export extends React.Component<any, State> {
                     Select a date: 
                     <input type="date" id="pullDate" className="form-control"
                             value={this.state.pullDate} onChange={this.updateData}/>
-                    <button className="btn btn-success mt-2" onClick={this.loadData}>Print</button>
+                    <button className="btn btn-outline-success mt-2" onClick={this.loadData}>Print</button>
                 </div>
                 {(this.state.orderItems.length + this.state.orders.length > 0) &&
                     <div className="col-12 print-sheet">

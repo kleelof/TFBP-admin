@@ -91,7 +91,7 @@ export default class Deliveries extends React.Component<any, State> {
                         onChange={this.updateData} />
 
                     <button 
-                        className="btn btn-success ml-2 mt-2 mt-m-0"
+                        className="btn btn-outline-success ml-2 mt-2 mt-m-0"
                         onClick={this.createDeliveryDay}
                         disabled={this.state.creatingDeliveryDay}
                         >create</button>

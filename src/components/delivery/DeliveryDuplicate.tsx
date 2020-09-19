@@ -102,7 +102,7 @@ export default class DeliveryDuplicate extends React.Component<Props, State> {
                 </div>
                 <div className="col-12 mt-3">
                     <button 
-                        className="btn btn-success duplicate_btn" disabled={!this.datesAreValid()}
+                        className="btn btn-outline-success duplicate_btn" disabled={!this.datesAreValid()}
                         onClick={this.duplicate}>
                             Duplicate</button>
                     <button 

@@ -85,11 +85,11 @@ class BrowserWindowTools extends React.Component<Props, State>{
                         <div className={'col-6 mt-2'}>Dishes: {this.props.dto.dish_count}</div>
                         <div className={'col-12'}><hr/></div>
                         <div className={'d-none d-md-block col-md-12 browser_window_tools__controls mt-2'}>
-                                <button className={'btn-block btn-success'} onClick={() => this.print('prep')}
+                                <button className={'btn-block btn-outline-success'} onClick={() => this.print('prep')}
                                 disabled={this.state.orders.length === 0}>print prep list</button>
-                                <button className={'btn-block btn-success'} onClick={() => this.print('delivery_tags')}
+                                <button className={'btn-block btn-outline-success'} onClick={() => this.print('delivery_tags')}
                                 disabled={this.state.orders.length === 0}>print delivery tags</button>
-                                <button className={'btn-block btn-success'} onClick={this.downloadDeliverySpreadsheet}
+                                <button className={'btn-block btn-outline-success'} onClick={this.downloadDeliverySpreadsheet}
                                 disabled={this.state.orders.length === 0}>download delivery spreadsheet</button>
 
                         </div>

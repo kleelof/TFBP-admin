@@ -40,7 +40,7 @@ class NewsletterAdd extends React.Component<any, State> {
                             this.setState(({title: e.target.value}))}
                         />
                     <button
-                        className={'btn btn-success ml-2'}
+                        className={'btn btn-outline-success ml-2'}
                         disabled={this.state.title === '' || this.state.creating}
                         onClick={createNewsletter}
                         >create</button>

@@ -125,7 +125,7 @@ export default class OrderEdit extends React.Component<any, State> {
                     </pre>
                 </div>
                 <div className="col-12">
-                    <button className="btn btn-success" onClick={this.saveUpdates}
+                    <button className="btn btn-outline-success" onClick={this.saveUpdates}
                             disabled={!this.state.updatesPending || this.state.updating}>Save Updates</button>
                 </div>
                 <div className="col-12 edit_order_deliveries">

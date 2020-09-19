@@ -1,12 +1,12 @@
 @import '../../css_variables';
 
 .delivery_windows__window-inactive {
-  background-color: $highlight_danger_background;
+  background-color: $danger_highlight;
 }
 
 .delivery_windows__window:hover {
   cursor: pointer;
-  background-color: $highlight_success_background;
+  background-color: $success_highlight;
 }
 
 .delivery_window_edit {

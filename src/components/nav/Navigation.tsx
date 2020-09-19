@@ -86,7 +86,7 @@ class Navigation extends React.Component<Props, State> {
                             <button className="btn btn-danger" onClick={this.logout}>Logout</button>
                             :
                             <div 
-                                className="btn btn-success"
+                                className="btn btn-outline-success"
                                 onClick={() => this.setState({doLogin: true})}
                                 >Login</div>
                     }

@@ -41,12 +41,12 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
             </div>
             <div className="col-12 mt-3">
                 <button
-                    className="btn btn-success"
+                    className="btn btn-outline-success"
                     onClick={()=> {history.push({pathname: `/dashboard/delivery/edit/${props.deliveryDay.id}/`})}}>
                         edit
                     </button>
                 <button
-                    className="btn btn-warning ml-2"
+                    className="btn btn-outline-warning ml-2"
                     onClick={()=> {history.push({pathname: `/dashboard/delivery/duplicate/${props.deliveryDay.id}`})}}>
                         duplicate
                     </button>
