@@ -1,0 +1,19 @@
+@import '../../scss_variables';
+
+.delivery_planner {
+  &__map_div {
+    height: 600px;
+  }
+}
+
+.route_organizer_entry {
+  .organizer_entry {
+    &__address {
+      float: left;
+    }
+
+    &__time {
+      float: right;
+    }
+  }
+}

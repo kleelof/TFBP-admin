@@ -4,6 +4,10 @@ import Order from "../models/OrderModel";
 
 class AdminService extends Service {
 
+    public alertDelivery = (routeId: number): Promise<any> => {
+            return this._get(`dashboard/alert_delivery/${routeId}`);
+    }
+
     public sendWeeklyEmails = (): Promise<FunctionsResponsesDTO> => {
         return this._get(`dashboard/send_weekly_email/`);
     }
