@@ -9,6 +9,8 @@ import Newsletter from "../src/models/Newsletter";
 import MailingListModel from "../src/models/MailingListModel";
 import Zipcode from "../src/models/ZipcodeModel";
 import Zone from "../src/models/ZoneModel";
+import Route from "../src/models/RouteModel";
+import DeliveryWindow from "../src/models/DeliveryWindowModel";
 
 interface BuildCoupon {
     count: number,
@@ -83,7 +85,7 @@ export const BuildOrder = (params: IOrder): any => {
                 `000-000-000${x}`,
                 `email_${x}@email.com`,
                 '',
-                '',
+                `street_address_${x}`,
                 '',
                 '',
                 '',
@@ -187,6 +189,46 @@ export const BuildMailingList = (params: IBuildMailingListEntry): any => {
                 params.email || `email_${x}@mail.com`,
                 params.code || x.toString(),
                 params.active || true
+            )
+        )
+    }
+
+    return items.length > 1 ? items : items[0];
+}
+
+interface IBuildRoute {
+    count: number,
+    delivered?: string,
+    delivery_date?: string,
+    delivery_window?: DeliveryWindow,
+    index?: number,
+    leg?: any,
+    order?: Order
+}
+
+export const BuildRoute = (params: IBuildRoute): any => {
+    let items: Route[] = [];
+
+    for (let x: number = 1; x <= params.count; x ++) {
+        items.push(
+            new Route(
+                x,
+                params.delivered || '2020-07-04',
+                params.delivery_date || '2020-07-05',
+                params.index || x,
+                params.leg || JSON.stringify({
+                    end_location: {
+                        lat: 0,
+                        lng: 0
+                    },
+                    distance: {
+                        text: '1 mile'
+                    },
+                    duration: {
+                        text: '5 minutes'
+                    }
+                }),
+                params.order || BuildOrder({count: 1})
             )
         )
     }

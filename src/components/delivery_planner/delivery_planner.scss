@@ -2,18 +2,48 @@
 
 .delivery_planner {
   &__map_div {
-    height: 600px;
+    height: 400px;
+  }
+
+  @media(min-width: 576px) {
+    &__map_div {
+      height: 700px;
+    }
   }
 }
 
+.route_organizer {
+  &__mode_select {
+    float: right;
+  }
+}
 .route_organizer_entry {
   .organizer_entry {
     &__address {
       float: left;
     }
 
+    &__inner {
+      margin: 5px;
+      padding: 3px;
+      border: 2px solid $info_highlight;
+    }
+
+    &__notes {
+      height: 100px;
+      overflow-scrolling: auto;
+      border: 1px solid $warning_fill;
+      padding: 3px;
+      margin: 5px;
+    }
+
     &__time {
       float: right;
+    }
+
+    &__plan_controls {
+      &__up_btn{}
+      &__down_btn{}
     }
   }
 }

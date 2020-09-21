@@ -1,8 +1,17 @@
 
 // highlight colors; match Bootstrap button colors and names
-$success_highlight_background_color: rgba(40, 167, 69, .3);
-$warning_highlight_background_color: rgba(255, 193, 7, .3);
-$danger_highlight_background_color: rgba(220, 53, 69, .3);
-$primary_highlight_background_color: rgba(0, 127, 246, .3);
+$success_highlight: rgba(40, 167, 69, .3);
+$danger_highlight: rgba(220, 53, 69, .3);
+$info_highlight: rgba(0, 163, 181, .3);
+$secondary_highlight: rgba(106, 117, 124, .3);
+$warning_highlight: rgba(253, 189, 63, .3);
+$primary_highlight: rgba(0, 127, 246, .3);
+
+$success_fill: rgb(40, 167, 69);
+$danger_fill: rgb(220, 53, 69);
+$info_fill: rgb(0, 163, 181);
+$secondary_fill: rgb(106, 117, 124);
+$warning_fill: rgb(253, 189, 63);
+$primary_fill: rgb(0, 127, 246);
 
 $media_breakpoint: 576px;
