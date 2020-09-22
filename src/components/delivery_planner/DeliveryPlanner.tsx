@@ -62,7 +62,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                 <h3>route planner</h3>
                 <hr/>
             </div>
-            <div className='col-12 col-md-8 delivery_planner__map_div'>
+            <div className='d-none d-md-block col-md-8 delivery_planner__map_div'>
                 <GoogleMapReact
                   bootstrapURLKeys={{ key: 'AIzaSyC0yq5uGlMfHp98X-L452J-dzR2HX5FEP8'}}
                   center={JSON.parse(route.stops[0].leg)['start_location']}
@@ -86,10 +86,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                     }
                 </GoogleMapReact>
             </div>
-            <div className='col-12 d-md-none'><hr/></div>
             <div className='col-12 col-md-4'>
-                <h5>stops</h5>
-                <hr/>
                 <RouteOrganizer
                     key={Math.random()}
                     route={route}

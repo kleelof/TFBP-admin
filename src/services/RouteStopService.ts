@@ -6,8 +6,12 @@ class RouteStopService extends Service {
     appName = 'dashboard';
     view = 'route_stop';
 
-    public alertDelivery = (routeId: number): Promise<RouteStop> => {
-            return this._get(`${this.appName}/${this.view}/${routeId}/delivery_alert/`);
+    public alertDelivery = (stop: RouteStop): Promise<RouteStop> => {
+        return this._get(`${this.appName}/${this.view}/${stop.id}/delivery_alert/`);
+    }
+
+    public delivered = (stop: RouteStop): Promise<RouteStop> => {
+        return this._get(`${this.appName}/${this.view}/${stop.id}/delivered/`);
     }
 }
 

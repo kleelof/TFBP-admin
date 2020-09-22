@@ -89,19 +89,21 @@ class BrowserWindowTools extends React.Component<Props, State>{
                                 disabled={this.state.orders.length === 0}>print prep list</button>
                                 <button className={'btn-block btn-outline-success'} onClick={() => this.print('delivery_tags')}
                                 disabled={this.state.orders.length === 0}>print delivery tags</button>
-                                <button className={'btn-block btn-outline-success'}
-                                        onClick={() => this.props.history.push({
-                                            pathname:`/dashboard/delivery_planner/${this.props.dto.window.id}/${momentHelper.asDateSlug(this.props.date)}`})}
-                                disabled={this.state.orders.length === 0}>route planner</button>
-
                         </div>
                         <div className={'col-12 mt-2'}>
+                            <button className={'btn-block btn-outline-success'}
+                                    onClick={() => this.props.history.push({
+                                        pathname:`/dashboard/delivery_planner/${this.props.dto.window.id}/${momentHelper.asDateSlug(this.props.date)}`})}
+                                    disabled={this.state.orders.length === 0}>
+                                route planner</button>
+
                             <button
                                 className={'btn-block btn-info'}
                                 onClick={() =>
                                     this.props.history.push(
                                         {pathname: `/dashboard/mail/mass_mailer/upcoming_delivery/${momentHelper.asDateSlug(this.props.date)}`})}
-                            disabled={this.state.orders.length === 0}>send mail</button>
+                                disabled={this.state.orders.length === 0}>
+                                send mail</button>
                         </div>
                     </div>
                 </div>

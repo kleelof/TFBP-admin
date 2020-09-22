@@ -16,6 +16,19 @@
   &__mode_select {
     float: right;
   }
+
+  &__stops {
+    height: 500px;
+    overflow: auto;
+    border: 1px solid $info_fill;
+  }
+
+  @media(min-width: 576px) {
+    &__stops {
+      height: 700px;
+      overflow: auto;
+    }
+  }
 }
 .route_organizer_entry {
   .organizer_entry {
@@ -27,6 +40,7 @@
       margin: 5px;
       padding: 3px;
       border: 2px solid $info_highlight;
+      min-height: 200px;
     }
 
     &__notes {

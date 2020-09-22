@@ -80,19 +80,23 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                         <option value={'delivery'}>delivery mode</option>
                     </select>
                 </div>
-                {
-                    this.state.route.stops.map((stop: RouteStop, index: number) =>
-                        <div className='col-12'key={`route_${Math.random()}`}>
-                            <RouteOrganizerEntry
-                                stop={stop}
-                                mode={this.state.mode}
-                                moveStop={this.moveEntry}
-                                canMoveDown={index + 1  < this.state.route.stops.length}
-                                canMoveUp={index > 0}
-                            />
-                        </div>
-                    )
-                }
+                <div className='col-12 route_organizer__stops mt-2'>
+                    <div className='row'>
+                        {
+                            this.state.route.stops.map((stop: RouteStop, index: number) =>
+                                <div className='col-12'key={`route_${Math.random()}`}>
+                                    <RouteOrganizerEntry
+                                        stop={stop}
+                                        mode={this.state.mode}
+                                        moveStop={this.moveEntry}
+                                        canMoveDown={index + 1  < this.state.route.stops.length}
+                                        canMoveUp={index > 0}
+                                    />
+                                </div>
+                            )
+                        }
+                    </div>
+                </div>
             </div>
         )
     }
