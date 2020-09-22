@@ -43,7 +43,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                     {props.mode === 'delivery' &&
                         <div className='col-12 organizer_entry__delivery_controls'>
                             <button className='btn btn-sm btn-outline-success' onClick={openMap}>navigate</button>
-                            <button className='btn btn-sm btn-outline-warning' onClick={alertAndNav}>alert and nav</button>
+                            <button className='btn btn-sm btn-outline-danger' onClick={alertAndNav}>alert and nav</button>
                         </div>
                     }
                     {props.mode === 'plan' &&

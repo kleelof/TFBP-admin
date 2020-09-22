@@ -56,12 +56,12 @@
 
   &__date {
     padding: 5px;
-    background-color: $success_highlight;
+    background-color: $info_fill;
     color: rgba(255, 255, 255, .8);
     font-weight: bold;
 
     &--today{
-      background-color: $success_highlight;
+      background-color: $success_fill;
       color: white;
     }
   }
