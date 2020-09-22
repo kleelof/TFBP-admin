@@ -1,28 +1,28 @@
 import React from 'react';
-import Route from "../../models/RouteModel";
-import adminService from '../../services/AdminService';
+import routeStopService from '../../services/RouteStopService';
 
 import './delivery_planner.scss';
+import RouteStop from "../../models/RouteStopModel";
 
 interface Props {
-    routeEntry: Route,
+    stop: RouteStop,
     mode: string,
-    moveEntry: (routeEntry: Route, direction: string) => void,
+    moveStop: (stop: RouteStop, direction: string) => void,
     canMoveUp: boolean,
     canMoveDown: boolean
 }
 
 export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
-    const leg: any = JSON.parse(props.routeEntry.leg);
+    const leg: any = JSON.parse(props.stop.leg);
 
     const alertAndNav = (): void => {
-        adminService.alertDelivery(props.routeEntry.id)
+        routeStopService.alertDelivery(props.stop.id)
             .then(() => {})
         openMap();
     }
 
     const openMap = (): void => {
-        window.open(`http://maps.google.com/?q=${props.routeEntry.order.street_address} ${props.routeEntry.order.zip}`, '_blank');
+        window.open(`http://maps.google.com/?q=${props.stop.order.street_address} ${props.stop.order.zip}`, '_blank');
     }
 
     return (
@@ -31,14 +31,14 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                 <div className='row organizer_entry__inner'>
                     <div className='col-12'>
                         <div className='organizer_entry__address'>
-                            {props.routeEntry.order.street_address}
+                            {props.stop.order.street_address}
                         </div>
                         <div className='organizer_entry__time'>
                             {leg.duration.text}
                         </div>
                     </div>
                     <div className='col-12 organizer_entry__notes'>
-                        {props.routeEntry.order.notes}
+                        {props.stop.order.notes}
                     </div>
                     {props.mode === 'delivery' &&
                         <div className='col-12 organizer_entry__delivery_controls'>
@@ -49,16 +49,16 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                     {props.mode === 'plan' &&
                         <div className='col-12 organizer_entry__plan_controls'>
                             <button className='btn btn-sm btn-outline-success plan_controls__up_btn' disabled={!props.canMoveUp}
-                                    onClick={() => props.moveEntry(props.routeEntry, 'up')}
+                                    onClick={() => props.moveStop(props.stop, 'up')}
                             >+</button>
                             <button className='btn btn-sm btn-outline-success plan_controls__down_btn' disabled={!props.canMoveDown}
-                                    onClick={() => props.moveEntry(props.routeEntry, 'down')}
+                                    onClick={() => props.moveStop(props.stop, 'down')}
                             >-</button>
                             <button className='btn btn-sm btn-outline-success plan_controls__top_btn' disabled={!props.canMoveUp}
-                                    onClick={() => props.moveEntry(props.routeEntry, 'top')}
+                                    onClick={() => props.moveStop(props.stop, 'top')}
                             >t</button>
                             <button className='btn btn-sm btn-outline-success plan_controls__bottom_btn' disabled={!props.canMoveDown}
-                                    onClick={() => props.moveEntry(props.routeEntry, 'bottom')}
+                                    onClick={() => props.moveStop(props.stop, 'bottom')}
                             >b</button>
 
                         </div>

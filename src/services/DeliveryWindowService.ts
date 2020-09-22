@@ -18,7 +18,7 @@ class DeliveryWindowService extends Service {
             moment(targetDate).utc().format('YYYY-MM-DD')}`)
     }
 
-    public retrieveRoute = (deliveryWindowId: number, targetDate: Date, optimize: boolean): Promise<Route[]> => {
+    public retrieveRoute = (deliveryWindowId: number, targetDate: Date, optimize: boolean): Promise<Route> => {
         return this._get(`${this.appName}/${this.view}/${deliveryWindowId}/retrieve_route/?target_date=${
             moment(targetDate).utc().format('YYYY-MM-DD')}&optimize=${optimize.toString()}`)
     }

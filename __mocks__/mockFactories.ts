@@ -11,6 +11,8 @@ import Zipcode from "../src/models/ZipcodeModel";
 import Zone from "../src/models/ZoneModel";
 import Route from "../src/models/RouteModel";
 import DeliveryWindow from "../src/models/DeliveryWindowModel";
+import RouteStop from "../src/models/RouteStopModel";
+import {BuildDeliveryWindow} from "./deliveryMocks";
 
 interface BuildCoupon {
     count: number,
@@ -198,12 +200,10 @@ export const BuildMailingList = (params: IBuildMailingListEntry): any => {
 
 interface IBuildRoute {
     count: number,
-    delivered?: string,
+    optimized?: boolean,
     delivery_date?: string,
     delivery_window?: DeliveryWindow,
-    index?: number,
-    leg?: any,
-    order?: Order
+    stops?: RouteStop[]
 }
 
 export const BuildRoute = (params: IBuildRoute): any => {
@@ -213,8 +213,33 @@ export const BuildRoute = (params: IBuildRoute): any => {
         items.push(
             new Route(
                 x,
+                params.delivery_date || `2020-07-0${x}`,
+                params.delivery_window || BuildDeliveryWindow({count: 1}),
+                params.stops || BuildRouteStop({count: 2}),
+                params.optimized || false
+            )
+        )
+    }
+
+    return items.length > 1 ? items : items[0];
+}
+
+interface IBuildRouteStop {
+    count: number,
+    delivered?: string,
+    index?: number,
+    leg?: any,
+    order?: Order
+}
+
+export const BuildRouteStop = (params: IBuildRouteStop): any => {
+    let items: RouteStop[] = [];
+
+    for (let x: number = 1; x <= params.count; x ++) {
+        items.push(
+            new RouteStop(
+                x,
                 params.delivered || '2020-07-04',
-                params.delivery_date || '2020-07-05',
                 params.index || x,
                 params.leg || JSON.stringify({
                     end_location: {

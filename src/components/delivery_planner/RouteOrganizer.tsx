@@ -3,16 +3,17 @@ import Route from "../../models/RouteModel";
 
 import './delivery_planner.scss';
 import {RouteOrganizerEntry} from "./RouteOrganizerEntry";
+import RouteStop from "../../models/RouteStopModel";
 
 interface Props {
-    routeEntries: Route[],
+    route: Route,
     optimize: () => void,
     reorderAndRecalculate: (ndxs: number[]) => void
 }
 
 interface State {
     mode: string,
-    routeEntries: Route[],
+    route: Route,
     routeUpdated: boolean
 }
 
@@ -21,10 +22,9 @@ export default class RouteOrganizer extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-
         this.state = {
             mode: 'plan',
-            routeEntries: props.routeEntries,
+            route: {...props.route, stops: props.route.stops.sort((a,b) => (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0))},
             routeUpdated: false
         }
     }
@@ -33,36 +33,36 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         this.setState({mode});
     }
 
-    private moveEntry = (entry: Route, direction: string) => {
+    private moveEntry = (stop: RouteStop, direction: string) => {
         let currentNdx: number = -1;
-        this.state.routeEntries.forEach((e: Route, index: number) => {
-            if (e.id === entry.id) currentNdx = index;
+        this.state.route.stops.forEach((e: RouteStop, index: number) => {
+            if (e.id === stop.id) currentNdx = index;
         })
 
-        let entries: Route[] = this.state.routeEntries;
-        entries.splice(currentNdx, 1); // remove
+        let stops: RouteStop[] = this.state.route.stops;
+        stops.splice(currentNdx, 1); // remove
 
         // add
         switch(direction) {
             case 'up': currentNdx --; break;
             case 'down': currentNdx ++; break;
             case 'top': currentNdx = 0; break;
-            case 'bottom': currentNdx = entries.length; break;
+            case 'bottom': currentNdx = stops.length; break;
         }
-        entries.splice(currentNdx, 0, entry)
+        stops.splice(currentNdx, 0, stop)
 
-        this.setState({routeEntries: entries, routeUpdated: true});
+        this.setState({route: {...this.state.route, stops}, routeUpdated: true});
     }
 
     private reorderAndRecalculate = (): void => {
-        this.props.reorderAndRecalculate(this.state.routeEntries.map((entry: Route) => entry.id))
+        this.props.reorderAndRecalculate(this.state.route.stops.map((stop: RouteStop) => stop.id))
     }
 
     public render() {
         return (
             <div className='row route_organizer'>
                 <div className='col-12'>
-                    {this.state.mode === 'plan' &&
+                    {(this.state.mode === 'plan' && !this.state.route.optimized) &&
                         <button
                             className='btn btn-outline-info btn-sm route_organizer__optimize_btn mr-2'
                             onClick={this.props.optimize}
@@ -81,13 +81,13 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                     </select>
                 </div>
                 {
-                    this.state.routeEntries.map((entry: Route, index: number) =>
+                    this.state.route.stops.map((stop: RouteStop, index: number) =>
                         <div className='col-12'key={`route_${Math.random()}`}>
                             <RouteOrganizerEntry
-                                routeEntry={entry}
+                                stop={stop}
                                 mode={this.state.mode}
-                                moveEntry={this.moveEntry}
-                                canMoveDown={index + 1  < this.state.routeEntries.length}
+                                moveStop={this.moveEntry}
+                                canMoveDown={index + 1  < this.state.route.stops.length}
                                 canMoveUp={index > 0}
                             />
                         </div>

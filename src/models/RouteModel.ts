@@ -1,29 +1,26 @@
 import ModelBase from "./ModelBase";
 import DeliveryWindow from "./DeliveryWindowModel";
 import Order from "./OrderModel";
+import RouteStop from "./RouteStopModel";
 
 export default class Route extends ModelBase {
-    public delivered!: string;
+    public optimized!: boolean;
     public delivery_date!: string;
-    public delivery_window!: DeliveryWindow;
-    public index!: number;
-    public leg!: any;
-    public order!: Order;
+    public delivery_window!: DeliveryWindow
+    public stops!: RouteStop[];
 
     constructor(
         id?: number,
-        delivered?: string,
         delivery_date?: string,
-        index?: number,
-        leg?: any,
-        order?: Order)
+        delivery_window?: DeliveryWindow,
+        stops?: RouteStop[],
+        optimized?: boolean)
     {
         super();
         this.id = id || -1;
-        this.delivered = delivered || '';
         this.delivery_date = delivery_date || '';
-        this.index = index || -1;
-        this.leg = leg || '';
-        this.order = order || new Order();
+        this.delivery_window = delivery_window || new DeliveryWindow();
+        this.stops = stops || [];
+        this.optimized = optimized || false;
     }
 }

@@ -3,7 +3,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { shallow, configure, mount } from 'enzyme';
 import deliveryWindowService from '../../services/DeliveryWindowService'
 import {DeliveryPlanner, Marker} from "./DeliveryPlanner";
-import {BuildRoute} from "../../../__mocks__/mockFactories";
+import {BuildRoute, BuildRouteStop} from "../../../__mocks__/mockFactories";
 import { MemoryRouter, Route } from 'react-router-dom';
 import RouteOrganizer from "./RouteOrganizer";
 import {RouteOrganizerEntry} from "./RouteOrganizerEntry";
@@ -17,7 +17,8 @@ let retrieveRouteSpy: jest.SpyInstance = jest.spyOn(deliveryWindowService, 'retr
 
 describe('DeliveryPlanner tests', () => {
     beforeEach(async () => {
-        retrieveRouteSpy.mockImplementation(() => Promise.resolve(BuildRoute({count: 3})));
+
+        retrieveRouteSpy.mockImplementation(() => Promise.resolve(BuildRoute({count: 1})));
         component = await mount(
             <MemoryRouter initialEntries={['/dashboard/delivery_planner/1']}>
                 <Route path='/dashboard/delivery_planner/:delivery_window'>
@@ -30,7 +31,7 @@ describe('DeliveryPlanner tests', () => {
     })
 
     it('should list all markers', () => {
-        expect(component.find(Marker).length).toBe(3);
+        expect(component.find(Marker).length).toBe(2);
     })
 
     it('should respond to optimize', () => {
@@ -59,12 +60,16 @@ describe ('Marker tests', () => {
 describe('RouteOrganizer tests', () => {
     beforeEach(() => {
       component = shallow(
-          <RouteOrganizer routeEntries={BuildRoute({count:3})} optimize={jest.fn()} />
+          <RouteOrganizer
+              route={BuildRoute({count:1})}
+              optimize={jest.fn()}
+              reorderAndRecalculate={jest.fn()}
+          />
       )
     })
 
     it('should list all stops', () => {
-        expect(component.find(RouteOrganizerEntry).length).toBe(3);
+        expect(component.find(RouteOrganizerEntry).length).toBe(2);
     })
 })
 
@@ -73,9 +78,9 @@ describe('RouteOrganizerEntry tests', () => {
         beforeEach(() => {
             component = shallow(
                 <RouteOrganizerEntry
-                    routeEntry={BuildRoute({count: 1})}
+                    stop={BuildRouteStop({count: 1})}
                     mode={'plan'}
-                    moveEntry={() => {}}
+                    moveStop={() => {}}
                     canMoveDown={true}
                     canMoveUp={false}
                 />

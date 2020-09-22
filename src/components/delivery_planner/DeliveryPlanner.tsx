@@ -9,10 +9,11 @@ import Route from "../../models/RouteModel";
 
 import './delivery_planner.scss';
 import RouteOrganizer from "./RouteOrganizer";
+import RouteStop from "../../models/RouteStopModel";
 
 export const DeliveryPlanner = (props: any): React.ReactElement => {
     const params: any = useParams();
-    const [route, setRoute] = useState<Route[]>([]);
+    const [route, setRoute] = useState<Route>(new Route());
     // const [legs, setLegs] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -26,7 +27,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
 
     const loadRoute = (optimize: boolean = false): void => {
         deliveryWindowService.retrieveRoute(params.delivery_window, params.target_date, optimize)
-            .then((route: Route[]) => {
+            .then((route: Route) => {
                 setRoute(route);
                 setLoading(false);
             })
@@ -47,8 +48,8 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
     }
 
     const reorderAndRecalculate = (ndxs: number[]): void => {
-        routeService.reorderAndRecalculate(ndxs, params.delivery_window, params.target_date)
-            .then((route: Route[]) => setRoute(route))
+        routeService.reorderAndRecalculate(route, ndxs)
+            .then((route: Route) => setRoute(route))
             .catch(() => window.alert('unable to update'))
     }
 
@@ -64,15 +65,15 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
             <div className='col-12 col-md-8 delivery_planner__map_div'>
                 <GoogleMapReact
                   bootstrapURLKeys={{ key: 'AIzaSyC0yq5uGlMfHp98X-L452J-dzR2HX5FEP8'}}
-                  center={JSON.parse(route[0].leg)['start_location']}
+                  center={JSON.parse(route.stops[0].leg)['start_location']}
                   zoom={10}
                   yesIWantToUseGoogleMapApiInternals={true}
                   options={createMapOptions}
                   onGoogleApiLoaded={({map, maps}) => handleApiLoaded(map, maps)}
                 >
                     {
-                        route.map((entry: Route, index: number) => {
-                            let leg: any = JSON.parse(entry.leg);
+                        route.stops.sort((a,b) => (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0)).map((stop: RouteStop, index: number) => {
+                            let leg: any = JSON.parse(stop.leg);
                             return(
                                 <Marker
                                     key={`leg_${index}`}
@@ -91,7 +92,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                 <hr/>
                 <RouteOrganizer
                     key={Math.random()}
-                    routeEntries={route}
+                    route={route}
                     optimize={()=>loadRoute(true)}
                     reorderAndRecalculate={reorderAndRecalculate}
                 />
