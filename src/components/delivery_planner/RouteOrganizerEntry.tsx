@@ -55,7 +55,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                     </div>
                     {completed &&
                         <Fragment>
-                            Delivered at: {moment(stop.delivered_at).utc().format('h:mm a')}
+                            Delivered: {moment(stop.delivered_at).format('MMM D YYYY h:mm a')}
                         </Fragment>
                     }
                     {!completed &&

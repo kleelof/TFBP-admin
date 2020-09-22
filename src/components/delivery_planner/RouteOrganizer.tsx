@@ -4,11 +4,12 @@ import Route from "../../models/RouteModel";
 import './delivery_planner.scss';
 import {RouteOrganizerEntry} from "./RouteOrganizerEntry";
 import RouteStop from "../../models/RouteStopModel";
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 
 interface Props {
     route: Route,
-    optimize: () => void,
-    reorderAndRecalculate: (ndxs: number[]) => void
+    optimize: (callback: () => {}) => void,
+    reorderAndRecalculate: (ndxs: number[], callback: any) => void
 }
 
 interface State {
@@ -54,8 +55,8 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         this.setState({route: {...this.state.route, stops}, routeUpdated: true});
     }
 
-    private reorderAndRecalculate = (): void => {
-        this.props.reorderAndRecalculate(this.state.route.stops.map((stop: RouteStop) => stop.id))
+    private reorderAndRecalculate = (callback: any): void => {
+        this.props.reorderAndRecalculate(this.state.route.stops.map((stop: RouteStop) => stop.id), callback);
     }
 
     public render() {
@@ -63,16 +64,18 @@ export default class RouteOrganizer extends React.Component<Props, State> {
             <div className='row route_organizer'>
                 <div className='col-12'>
                     {(this.state.mode === 'plan' && !this.state.route.optimized) &&
-                        <button
-                            className='btn btn-outline-info btn-sm route_organizer__optimize_btn mr-2'
-                            onClick={this.props.optimize}
-                        >optimize</button>
+                        <LoadingIconButton
+                            btnClass={'btn btn-outline-info btn-sm route_organizer__optimize_btn'}
+                            label={'optimize'}
+                            onClick={this.props.optimize} />
                     }
                     {(this.state.routeUpdated && this.state.mode === 'plan') &&
-                        <button
-                            className='btn btn-sm btn-outline-danger'
-                            onClick={this.reorderAndRecalculate}
-                        >recalculate</button>
+                        <div className=''>
+                            <LoadingIconButton
+                                btnClass='btn btn-sm btn-outline-danger'
+                                label={'recalculate'}
+                                onClick={this.reorderAndRecalculate} />
+                        </div>
                     }
                     <select className='route_organizer__mode_select' value={this.state.mode}
                             onChange={(e:ChangeEvent<HTMLSelectElement>) => this.changeMode(e.target.value)}>

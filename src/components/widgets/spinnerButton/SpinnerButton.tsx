@@ -11,7 +11,6 @@ export const SpinnerButton = (props: Props): React.ReactElement => {
 
     return (
         <div className={`spinner_button ${props.active ? '' : 'spinner_button--inactive'}`}>
-
             {
                 props.active ?
                     <div className='spinner_button__loader'></div>

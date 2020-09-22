@@ -25,13 +25,16 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
       console.log(map, maps)
     };
 
-    const loadRoute = (optimize: boolean = false): void => {
+    const loadRoute = (optimize: boolean = false, callback: any = undefined): void => {
         deliveryWindowService.retrieveRoute(params.delivery_window, params.target_date, optimize)
             .then((route: Route) => {
                 setRoute(route);
                 setLoading(false);
             })
             .catch(() => window.alert('unable to load route'))
+            .then(() => {
+                if (callback !== undefined) callback();
+            })
     }
 
     const createMapOptions = (maps: any): any => {
@@ -47,10 +50,11 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
       };
     }
 
-    const reorderAndRecalculate = (ndxs: number[]): void => {
+    const reorderAndRecalculate = (ndxs: number[], callback: any): void => {
         routeService.reorderAndRecalculate(route, ndxs)
             .then((route: Route) => setRoute(route))
             .catch(() => window.alert('unable to update'))
+            .then(() => callback())
     }
 
     if (loading)
@@ -90,7 +94,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                 <RouteOrganizer
                     key={Math.random()}
                     route={route}
-                    optimize={()=>loadRoute(true)}
+                    optimize={(callback: any)=>loadRoute(true, callback)}
                     reorderAndRecalculate={reorderAndRecalculate}
                 />
             </div>
