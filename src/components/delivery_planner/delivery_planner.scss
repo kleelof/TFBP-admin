@@ -13,8 +13,25 @@
 }
 
 .route_organizer {
-  &__mode_select {
+  &__status {
     float: right;
+    font-size: 1.5em;
+  }
+
+  &__status--0 { // uncommitted
+    color: $danger_fill;
+  }
+
+  &__status--1 { //committed
+    color: $info_fill;
+  }
+
+  &__status--2 { // in progress
+    color: $primary_fill;
+  }
+
+  &__status--3 { // completed
+    color: $success_fill;
   }
 
   &__stops {
@@ -30,6 +47,7 @@
     }
   }
 }
+
 .route_organizer_entry {
   .organizer_entry {
     &__address {

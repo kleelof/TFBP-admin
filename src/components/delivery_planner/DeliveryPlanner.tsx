@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import Order from "../../models/OrderModel";
 import { useParams } from 'react-router-dom';
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import routeService from '../../services/RouteService';
@@ -14,27 +13,32 @@ import RouteStop from "../../models/RouteStopModel";
 export const DeliveryPlanner = (props: any): React.ReactElement => {
     const params: any = useParams();
     const [route, setRoute] = useState<Route>(new Route());
-    // const [legs, setLegs] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
+    let map: any;
+    let maps: any;
+    let markers: any[] = [];
+
     useEffect(() => {
-        loadRoute();
-    }, [])
-
-    const handleApiLoaded = (map: any, maps: Maps) => {
-      console.log(map, maps)
-    };
-
-    const loadRoute = (optimize: boolean = false, callback: any = undefined): void => {
-        deliveryWindowService.retrieveRoute(params.delivery_window, params.target_date, optimize)
+        deliveryWindowService.retrieveRoute(params.delivery_window, params.target_date)
             .then((route: Route) => {
                 setRoute(route);
                 setLoading(false);
+                firstBuild();
             })
             .catch(() => window.alert('unable to load route'))
-            .then(() => {
-                if (callback !== undefined) callback();
-            })
+    }, [])
+
+    const handleApiLoaded = (imap: any, imaps: Maps) => {
+      map = imap;
+      maps = imaps;
+      firstBuild();
+    };
+
+    const firstBuild = (): void => {
+        return;
+        if (route.id === -1 || map === undefined) return;
+        updateStops(route.stops);
     }
 
     const createMapOptions = (maps: any): any => {
@@ -50,11 +54,31 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
       };
     }
 
-    const reorderAndRecalculate = (ndxs: number[], callback: any): void => {
-        routeService.reorderAndRecalculate(route, ndxs)
-            .then((route: Route) => setRoute(route))
-            .catch(() => window.alert('unable to update'))
-            .then(() => callback())
+    const updateStops = (stops: RouteStop[]): void => {
+        if (map !== undefined) {
+
+            // clear old markers
+            markers.forEach((marker: any) => marker.setMap(null));
+            markers = [];
+
+            // add new markers
+            stops.forEach((stop: RouteStop, index: number) => {
+                markers.push(
+                    new maps.Marker({
+                        position: JSON.parse(stop.leg).end_location,
+                        map,
+                        title: stop.order.street_address,
+                        label: {
+                            color: '#00ff00',
+                            fontWeight: 'bold',
+                            fontSize: '3em',
+                            text: (index + 1).toString()
+                        },
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                    })
+                )
+            })
+        }
     }
 
     if (loading)
@@ -68,6 +92,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
             </div>
             <div className='d-none d-md-block col-md-8 delivery_planner__map_div'>
                 <GoogleMapReact
+                    key={Math.random()}
                   bootstrapURLKeys={{ key: 'AIzaSyC0yq5uGlMfHp98X-L452J-dzR2HX5FEP8'}}
                   center={JSON.parse(route.stops[0].leg)['start_location']}
                   zoom={10}
@@ -76,11 +101,11 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                   onGoogleApiLoaded={({map, maps}) => handleApiLoaded(map, maps)}
                 >
                     {
-                        route.stops.sort((a,b) => (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0)).map((stop: RouteStop, index: number) => {
+                        route.stops.sort((a,b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0)).map((stop: RouteStop, index: number) => {
                             let leg: any = JSON.parse(stop.leg);
                             return(
                                 <Marker
-                                    key={`leg_${index}`}
+                                    key={Math.random()}
                                     lat={leg.end_location.lat}
                                     lng={leg.end_location.lng}
                                     text={(index += 1).toString()}
@@ -94,8 +119,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                 <RouteOrganizer
                     key={Math.random()}
                     route={route}
-                    optimize={(callback: any)=>loadRoute(true, callback)}
-                    reorderAndRecalculate={reorderAndRecalculate}
+                    updateRoute={(route: Route) => setRoute(route)}
                 />
             </div>
         </div>

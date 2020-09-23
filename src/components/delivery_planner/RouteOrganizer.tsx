@@ -1,21 +1,23 @@
-import React, {ChangeEvent} from 'react';
+import React, {Fragment} from 'react';
 import Route from "../../models/RouteModel";
 
 import './delivery_planner.scss';
 import {RouteOrganizerEntry} from "./RouteOrganizerEntry";
 import RouteStop from "../../models/RouteStopModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
+import routeService from '../../services/RouteService';
 
 interface Props {
     route: Route,
-    optimize: (callback: () => {}) => void,
-    reorderAndRecalculate: (ndxs: number[], callback: any) => void
+    updateRoute: (route: Route) => void
 }
 
 interface State {
     mode: string,
     route: Route,
-    routeUpdated: boolean
+    routeUpdated: boolean,
+    loading: boolean,
+    stops: RouteStop[]
 }
 
 export default class RouteOrganizer extends React.Component<Props, State> {
@@ -25,22 +27,48 @@ export default class RouteOrganizer extends React.Component<Props, State> {
 
         this.state = {
             mode: 'plan',
-            route: {...props.route, stops: props.route.stops.sort((a,b) => (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0))},
-            routeUpdated: false
+            route: props.route,
+            routeUpdated: false,
+            loading: true,
+            stops: props.route.stops.sort((a,b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0))
         }
     }
 
-    private changeMode = (mode: string): void => {
-        this.setState({mode});
+    private commitRoute = (callback: any = undefined): void => {
+        if (!window.confirm('Once you commit a route, it cannot be changed.\n\nYour customers will be notified of their approximate delivery time.')){
+            if (callback) callback();
+            return;
+        }
+
+        routeService.commitRoute(this.state.route)
+            .then((route: Route) => this.setState({route}))
+            .catch(() => window.alert('cannot commit route'))
+            .then(() => {
+                if (callback) callback();
+            })
+    }
+
+    private completeRoute = (callback: any = undefined): void => {
+        if (!window.confirm('Are you sure you are done?')) {
+            if (callback) callback();
+            return;
+        }
+
+        routeService.completeRoute(this.state.route)
+            .then((route: Route) => this.setState({route}))
+            .catch(() => window.alert('unable to complete route'))
+            .then(() => {
+                if (callback) callback();
+            })
     }
 
     private moveEntry = (stop: RouteStop, direction: string) => {
         let currentNdx: number = -1;
-        this.state.route.stops.forEach((e: RouteStop, index: number) => {
+        this.state.stops.forEach((e: RouteStop, index: number) => {
             if (e.id === stop.id) currentNdx = index;
         })
 
-        let stops: RouteStop[] = this.state.route.stops;
+        let stops: RouteStop[] = this.state.stops;
         stops.splice(currentNdx, 1); // remove
 
         // add
@@ -52,47 +80,110 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         }
         stops.splice(currentNdx, 0, stop)
 
-        this.setState({route: {...this.state.route, stops}, routeUpdated: true});
+        for (let x: number = 0; x < stops.length; x ++)
+            // stop.current_index = x
+
+        this.setState({stops, routeUpdated: true});
     }
 
-    private reorderAndRecalculate = (callback: any): void => {
-        this.props.reorderAndRecalculate(this.state.route.stops.map((stop: RouteStop) => stop.id), callback);
+    private optimize = (callback: any = undefined): void => {
+        this.setState({
+            stops: this.state.stops.sort((a,b) => (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0))
+        }, () => this.saveChanges(callback))
+    }
+
+    private saveChanges = (callback: any = undefined): void => {
+        routeService.updateStopOrder(this.state.route, this.state.stops.map((stop: RouteStop) => stop.id))
+            .then((route: Route) => this.props.updateRoute(route))
+            .catch(() => window.alert('unable to save changes'))
+            .then(() => {
+                if (callback) callback();
+            })
+    }
+
+    private startRoute = (callback: any = undefined): void => {
+        if (!window.confirm('Are you sure you want to start the route?')) return;
+
+        routeService.startRoute(this.state.route)
+            .then((route: Route) => this.setState({route}))
+            .catch(() => window.alert('unable to start route'))
+            .then(() => {
+                if (callback) callback();
+            })
     }
 
     public render() {
+        const routeStatus: string[] = ['uncommitted', 'committed', 'in progress', 'completed'];
+        let needToSave: boolean = false;
+        let canOptimize: boolean = false;
+        this.state.stops.forEach((stop: RouteStop, index: number) => {
+            if (index !== stop.current_index) needToSave = true;
+            if (stop.index !== stop.current_index) canOptimize = true;
+        })
+
         return (
             <div className='row route_organizer'>
+                <div className='col-12 route_organizer__status mb-2'>
+                    status:
+                    <span className={`route_organizer__status--${this.state.route.route_status} ml-2`}>
+                        {routeStatus[this.state.route.route_status]}
+                    </span>
+                </div>
                 <div className='col-12'>
-                    {(this.state.mode === 'plan' && !this.state.route.optimized) &&
-                        <LoadingIconButton
-                            btnClass={'btn btn-outline-info btn-sm route_organizer__optimize_btn'}
-                            label={'optimize'}
-                            onClick={this.props.optimize} />
+                    {this.state.route.route_status === 0 && //uncommitted
+                        <Fragment>
+                            {needToSave &&
+                                <LoadingIconButton
+                                    outerClass='mr-2'
+                                    btnClass={'btn btn-outline-success route_organizer__optimize_btn'}
+                                    label={'save changes'}
+                                    onClick={this.saveChanges} />
+                            }
+                            {(!needToSave) &&
+                                <LoadingIconButton
+                                    outerClass='mr-2'
+                                    btnClass='btn btn-outline-success'
+                                    label={'commit route'}
+                                    onClick={this.commitRoute} />
+                            }
+                            {canOptimize &&
+                                <LoadingIconButton
+                                    outerClass='mr-2'
+                                    btnClass='btn btn-outline-info'
+                                    label={'optimize'}
+                                    onClick={this.optimize} />
+                            }
+                        </Fragment>
                     }
-                    {(this.state.routeUpdated && this.state.mode === 'plan') &&
-                        <div className=''>
+                    {this.state.route.route_status === 1 &&  //committed
+                        <Fragment>
                             <LoadingIconButton
-                                btnClass='btn btn-sm btn-outline-danger'
-                                label={'recalculate'}
-                                onClick={this.reorderAndRecalculate} />
-                        </div>
+                                    outerClass='mr-2'
+                                    btnClass='btn btn-outline-info'
+                                    label={'start route'}
+                                    onClick={this.startRoute} />
+                        </Fragment>
                     }
-                    <select className='route_organizer__mode_select' value={this.state.mode}
-                            onChange={(e:ChangeEvent<HTMLSelectElement>) => this.changeMode(e.target.value)}>
-                        <option value={'plan'}>planning mode</option>
-                        <option value={'delivery'}>delivery mode</option>
-                    </select>
+                    {this.state.route.route_status === 2 &&  //in progress
+                        <Fragment>
+                            <LoadingIconButton
+                                    outerClass='mr-2'
+                                    btnClass='btn btn-outline-success'
+                                    label={'completed'}
+                                    onClick={this.completeRoute} />
+                        </Fragment>
+                    }
                 </div>
                 <div className='col-12 route_organizer__stops mt-2'>
                     <div className='row'>
                         {
-                            this.state.route.stops.map((stop: RouteStop, index: number) =>
+                            this.state.stops.map((stop: RouteStop, index: number) =>
                                 <div className='col-12'key={`route_${Math.random()}`}>
                                     <RouteOrganizerEntry
                                         stop={stop}
-                                        mode={this.state.mode}
+                                        route={this.state.route}
                                         moveStop={this.moveEntry}
-                                        canMoveDown={index + 1  < this.state.route.stops.length}
+                                        canMoveDown={index + 1  < this.state.stops.length}
                                         canMoveUp={index > 0}
                                     />
                                 </div>

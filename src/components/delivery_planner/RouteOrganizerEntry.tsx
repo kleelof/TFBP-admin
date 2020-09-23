@@ -4,10 +4,12 @@ import routeStopService from '../../services/RouteStopService';
 import './delivery_planner.scss';
 import RouteStop from "../../models/RouteStopModel";
 import moment from "moment";
+import Route from "../../models/RouteModel";
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 
 interface Props {
     stop: RouteStop,
-    mode: string,
+    route: Route,
     moveStop: (stop: RouteStop, direction: string) => void,
     canMoveUp: boolean,
     canMoveDown: boolean
@@ -15,23 +17,35 @@ interface Props {
 
 export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
     const leg: any = JSON.parse(props.stop.leg);
-    const [atStop, setAtStop] = useState(false);
-    const [completed, setCompleted] = useState<boolean>(props.stop.delivered_at !== null)
     const [stop, setStop] = useState(props.stop)
 
-    const alertAndNav = (): void => {
-        routeStopService.alertDelivery(props.stop)
-            .then(() => {})
-        openMap();
+    const atStop = (callback?: any): void => {
+        routeStopService.at_stop(props.stop)
+            .then((stop:RouteStop) => setStop(stop))
+            .catch(() => window.alert('unable to at route'))
+            .then(() => {
+                if (callback) callback();
+            })
     }
 
-    const completeDelivery = (): void => {
+    const completeDelivery = (callback?: any): void => {
         routeStopService.delivered(props.stop)
-            .then((s: RouteStop) => {
-                setAtStop(false);
-                setCompleted(true);
-                setStop(s);
+            .then((s: RouteStop) => {setStop(s)})
+            .catch(() => window.alert('unable to complete'))
+            .then(() => {
+                if (callback) callback();
             })
+    }
+
+    const navigate = (sendAlert: boolean = false): void => {
+        openMap();
+        routeStopService.en_route(props.stop)
+            .then((stop:RouteStop) => setStop(stop))
+            .catch(() => window.alert('unable to en route'))
+
+        routeStopService.alertDelivery(props.stop)
+            .then(() => {})
+            .catch(() => window.alert('unable to alert customer'))
     }
 
     const openMap = (): void => {
@@ -43,54 +57,81 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
             <div className='col-12'>
                 <div className='row organizer_entry__inner'>
                     <div className='col-12'>
+
                         <div className='organizer_entry__address'>
-                            {props.stop.order.street_address}
+                            {stop.current_index + 1}. &nbsp;
+                            {stop.order.street_address}
                         </div>
                         <div className='organizer_entry__time'>
                             {leg.duration.text}
                         </div>
                     </div>
                     <div className='col-12 organizer_entry__notes'>
-                        {props.stop.order.notes}
+                        {stop.order.notes}
                     </div>
-                    {completed &&
-                        <Fragment>
-                            Delivered: {moment(stop.delivered_at).format('MMM D YYYY h:mm a')}
-                        </Fragment>
-                    }
-                    {!completed &&
-                        <Fragment>
-                            {(props.mode === 'delivery' && !atStop) &&
-                                <div className='col-12 organizer_entry__delivery_controls'>
-                                    <button className='btn btn-sm btn-outline-success' onClick={openMap}>navigate</button>
-                                    <button className='btn btn-sm btn-outline-danger ml-2' onClick={alertAndNav}>alert and nav</button>
-                                    <button className='btn btn-sm btn-outline-info ml-2' onClick={()=>setAtStop(true)}>arrive</button>
-                                </div>
-                            }
-                            {(props.mode === 'delivery' && atStop) &&
-                                <div className='col-12 organizer_entry__delivery_controls'>
-                                    <button className='btn btn-sm btn-outline-success' onClick={completeDelivery}>completed</button>
-                                </div>
-                            }
-                            {props.mode === 'plan' &&
-                                <div className='col-12 organizer_entry__plan_controls'>
-                                    <button className='btn btn-sm btn-outline-success plan_controls__up_btn' disabled={!props.canMoveUp}
-                                            onClick={() => props.moveStop(props.stop, 'up')}
-                                    >+</button>
-                                    <button className='btn btn-sm btn-outline-success plan_controls__down_btn' disabled={!props.canMoveDown}
-                                            onClick={() => props.moveStop(props.stop, 'down')}
-                                    >-</button>
-                                    <button className='btn btn-sm btn-outline-success plan_controls__top_btn' disabled={!props.canMoveUp}
-                                            onClick={() => props.moveStop(props.stop, 'top')}
-                                    >t</button>
-                                    <button className='btn btn-sm btn-outline-success plan_controls__bottom_btn' disabled={!props.canMoveDown}
-                                            onClick={() => props.moveStop(props.stop, 'bottom')}
-                                    >b</button>
+                    <div className='col-12 text-center'>
+                            {stop.stop_status === 3 && // delivery completed
+                                <Fragment>
+                                    {
+                                        <Fragment>
+                                            delivered: {moment(stop.delivered_at).format('MMM D YYYY h:mm a')}
+                                        </Fragment>
+                                    }
 
-                                </div>
+                                </Fragment>
                             }
-                        </Fragment>
-                    }
+                            {(props.route.route_status === 3 && stop.stop_status !== 3) && // route completed
+                                <Fragment>
+                                    there was no delivery time recorded
+                                </Fragment>
+                            }
+                            {stop.stop_status === 4 &&
+                                <Fragment>
+                                    canceled
+                                </Fragment>
+                            }
+
+                            {stop.stop_status < 3 &&
+                                <Fragment>
+                                    <div className='col-12 organizer_entry__delivery_controls'>
+                                        {(props.route.route_status === 2 && stop.stop_status === 0) &&
+                                            <button className='btn btn-sm btn-outline-success' onClick={() => navigate()}>navigate</button>
+                                        }
+                                        {(props.route.route_status === 2 && stop.stop_status === 1) &&
+                                            <LoadingIconButton
+                                                outerClass='mr-2'
+                                                btnClass={'btn btn-sm btn-outline-info'}
+                                                label={'arrive'}
+                                                onClick={atStop} />
+                                        }
+                                        {(props.route.route_status === 2 && stop.stop_status === 2) &&
+                                            <LoadingIconButton
+                                                outerClass='mr-2'
+                                                btnClass={'btn btn-sm btn-outline-success'}
+                                                label={'finished'}
+                                                onClick={completeDelivery} />
+                                        }
+                                    </div>
+                                    {props.route.route_status === 0 && // non commited
+                                        <div className='col-12 organizer_entry__plan_controls'>
+                                            <button className='btn btn-sm btn-outline-success plan_controls__up_btn mr-2' disabled={!props.canMoveUp}
+                                                    onClick={() => props.moveStop(stop, 'up')}
+                                            >up</button>
+                                            <button className='btn btn-sm btn-outline-success plan_controls__down_btn mr-2' disabled={!props.canMoveDown}
+                                                    onClick={() => props.moveStop(stop, 'down')}
+                                            >down</button>
+                                            <button className='btn btn-sm btn-outline-success plan_controls__top_btn mr-2' disabled={!props.canMoveUp}
+                                                    onClick={() => props.moveStop(stop, 'top')}
+                                            >first</button>
+                                            <button className='btn btn-sm btn-outline-success plan_controls__bottom_btn' disabled={!props.canMoveDown}
+                                                    onClick={() => props.moveStop(stop, 'bottom')}
+                                            >last</button>
+
+                                        </div>
+                                    }
+                                </Fragment>
+                            }
+                    </div>
 
                 </div>
             </div>

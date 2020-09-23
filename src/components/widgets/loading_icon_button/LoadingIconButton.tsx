@@ -5,7 +5,8 @@ interface Props {
     label: string,
     onClick: any,
     btnClass?: string,
-    disabled?: boolean
+    disabled?: boolean,
+    outerClass?: string
 }
 
 export const LoadingIconButton = (props: Props): React.ReactElement => {
@@ -24,7 +25,7 @@ export const LoadingIconButton = (props: Props): React.ReactElement => {
     }
 
     return (
-        <div className='loading_icon_button'>
+        <div className={`loading_icon_button ${props.outerClass !== undefined ? props.outerClass : ''}`}>
             <button
                 className={
                     `${props.btnClass !== undefined ? props.btnClass : ''}`
