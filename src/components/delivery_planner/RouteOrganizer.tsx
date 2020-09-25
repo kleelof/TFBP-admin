@@ -41,7 +41,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         }
 
         routeService.commitRoute(this.state.route)
-            .then((route: Route) => this.setState({route}))
+            .then((route: Route) => this.setState({route, stops: route.stops}))
             .catch(() => window.alert('cannot commit route'))
             .then(() => {
                 if (callback) callback();
@@ -81,7 +81,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         stops.splice(currentNdx, 0, stop)
 
         for (let x: number = 0; x < stops.length; x ++)
-            // stop.current_index = x
+            stop.current_index = x
 
         this.setState({stops, routeUpdated: true});
     }
@@ -102,7 +102,10 @@ export default class RouteOrganizer extends React.Component<Props, State> {
     }
 
     private startRoute = (callback: any = undefined): void => {
-        if (!window.confirm('Are you sure you want to start the route?')) return;
+        if (!window.confirm('Are you sure you want to start the route?')) {
+            if (callback) callback();
+            return;
+        };
 
         routeService.startRoute(this.state.route)
             .then((route: Route) => this.setState({route}))

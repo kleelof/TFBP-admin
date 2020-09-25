@@ -53,7 +53,7 @@ describe('DeliveryDays tests', () => {
     })
 
     it('should list all menu items', () => {
-        expect(component.find('.delivery_days_item').length).toEqual(1);
+        expect(component.find('.delivery_days__item').length).toEqual(1);
     })
 })
 

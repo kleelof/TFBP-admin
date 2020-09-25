@@ -203,7 +203,8 @@ interface IBuildRoute {
     optimized?: boolean,
     delivery_date?: string,
     delivery_window?: DeliveryWindow,
-    stops?: RouteStop[]
+    stops?: RouteStop[],
+    route_status?: number
 }
 
 export const BuildRoute = (params: IBuildRoute): any => {
@@ -216,7 +217,7 @@ export const BuildRoute = (params: IBuildRoute): any => {
                 params.delivery_date || `2020-07-0${x}`,
                 params.delivery_window || BuildDeliveryWindow({count: 1}),
                 params.stops || BuildRouteStop({count: 2}),
-                params.optimized || false
+                params.route_status || 0
             )
         )
     }
@@ -230,6 +231,7 @@ interface IBuildRouteStop {
     index?: number,
     leg?: any,
     order?: Order
+    stop_status?: number
 }
 
 export const BuildRouteStop = (params: IBuildRouteStop): any => {
@@ -253,7 +255,9 @@ export const BuildRouteStop = (params: IBuildRouteStop): any => {
                         text: '5 minutes'
                     }
                 }),
-                params.order || BuildOrder({count: 1})
+                params.order || BuildOrder({count: 1}),
+                params.index || x,
+                params.stop_status || 0
             )
         )
     }

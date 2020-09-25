@@ -60,7 +60,7 @@ describe('MailMassMailer tests', () => {
             await component.update();
 
             expect(component.find('#upcoming_delivery').instance().checked).toBe(true);
-            expect(component.find('.options__upcoming_delivery').instance().value).toBe('');
+            expect(component.find('.options__upcoming_delivery').instance().value).toBe(''); // TODO: fix
         })
     })
 
@@ -200,7 +200,8 @@ describe('MailTemplateComponent tests', () => {
         component.find('.mail_template__body').simulate('change', {target: {value: 'test_change_text'}});
         await component.update();
         component.find('.btn').simulate('click');
-        expect(updateTemplateSpy).toBeCalledTimes(1);
+        await component.update();
+        expect(updateTemplateSpy).toBeCalledTimes(1); // TODO: fix
         expect(updateTemplateSpy.mock.calls[0][1]['text']).toBe('test_change_text');
     })
 })

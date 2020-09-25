@@ -69,12 +69,12 @@ describe('NewsletterAdd tests', () => {
         expect(addNewsletterSpy).toHaveBeenCalledTimes(1);
         expect(addNewsletterSpy.mock.calls[0][0]['title']).toBe('test_new_newsletter');
 
-        expect(historyMock.push).toHaveBeenCalled(); //.toEqual(`/dashboard/newsletter/edit/${newsletter.id}`);
+        expect(historyMock.push).toHaveBeenCalled(); //.toEqual(`/dashboard/newsletter/edit/${newsletter.id}`); // TODO: fix
     })
 })
 
 describe('NewsletterEdit tests', () => {
-    beforeEach( async() => {
+    beforeAll( async() => {
         props = {
             match: {
                 params: {
@@ -86,7 +86,9 @@ describe('NewsletterEdit tests', () => {
         getNewslettersSpy.mockImplementation(() => Promise.resolve(newsletter));
 
         component = await mount(
-            <NewsletterEdit {...props}/>
+            <MemoryRouter>
+                <NewsletterEdit {...props}/>
+            </MemoryRouter>
         )
 
         await component.update();
@@ -94,23 +96,23 @@ describe('NewsletterEdit tests', () => {
 
     it('should set-up correctly', () => {
         expect(component.text()).toContain(newsletter.content);
-        expect(component.find('.newsletter_edit_controls__save_btn').props().disabled).toBe(true);
-        // expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(false);
-        // expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(false);
-        expect(component.text()).toContain(newsletter.title);
+        expect(component.find('.newsletter_edit__save_btn').props().disabled).toBe(true);
+        expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(false);
+        expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(false);
+        expect(component.text()).toContain(newsletter.title); // TODO: fix
     })
 
     it('should enable save button and disable emailing if changes have been made', () => {
         component.find('.newsletter_edit__title_input').simulate('change', {target: {value: 'boogie_baby'}});
-        expect(component.find('.newsletter_edit_controls__save_btn').props().disabled).toBe(false);
-        // expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(true);
-        // expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(true);
+        expect(component.find('.newsletter_edit__save_btn').props().disabled).toBe(false);
+        expect(component.find('.newsletter_edit_controls__email_btn').props().disabled).toBe(true);
+        expect(component.find('.newsletter_edit_controls__email_input').props().disabled).toBe(true);
     })
 
     it('should submit correct data to API and reset buttons to correct states', () => {
         component.find('.newsletter_edit__title_input').simulate('change', {target: { value: 'send_title'}});
         component.find('.newsletter_edit__content_input').simulate('change', {target: { value: 'send_content'}});
-        component.find('.newsletter_edit_controls__save_btn').simulate('click');
+        component.find('.newsletter_edit__save_btn').simulate('click');
 
         expect(updateNewsletterSpy).toHaveBeenCalledTimes(1);
         expect(updateNewsletterSpy.mock.calls[0][1]['title']).toBe('send_title');
@@ -118,31 +120,33 @@ describe('NewsletterEdit tests', () => {
     })
 
     it('should show no errors if newsletter classes are present', () => {
-        expect(component.find('.newsletter_edit__error').length).toBe(0);
+        expect(component.find('.newsletter_edit__error').length).toBe(0); // TODO: fix
     })
 
     describe('missing newsletter classes tests', () => {
         beforeEach(async () => {
+            jest.clearAllMocks();
+
             props = {
-            match: {
-                params: {
-                    id: 1
+                match: {
+                    params: {
+                        id: 1
+                    }
                 }
             }
-        }
-        newsletter = BuildNewsletter({count: 1});
-        newsletter.content="invalid content";
-        getNewslettersSpy.mockImplementation(() => Promise.resolve(newsletter));
+            newsletter = BuildNewsletter({count: 1});
+            newsletter.content="invalid content";
+            getNewslettersSpy.mockImplementation(() => Promise.resolve(newsletter));
 
-        component = await mount(
-            <NewsletterEdit {...props}/>
-        )
+            component = await shallow(
+                <NewsletterEdit {...props}/>
+            )
 
-        await component.update();
-
+            await component.update();
         })
 
         it('should show errors', () => {
+            expect(getNewslettersSpy).toHaveBeenCalledTimes(1);
             expect(component.find('.newsletter_edit__error').length).toBe(2);
         })
     })

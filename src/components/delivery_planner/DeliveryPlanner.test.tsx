@@ -62,8 +62,7 @@ describe('RouteOrganizer tests', () => {
       component = shallow(
           <RouteOrganizer
               route={BuildRoute({count:1})}
-              optimize={jest.fn()}
-              reorderAndRecalculate={jest.fn()}
+              updateRoute={jest.fn()}
           />
       )
     })
@@ -76,22 +75,128 @@ describe('RouteOrganizer tests', () => {
 describe('RouteOrganizerEntry tests', () => {
     describe('Setup for planning mode -- default mode', () => {
         beforeEach(() => {
+
+        })
+
+        it('should display all info', () => {
             component = shallow(
                 <RouteOrganizerEntry
                     stop={BuildRouteStop({count: 1})}
-                    mode={'plan'}
+                    route={BuildRoute({count:1})}
                     moveStop={() => {}}
                     canMoveDown={true}
                     canMoveUp={false}
                 />
             )
-        })
-
-        it('should display all info', () => {
             expect(component.text()).toContain('street_address_1');
             expect(component.text()).toContain('5 minutes');
             expect(component.find('.plan_controls__up_btn').props().disabled).toBe(true);
             expect(component.find('.plan_controls__down_btn').props().disabled).toBe(false);
+        })
+
+        it('should display completed when finished', () => {
+            component = shallow(
+                <RouteOrganizerEntry
+                    stop={BuildRouteStop({count: 1, stop_status:3})}
+                    route={BuildRoute({count:1})}
+                    moveStop={() => {}}
+                    canMoveDown={true}
+                    canMoveUp={false}
+                />
+            )
+            expect(component.text()).toContain('delivered:')
+        })
+
+        it('should display no delivery time when route ends, but no delivery', () => {
+            component = shallow(
+                <RouteOrganizerEntry
+                    stop={BuildRouteStop({count: 1, stop_status:2})}
+                    route={BuildRoute({count:1, route_status:3})}
+                    moveStop={() => {}}
+                    canMoveDown={true}
+                    canMoveUp={false}
+                />
+            )
+            expect(component.text()).toContain('no delivery')
+        })
+
+        it('should display canceled', () => {
+            component = shallow(
+                <RouteOrganizerEntry
+                    stop={BuildRouteStop({count: 1, stop_status:4})}
+                    route={BuildRoute({count:1, route_status:3})}
+                    moveStop={() => {}}
+                    canMoveDown={true}
+                    canMoveUp={false}
+                />
+            )
+            expect(component.text()).toContain('canceled')
+        })
+
+        it('should display navigate button', () => {
+            component = shallow(
+                <RouteOrganizerEntry
+                    stop={BuildRouteStop({count: 1, stop_status:0})}
+                    route={BuildRoute({count:1, route_status:2})}
+                    moveStop={() => {}}
+                    canMoveDown={true}
+                    canMoveUp={false}
+                />
+            )
+            expect(component.find('.delivery_controls__navigate').length).toBe(1);
+            expect(component.find('.organizer_entry__plan_controls').length).toBe(0);
+            expect(component.find('.delivery_controls__finished').length).toBe(0);
+            expect(component.find('.delivery_controls__arrive').length).toBe(0);
+        })
+
+        it('should display arrive button', () => {
+            component = mount(
+                <RouteOrganizerEntry
+                    stop={BuildRouteStop({count: 1, stop_status:1})}
+                    route={BuildRoute({count:1, route_status:2})}
+                    moveStop={() => {}}
+                    canMoveDown={true}
+                    canMoveUp={false}
+                />
+            )
+            expect(component.find('.delivery_controls__arrive').length).toBe(1);
+            expect(component.find('.delivery_controls__navigate').length).toBe(0);
+            expect(component.find('.organizer_entry__plan_controls').length).toBe(0);
+            expect(component.find('.delivery_controls__finished').length).toBe(0);
+        })
+
+        it('should display finished button', () => {
+            component = mount(
+                <RouteOrganizerEntry
+                    stop={BuildRouteStop({count: 1, stop_status:2})}
+                    route={BuildRoute({count:1, route_status:2})}
+                    moveStop={() => {}}
+                    canMoveDown={true}
+                    canMoveUp={false}
+                />
+            )
+
+            expect(component.find('.delivery_controls__finished').length).toBe(1);
+            expect(component.find('.delivery_controls__arrive').length).toBe(0);
+            expect(component.find('.delivery_controls__navigate').length).toBe(0);
+            expect(component.find('.organizer_entry__plan_controls').length).toBe(0);
+        })
+
+        it('should display move buttons', () => {
+            component = mount(
+                <RouteOrganizerEntry
+                    stop={BuildRouteStop({count: 1, stop_status:2})}
+                    route={BuildRoute({count:1, route_status:0})}
+                    moveStop={() => {}}
+                    canMoveDown={true}
+                    canMoveUp={false}
+                />
+            )
+
+            expect(component.find('.organizer_entry__plan_controls').length).toBe(1);
+            expect(component.find('.delivery_controls__finished').length).toBe(0);
+            expect(component.find('.delivery_controls__arrive').length).toBe(0);
+            expect(component.find('.delivery_controls__navigate').length).toBe(0);
         })
     })
 

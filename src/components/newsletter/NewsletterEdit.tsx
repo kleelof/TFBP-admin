@@ -139,7 +139,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                 ></textarea>
                             ({this.state.content.length} characters)
                             <button
-                                className={'btn btn-outline-success newsletter_edit__control_btn mt-2'}
+                                className={'btn btn-outline-success newsletter_edit__control_btn newsletter_edit__save_btn mt-2'}
                                 disabled={saveDisabled}
                                 onClick={this.saveNewsletter}
                                 >save</button>
@@ -165,11 +165,6 @@ export default class NewsletterEdit extends React.Component<any, State> {
                         </div>
                         <div className={'col-12 newsletter_edit_controls mt-3'}>
                             <div className={'row'}>
-                                <div className={'col-12 col-md-6 mb-2'}>
-
-
-
-                                </div>
                                 <div className={'col-12'}>
                                     <h5>test email</h5>
                                     <input
@@ -193,9 +188,6 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                         >return to newsletters</Link>
                                 </div>
                             </div>
-                        </div>
-                        <div className={'col-12 text-center'}>
-
                         </div>
                     </div>
                 </div>

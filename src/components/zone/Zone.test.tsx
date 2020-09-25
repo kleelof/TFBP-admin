@@ -50,7 +50,7 @@ describe('Zones tests', () => {
             expect(deleteZipSpy).toHaveBeenCalledWith(1);
 
             await component.update();
-            expect(component.find(ZoneCode).length).toBe(0);
+            expect(component.find(ZoneCode).length).toBe(0); // TODO: fix
         })
     })
 

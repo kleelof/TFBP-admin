@@ -95,18 +95,18 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                 <Fragment>
                                     <div className='col-12 organizer_entry__delivery_controls'>
                                         {(props.route.route_status === 2 && stop.stop_status === 0) &&
-                                            <button className='btn btn-sm btn-outline-success' onClick={() => navigate()}>navigate</button>
+                                            <button className='btn btn-sm btn-outline-success delivery_controls__navigate' onClick={() => navigate()}>navigate</button>
                                         }
                                         {(props.route.route_status === 2 && stop.stop_status === 1) &&
                                             <LoadingIconButton
-                                                outerClass='mr-2'
+                                                outerClass='mr-2 delivery_controls__arrive'
                                                 btnClass={'btn btn-sm btn-outline-info'}
                                                 label={'arrive'}
                                                 onClick={atStop} />
                                         }
                                         {(props.route.route_status === 2 && stop.stop_status === 2) &&
                                             <LoadingIconButton
-                                                outerClass='mr-2'
+                                                outerClass='mr-2 delivery_controls__finished'
                                                 btnClass={'btn btn-sm btn-outline-success'}
                                                 label={'finished'}
                                                 onClick={completeDelivery} />
