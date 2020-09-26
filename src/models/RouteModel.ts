@@ -7,6 +7,8 @@ export default class Route extends ModelBase {
     public delivery_window!: DeliveryWindow
     public stops!: RouteStop[];
     public route_status!: number;
+    public started_at!: string;
+    public finished_at!: string;
 
     /*
     ROUTE_STATUS = (
@@ -22,7 +24,9 @@ export default class Route extends ModelBase {
         delivery_date?: string,
         delivery_window?: DeliveryWindow,
         stops?: RouteStop[],
-        route_status?: number
+        route_status?: number,
+        started_at?: string,
+        finished_at?: string
     )
     {
         super();
@@ -31,5 +35,7 @@ export default class Route extends ModelBase {
         this.delivery_window = delivery_window || new DeliveryWindow();
         this.stops = stops || [];
         this.route_status = route_status || 0;
+        this.started_at = started_at || '';
+        this.finished_at = finished_at || '';
     }
 }

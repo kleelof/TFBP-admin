@@ -6,6 +6,7 @@ import {RouteOrganizerEntry} from "./RouteOrganizerEntry";
 import RouteStop from "../../models/RouteStopModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 import routeService from '../../services/RouteService';
+import MomentHelper from "../../helpers/MomentHelper";
 
 interface Props {
     route: Route,
@@ -132,6 +133,13 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                         {routeStatus[this.state.route.route_status]}
                     </span>
                 </div>
+                {this.state.route.route_status === 3 &&
+                    <Fragment>
+                        <div className='col-12'>started: {MomentHelper.asFullDateTime(this.state.route.started_at)}</div>
+                        <div className='col-12'>completed: {MomentHelper.asFullDateTime(this.state.route.finished_at)}</div>
+                    </Fragment>
+
+                }
                 <div className='col-12'>
                     {this.state.route.route_status === 0 && //uncommitted
                         <Fragment>

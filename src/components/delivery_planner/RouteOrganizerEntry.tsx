@@ -6,6 +6,7 @@ import RouteStop from "../../models/RouteStopModel";
 import moment from "moment";
 import Route from "../../models/RouteModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
+import MomentHelper from "../../helpers/MomentHelper";
 
 interface Props {
     stop: RouteStop,
@@ -83,7 +84,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                 <Fragment>
                                     {
                                         <Fragment>
-                                            delivered: {moment(stop.delivered_at).format('MMM D YYYY h:mm a')}
+                                            delivered: {MomentHelper.asFullDateTime(stop.delivered_at)}
                                         </Fragment>
                                     }
 

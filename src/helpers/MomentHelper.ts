@@ -3,6 +3,7 @@ import moment from 'moment';
 class MomentHelper {
 
     public asDateSlug = (date: any): string => {
+        console.log(date);
         return moment(date).utc().format('YYYY-MM-DD');
     }
 
@@ -10,8 +11,16 @@ class MomentHelper {
         return moment(date).utc().format('dddd MMMM D, YYYY');
     }
 
+    public asFullDateTime = (dateTime: any): string => {
+        return moment(dateTime).format('dddd MMMM D, YYYY h:mm a')
+    }
+
     public asShortDate = (date: any): string => {
         return moment(date).utc().format('MMM D YYYY');
+    }
+
+    public asShortDateTime = (dateTime: any): string => {
+        return moment(dateTime).format('MMM D YYYY h:mm a')
     }
 }
 
