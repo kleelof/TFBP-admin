@@ -22,7 +22,20 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
     const atStop = (callback?: any): void => {
         routeStopService.at_stop(props.stop)
             .then((stop:RouteStop) => setStop(stop))
-            .catch(() => window.alert('unable to at route'))
+            .catch(() => window.alert('unable to at_stop'))
+            .then(() => {
+                if (callback) callback();
+            })
+    }
+
+    const cancelDelivery = (callback?: any): void => {
+        if (!window.confirm('are you sure you want to cancel this stop? \n\nThis cannot be reversed.')) {
+            if (callback) callback();
+            return;
+        }
+        routeStopService.cancel(props.stop)
+            .then((stop:RouteStop) => setStop(stop))
+            .catch(() => window.alert('unable to cancel'))
             .then(() => {
                 if (callback) callback();
             })
@@ -41,11 +54,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
         openMap();
         routeStopService.en_route(props.stop)
             .then((stop:RouteStop) => setStop(stop))
-            .catch(() => window.alert('unable to en route'))
-
-        routeStopService.alertDelivery(props.stop)
-            .then(() => {})
-            .catch(() => window.alert('unable to alert customer'))
+            .catch(() => window.alert('unable to en_route'))
     }
 
     const openMap = (): void => {
@@ -97,19 +106,28 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                         {(props.route.route_status === 2 && stop.stop_status === 0) &&
                                             <button className='btn btn-sm btn-outline-success delivery_controls__navigate' onClick={() => navigate()}>navigate</button>
                                         }
-                                        {(props.route.route_status === 2 && stop.stop_status === 1) &&
-                                            <LoadingIconButton
-                                                outerClass='mr-2 delivery_controls__arrive'
-                                                btnClass={'btn btn-sm btn-outline-info'}
-                                                label={'arrive'}
-                                                onClick={atStop} />
-                                        }
-                                        {(props.route.route_status === 2 && stop.stop_status === 2) &&
-                                            <LoadingIconButton
-                                                outerClass='mr-2 delivery_controls__finished'
-                                                btnClass={'btn btn-sm btn-outline-success'}
-                                                label={'finished'}
-                                                onClick={completeDelivery} />
+                                        {(props.route.route_status === 2 && stop.stop_status !== 0) &&
+                                            <Fragment>
+                                                {stop.stop_status === 1 &&
+                                                    <LoadingIconButton
+                                                        outerClass='mr-2 delivery_controls__arrive'
+                                                        btnClass={'btn btn-sm btn-outline-info'}
+                                                        label={'arrive'}
+                                                        onClick={atStop} />
+                                                }
+                                                {stop.stop_status === 2 &&
+                                                    <LoadingIconButton
+                                                        outerClass='mr-2 delivery_controls__finished'
+                                                        btnClass={'btn btn-sm btn-outline-success'}
+                                                        label={'finished'}
+                                                        onClick={completeDelivery} />
+                                                }
+                                                <LoadingIconButton
+                                                        outerClass='mr-2 delivery_controls__cancel'
+                                                        btnClass={'btn btn-sm btn-outline-danger'}
+                                                        label={'cancel'}
+                                                        onClick={cancelDelivery} />
+                                            </Fragment>
                                         }
                                     </div>
                                     {props.route.route_status === 0 && // non commited

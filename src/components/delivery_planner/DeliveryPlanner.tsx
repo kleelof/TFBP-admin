@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import deliveryWindowService from '../../services/DeliveryWindowService';
-import routeService from '../../services/RouteService';
 import GoogleMapReact, {Maps} from 'google-map-react';
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import Route from "../../models/RouteModel";
@@ -9,6 +8,7 @@ import Route from "../../models/RouteModel";
 import './delivery_planner.scss';
 import RouteOrganizer from "./RouteOrganizer";
 import RouteStop from "../../models/RouteStopModel";
+import MomentHelper from "../../helpers/MomentHelper";
 
 export const DeliveryPlanner = (props: any): React.ReactElement => {
     const params: any = useParams();
@@ -88,6 +88,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
         <div className='row delivery_planner'>
             <div className='col-12'>
                 <h3>route planner</h3>
+                <b>{MomentHelper.asShortDate(route.delivery_date)}</b>
                 <hr/>
             </div>
             <div className='d-none d-md-block col-md-8 delivery_planner__map_div'>

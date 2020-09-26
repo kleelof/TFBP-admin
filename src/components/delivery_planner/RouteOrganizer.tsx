@@ -116,7 +116,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
     }
 
     public render() {
-        const routeStatus: string[] = ['uncommitted', 'committed', 'in progress', 'completed'];
+        const routeStatus: string[] = ['uncommitted', 'committed', 'in progress', 'completed', 'waiting for cutoff'];
         let needToSave: boolean = false;
         let canOptimize: boolean = false;
         this.state.stops.forEach((stop: RouteStop, index: number) => {
