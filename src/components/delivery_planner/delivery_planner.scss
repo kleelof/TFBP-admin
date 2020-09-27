@@ -1,6 +1,11 @@
 @import '../../scss_variables';
 
 .delivery_planner {
+
+  &__back_btn {
+    float: right;
+  }
+
   &__map_div {
     height: 400px;
   }
@@ -56,6 +61,10 @@
   .organizer_entry {
     &__address {
       float: left;
+    }
+
+    &__cancel {
+      float: right;
     }
 
     &__inner {

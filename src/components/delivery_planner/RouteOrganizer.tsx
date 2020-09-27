@@ -36,7 +36,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
     }
 
     private commitRoute = (callback: any = undefined): void => {
-        if (!window.confirm('Once you commit a route, it cannot be changed.\n\nYour customers will be notified of their approximate delivery time.')){
+        if (!window.confirm('Once you commit a route, it cannot be changed.')){
             if (callback) callback();
             return;
         }

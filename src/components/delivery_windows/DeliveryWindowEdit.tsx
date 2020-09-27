@@ -105,7 +105,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                     </div>
                     <div className={'col-6 mt-2'}>
                         <div className={'delivery_window_edit__prompt'}>active:</div>
-                        <input type={'checkbox'} className={''} id={'active'}
+                        <input type='checkbox' className={''} id={'active'} data-toggle="toggle"
                                checked={deliveryWindow.active}
                                onChange={() => setWindow({...deliveryWindow, active: !deliveryWindow.active})}
                         />

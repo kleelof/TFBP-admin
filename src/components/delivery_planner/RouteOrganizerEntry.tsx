@@ -105,7 +105,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                 <Fragment>
                                     <div className='col-12 organizer_entry__delivery_controls'>
                                         {(props.route.route_status === 2 && stop.stop_status === 0) &&
-                                            <button className='btn btn-sm btn-outline-success delivery_controls__navigate' onClick={() => navigate()}>navigate</button>
+                                            <button className='btn btn-sm btn-outline-success delivery_controls__navigate mr-2' onClick={() => navigate()}>navigate</button>
                                         }
                                         {(props.route.route_status === 2 && stop.stop_status !== 0) &&
                                             <Fragment>
@@ -123,12 +123,14 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                                         label={'finished'}
                                                         onClick={completeDelivery} />
                                                 }
-                                                <LoadingIconButton
-                                                        outerClass='mr-2 delivery_controls__cancel'
-                                                        btnClass={'btn btn-sm btn-outline-danger'}
-                                                        label={'cancel'}
-                                                        onClick={cancelDelivery} />
                                             </Fragment>
+                                        }
+                                        {props.route.route_status === 2 &&
+                                            <LoadingIconButton
+                                                    outerClass='mr-2 organizer_entry__cancel'
+                                                    btnClass={'btn btn-sm btn-outline-danger'}
+                                                    label={'cancel'}
+                                                    onClick={cancelDelivery} />
                                         }
                                     </div>
                                     {props.route.route_status === 0 && // non commited

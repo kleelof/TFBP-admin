@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import GoogleMapReact, {Maps} from 'google-map-react';
 import LoadingOverlay from "../overlays/LoadingOverlay";
@@ -12,6 +12,7 @@ import MomentHelper from "../../helpers/MomentHelper";
 
 export const DeliveryPlanner = (props: any): React.ReactElement => {
     const params: any = useParams();
+    const history = useHistory();
     const [route, setRoute] = useState<Route>(new Route());
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -85,36 +86,44 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
         return <LoadingOverlay />
 
      return (
-        <div className='row delivery_planner'>
+        <div className='row delivery_planner justify-content-center'>
             <div className='col-12'>
                 <h3>route planner</h3>
                 <b>{MomentHelper.asShortDate(route.delivery_date)}</b>
+                <button
+                    className='btn btn-sm btn-outline-info delivery_planner__back_btn'
+                    onClick={() => history.goBack()}
+                >
+                    back to tools
+                </button>
                 <hr/>
             </div>
-            <div className='d-none d-md-block col-md-8 delivery_planner__map_div'>
-                <GoogleMapReact
-                    key={Math.random()}
-                  bootstrapURLKeys={{ key: 'AIzaSyC0yq5uGlMfHp98X-L452J-dzR2HX5FEP8'}}
-                  center={JSON.parse(route.stops[0].leg)['start_location']}
-                  zoom={10}
-                  yesIWantToUseGoogleMapApiInternals={true}
-                  options={createMapOptions}
-                  onGoogleApiLoaded={({map, maps}) => handleApiLoaded(map, maps)}
-                >
-                    {
-                        route.stops.sort((a,b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0)).map((stop: RouteStop, index: number) => {
-                            let leg: any = JSON.parse(stop.leg);
-                            return(
-                                <Marker
-                                    key={Math.random()}
-                                    lat={leg.end_location.lat}
-                                    lng={leg.end_location.lng}
-                                    text={(index += 1).toString()}
-                                />)
-                            }
-                        )
-                    }
-                </GoogleMapReact>
+            <div className={`d-none ${route.route_status !== 0 ? 'd-md-none' : 'd-md-block'}  col-md-8 delivery_planner__map_div`}>
+                {route.route_status === 0 &&
+                    <GoogleMapReact
+                        key={Math.random()}
+                        bootstrapURLKeys={{key: 'AIzaSyC0yq5uGlMfHp98X-L452J-dzR2HX5FEP8'}}
+                        center={JSON.parse(route.stops[0].leg)['start_location']}
+                        zoom={10}
+                        yesIWantToUseGoogleMapApiInternals={true}
+                        options={createMapOptions}
+                        onGoogleApiLoaded={({map, maps}) => handleApiLoaded(map, maps)}
+                    >
+                        {
+                            route.stops.sort((a, b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0)).map((stop: RouteStop, index: number) => {
+                                    let leg: any = JSON.parse(stop.leg);
+                                    return (
+                                        <Marker
+                                            key={Math.random()}
+                                            lat={leg.end_location.lat}
+                                            lng={leg.end_location.lng}
+                                            text={(index += 1).toString()}
+                                        />)
+                                }
+                            )
+                        }
+                    </GoogleMapReact>
+                }
             </div>
             <div className='col-12 col-md-4'>
                 <RouteOrganizer
