@@ -121,13 +121,13 @@ interface DeliveryTagsDisplayProps {
 }
 
 export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.ReactElement => {
-    const target_date: string = momentHelper.asDateSlug(props.date);
+    const target_date: string = moment(props.date).utc().format('YYYY-MM-DD');
     return (
         <div className='delivery_tags'>
             {
                 props.orders.map((order: Order) => {
                     const orderItems: OrderItem[] = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === target_date)
-
+                    console.log(order)
                     return (
                         <div className='quarter_print_page' key={`order_${order.id}`}>
                             <span className="contact-info">{order.contact_name}</span>
@@ -138,6 +138,7 @@ export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.Reac
                             <div className="delivery-tag-items">
                                 {
                                     orderItems.map((orderItem: OrderItem) => {
+                                        console.log(orderItem)
                                         return(
                                             <div className="delivery-tag-item" key={`oi_${orderItem.id}`}>
                                                 {orderItem.cart_item.quantity.toString() + " " + helpers.extractCartItemDescription(orderItem.cart_item)}

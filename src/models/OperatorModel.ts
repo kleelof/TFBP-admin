@@ -22,6 +22,7 @@ export default class Operator extends ModelBase {
     public ordering_cutoff_time!: number;
     public upcoming_delivery_notification_time!: number;
     public upcoming_delivery_days_notification_time!: number;
+    public auto_notify_upcoming_deliveries!: boolean;
 
     public user!: User;
 
@@ -45,7 +46,8 @@ export default class Operator extends ModelBase {
         ordering_cutoff_time: number = 0,
         upcoming_delivery_notification_time: number = 0,
         upcoming_delivery_days_notification_time: number = 0,
-        user: User = new User()
+        user: User = new User(),
+        auto_notify_upcoming_deliveries: boolean = false
     ) {
         super();
         this.id = id;
@@ -68,5 +70,6 @@ export default class Operator extends ModelBase {
         this.upcoming_delivery_notification_time = upcoming_delivery_notification_time;
         this.upcoming_delivery_days_notification_time = upcoming_delivery_days_notification_time;
         this.user = user;
+        this.auto_notify_upcoming_deliveries = auto_notify_upcoming_deliveries
     }
 }

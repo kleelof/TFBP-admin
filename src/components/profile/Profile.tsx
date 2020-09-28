@@ -39,21 +39,28 @@ export const Profile = (): React.ReactElement => {
         let errors: string[] = [];
 
         // each to check fields
-        (['zip_code', 'city', 'street_address', 'name', 'phone', 'page_name', 'support_email', 'state', 'timezone']).forEach((field: any) => {
+        (['zip_code', 'city', 'street_address', 'name', 'phone', 'page_name', 'support_email', 'state', 'timezone'
+        ]).forEach((field: any) => {
             // @ts-ignore
             if (op[field] === '')
                 errors.push(field);
         })
 
         // fields with more checking
-        switch(true) {
-            case op.self_hosted:
-                if (op.domain === '' || op.domain.indexOf('https://') !== 0)
-                    errors.push('domain');
-                break;
+        if (op.self_hosted &&
+            (op.domain === '' || op.domain.indexOf('https://') !== 0)
+        ) errors.push('domain');
 
-        }
+        if (op.auto_notify_upcoming_deliveries && op.upcoming_delivery_notification_time < 1)
+            errors.push('upcoming_delivery_notification_time');
 
+        if (op.ordering_cutoff_time < 1)
+            errors.push('ordering_cutoff_time')
+
+        if (op.upcoming_delivery_days_notification_time < 1)
+            errors.push('upcoming_delivery_days_notification_time');
+
+        console.log(errors);
         setHasUpdates(errors.length === 0);
         setErrors(errors);
         setOperator(op);
@@ -220,25 +227,53 @@ export const Profile = (): React.ReactElement => {
                                         <div className='col-12'>
                                             how many <strong>hours</strong> before delivery time should ordering be disabled?
                                             &nbsp;&nbsp;
-                                            <input type='number' className='form-control' value={operator.ordering_cutoff_time} />
+                                            <input type='number'
+                                                   min={1}
+                                                   className={`form-control ${errors.indexOf('ordering_cutoff_time') > -1 ? 'profile__error_border' : ''}`}
+                                                   value={operator.ordering_cutoff_time}
+                                                   onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                       updateOperator({...operator, ordering_cutoff_time: parseInt(e.target.value)})
+                                                   }
+                                            />
                                         </div>
 
                                         <div className='col-12 mt-4'>
                                             <hr/>
                                         </div>
-                                        <div className='col-12'>
-                                            how many <strong>days</strong> before a delivery should the customer be notified?
-                                            &nbsp;&nbsp;
-                                            <input type='number' className='form-control' value={operator.upcoming_delivery_notification_time} />
-                                        </div>
-                                        <div className='col-12 mt-2'>
-                                            <input type='checkbox' /> &nbsp;&nbsp; automatically notify customers of their upcoming delivery
-                                        </div>
                                         <div className='col-12 mt-2'>
                                             how many <b>days</b> before an upcoming delivery day should the customer be notified?
                                             &nbsp;&nbsp;
-                                            <input type='number' className='form-control' value={operator.upcoming_delivery_days_notification_time} />
+                                            <input
+                                                type='number'
+                                                min={1}
+                                                className={`form-control ${errors.indexOf('upcoming_delivery_days_notification_time') > -1 ? 'profile__error_border' : ''}`}
+                                                value={operator.upcoming_delivery_days_notification_time}
+                                                onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                       updateOperator({...operator, upcoming_delivery_days_notification_time: parseInt(e.target.value)})
+                                                   }
+                                            />
                                         </div>
+                                        <div className='col-12 mt-2'>
+                                            <input type='checkbox' checked={operator.auto_notify_upcoming_deliveries}
+                                                   onChange={()=> updateOperator({...operator, auto_notify_upcoming_deliveries: !operator.auto_notify_upcoming_deliveries})}
+                                            />
+                                            &nbsp;&nbsp; automatically notify customers of their upcoming delivery
+                                        </div>
+                                        {operator.auto_notify_upcoming_deliveries &&
+                                            <div className='col-12 mt-2'>
+                                                how many <strong>days</strong> before a delivery should the customer be notified?
+                                                &nbsp;&nbsp;
+                                                <input
+                                                    type='number'
+                                                    min={1}
+                                                    className={`form-control ${errors.indexOf('upcoming_delivery_notification_time') > -1 ? 'profile__error_border' : ''}`}
+                                                    value={operator.upcoming_delivery_notification_time}
+                                                    onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                           updateOperator({...operator, upcoming_delivery_notification_time: parseInt(e.target.value)})
+                                                       }
+                                                />
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
