@@ -61,7 +61,7 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
         return(
             <div className="row delivery_day_component">
                 <div className={"col-12 mb-2"}>
-                    <Link className={'btn btn-outline-info'} to={'/dashboard/deliveries'}>return to delivery menus</Link>
+                    <Link className={'btn btn-sm btn-outline-info'} to={'/dashboard/deliveries'}>return to delivery menus</Link>
                 </div>
                 <div className="col-12 col-md-6">
                     <h5>

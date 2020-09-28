@@ -7,6 +7,7 @@ import RouteStop from "../../models/RouteStopModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 import routeService from '../../services/RouteService';
 import MomentHelper from "../../helpers/MomentHelper";
+import DeliveryWindow from "../../models/DeliveryWindowModel";
 
 interface Props {
     route: Route,
@@ -18,7 +19,8 @@ interface State {
     route: Route,
     routeUpdated: boolean,
     loading: boolean,
-    stops: RouteStop[]
+    stops: RouteStop[],
+    loadingButtonInUse: string
 }
 
 export default class RouteOrganizer extends React.Component<Props, State> {
@@ -31,36 +33,30 @@ export default class RouteOrganizer extends React.Component<Props, State> {
             route: props.route,
             routeUpdated: false,
             loading: true,
-            stops: props.route.stops.sort((a,b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0))
+            stops: props.route.stops.sort((a,b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0)),
+            loadingButtonInUse: ''
         }
     }
 
-    private commitRoute = (callback: any = undefined): void => {
-        if (!window.confirm('Once you commit a route, it cannot be changed.')){
-            if (callback) callback();
-            return;
-        }
+    private commitRoute = (): void => {
+        if (!window.confirm('Once you commit a route, it cannot be changed.')) return;
+
+        this.setState({loadingButtonInUse: 'committing'});
 
         routeService.commitRoute(this.state.route)
-            .then((route: Route) => this.setState({route, stops: route.stops}))
+            .then((route: Route) => this.setState({route}))
             .catch(() => window.alert('cannot commit route'))
-            .then(() => {
-                if (callback) callback();
-            })
+            .then(() => this.setState({loadingButtonInUse: ''}))
     }
 
-    private completeRoute = (callback: any = undefined): void => {
-        if (!window.confirm('Are you sure you are done?')) {
-            if (callback) callback();
-            return;
-        }
+    private completeRoute = (): void => {
+        if (!window.confirm('Are you sure you are done?')) return;
 
+        this.setState({loadingButtonInUse: 'completing_route'})
         routeService.completeRoute(this.state.route)
             .then((route: Route) => this.setState({route}))
             .catch(() => window.alert('unable to complete route'))
-            .then(() => {
-                if (callback) callback();
-            })
+            .then(() => this.setState({loadingButtonInUse: ''}))
     }
 
     private moveEntry = (stop: RouteStop, direction: string) => {
@@ -87,33 +83,28 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         this.setState({stops, routeUpdated: true});
     }
 
-    private optimize = (callback: any = undefined): void => {
+    private optimize = (): void => {
         this.setState({
+            loadingButtonInUse: 'optimizing',
             stops: this.state.stops.sort((a,b) => (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0))
-        }, () => this.saveChanges(callback))
+        }, () => this.saveChanges())
     }
 
-    private saveChanges = (callback: any = undefined): void => {
+    private saveChanges = (): void => {
         routeService.updateStopOrder(this.state.route, this.state.stops.map((stop: RouteStop) => stop.id))
             .then((route: Route) => this.props.updateRoute(route))
             .catch(() => window.alert('unable to save changes'))
-            .then(() => {
-                if (callback) callback();
-            })
+            .then(() => this.setState({loadingButtonInUse: ''}))
     }
 
-    private startRoute = (callback: any = undefined): void => {
-        if (!window.confirm('Are you sure you want to start the route?')) {
-            if (callback) callback();
-            return;
-        };
+    private startRoute = (): void => {
+        if (!window.confirm('Are you sure you want to start the route?')) return;
 
+        this.setState({loadingButtonInUse: 'starting_route'})
         routeService.startRoute(this.state.route)
             .then((route: Route) => this.setState({route}))
             .catch(() => window.alert('unable to start route'))
-            .then(() => {
-                if (callback) callback();
-            })
+            .then(() => this.setState({loadingButtonInUse: ''}))
     }
 
     public render() {
@@ -138,7 +129,6 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                         <div className='col-12'>started: {MomentHelper.asFullDateTime(this.state.route.started_at)}</div>
                         <div className='col-12'>completed: {MomentHelper.asFullDateTime(this.state.route.finished_at)}</div>
                     </Fragment>
-
                 }
                 <div className='col-12'>
                     {this.state.route.route_status === 0 && //uncommitted
@@ -146,13 +136,18 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                             {needToSave &&
                                 <LoadingIconButton
                                     outerClass='mr-2'
+                                    busy={this.state.loadingButtonInUse ==='saving_changes'}
                                     btnClass={'btn btn-outline-success route_organizer__optimize_btn'}
                                     label={'save changes'}
-                                    onClick={this.saveChanges} />
+                                    onClick={() => {
+                                        this.setState({loadingButtonInUse: 'saving_changes'});
+                                        this.saveChanges();
+                                    }} />
                             }
                             {(!needToSave) &&
                                 <LoadingIconButton
                                     outerClass='mr-2'
+                                    busy={this.state.loadingButtonInUse ==='committing'}
                                     btnClass='btn btn-outline-success'
                                     label={'commit route'}
                                     onClick={this.commitRoute} />
@@ -160,6 +155,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                             {canOptimize &&
                                 <LoadingIconButton
                                     outerClass='mr-2'
+                                    busy={this.state.loadingButtonInUse ==='at_stop'}
                                     btnClass='btn btn-outline-info'
                                     label={'optimize'}
                                     onClick={this.optimize} />
@@ -170,6 +166,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                         <Fragment>
                             <LoadingIconButton
                                     outerClass='mr-2'
+                                    busy={this.state.loadingButtonInUse ==='starting_route'}
                                     btnClass='btn btn-outline-info'
                                     label={'start route'}
                                     onClick={this.startRoute} />
@@ -179,6 +176,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                         <Fragment>
                             <LoadingIconButton
                                     outerClass='mr-2'
+                                    busy={this.state.loadingButtonInUse ==='completing_route'}
                                     btnClass='btn btn-outline-success'
                                     label={'completed'}
                                     onClick={this.completeRoute} />

@@ -1,0 +1,18 @@
+@import '../../scss_variables';
+
+.profile {
+
+  &__error_border {
+    border-color: $danger_fill;
+  }
+
+  &__prompt_note {
+    display: block;
+    font-size: .8em;
+    color: rgba(0, 0, 0, .8);
+
+    & b {
+      color: $danger_fill;
+    }
+  }
+}

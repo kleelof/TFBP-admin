@@ -3,8 +3,7 @@ import moment from 'moment';
 class MomentHelper {
 
     public asDateSlug = (date: any): string => {
-        console.log(date);
-        return moment(date).utc().format('YYYY-MM-DD');
+        return moment(date).format('YYYY-MM-DD');
     }
 
     public asFullDate = (date: any): string => {

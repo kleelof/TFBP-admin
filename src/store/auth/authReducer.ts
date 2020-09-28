@@ -1,5 +1,5 @@
 import { AuthActionTypes } from "./authActions";
-import User from "../../models/UserModel";
+import User from "../../models/User";
 import { actions } from "../store";
 
 export interface AuthState {

@@ -9,6 +9,7 @@ import LoadingOverlay from "../overlays/LoadingOverlay";
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import './browser.scss';
+import moment from "moment";
 
 interface Props extends RouteComponentProps {
     dto: DeliveryWindowWithCountsDTO,
@@ -61,7 +62,7 @@ class BrowserWindowTools extends React.Component<Props, State>{
         let orderItems: OrderItem[] = [];
         for (let x: number = 0; x < this.state.orders.length; x ++)
             for (let y: number = 0; y < this.state.orders[x].items.length; y ++)
-                if (this.state.orders[x].items[y].cart_item.delivery_date === momentHelper.asDateSlug(this.props.date))
+                if (this.state.orders[x].items[y].cart_item.delivery_date === moment(this.props.date).utc().format('YYYY-MM-DD'))
                     orderItems.push(this.state.orders[x].items[y])
 
         switch(pullType) {
@@ -93,7 +94,7 @@ class BrowserWindowTools extends React.Component<Props, State>{
                         <div className={'col-12 mt-2'}>
                             <button className={'btn-block btn-outline-success'}
                                     onClick={() => this.props.history.push({
-                                        pathname:`/dashboard/delivery_planner/${this.props.dto.window.id}/${momentHelper.asDateSlug(this.props.date)}`})}
+                                        pathname:`/dashboard/delivery_planner/${this.props.dto.window.id}/${moment(this.props.date).utc().format('YYYY-MM-DD')}`})}
                                     disabled={this.state.orders.length === 0}>
                                 route planner</button>
 

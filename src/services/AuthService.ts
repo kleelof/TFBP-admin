@@ -1,7 +1,7 @@
 import Service from "./Service";
 
 import AuthenticateDTO from "../dto/AuthenticateDTO";
-import User from "../models/UserModel";
+import User from "../models/User";
 
 class AuthService extends Service {
     appName = 'core';

@@ -9,6 +9,7 @@ import './delivery_planner.scss';
 import RouteOrganizer from "./RouteOrganizer";
 import RouteStop from "../../models/RouteStopModel";
 import MomentHelper from "../../helpers/MomentHelper";
+import DeliveryWindow from "../../models/DeliveryWindowModel";
 
 export const DeliveryPlanner = (props: any): React.ReactElement => {
     const params: any = useParams();
@@ -103,7 +104,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                     <GoogleMapReact
                         key={Math.random()}
                         bootstrapURLKeys={{key: 'AIzaSyC0yq5uGlMfHp98X-L452J-dzR2HX5FEP8'}}
-                        center={JSON.parse(route.stops[0].leg)['start_location']}
+                        center={{lat: 37.804363, lng:-122.271111}}
                         zoom={10}
                         yesIWantToUseGoogleMapApiInternals={true}
                         options={createMapOptions}
@@ -111,7 +112,10 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
                     >
                         {
                             route.stops.sort((a, b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0)).map((stop: RouteStop, index: number) => {
-                                    let leg: any = JSON.parse(stop.leg);
+                                    let leg: any = stop.leg !== '' ? JSON.parse(stop.leg) : {end_location : {
+                                            lat: 37.804363,
+                                            lng: -122.271111
+                                        }};
                                     return (
                                         <Marker
                                             key={Math.random()}

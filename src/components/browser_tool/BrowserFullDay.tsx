@@ -32,7 +32,7 @@ export default class BrowserFullDay extends React.Component<Props, State> {
         const { match: { params } } = this.props;
 
         deliveryWindowService.listWithCounts(params.targetDate)
-            .then((counts: DeliveryWindowWithCountsDTO[]) => this.setState({counts, targetDate: new Date(params.targetDate)}))
+            .then((counts: DeliveryWindowWithCountsDTO[]) => this.setState({counts, targetDate: new Date(new Date(params.targetDate).toUTCString())}))
             .catch( err => console)
             .then(() => this.setState({loading: false}))
     }

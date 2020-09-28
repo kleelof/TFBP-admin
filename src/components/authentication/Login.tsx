@@ -7,7 +7,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import './authentication.css';
 import authService from '../../services/AuthService';
 import { Redirect } from 'react-router-dom';
-import User from '../../models/UserModel';
+import User from '../../models/User';
 import AuthenticateDTO from '../../dto/AuthenticateDTO';
 import { AppActions, AppState } from '../../store/store';
 import { dispatchLogin } from '../../store/auth/authActions';

@@ -4,25 +4,13 @@ import './loading_icon_button.scss';
 interface Props {
     label: string,
     onClick: any,
+    busy: boolean,
     btnClass?: string,
     disabled?: boolean,
     outerClass?: string
 }
 
 export const LoadingIconButton = (props: Props): React.ReactElement => {
-    const [showAnimation, setShowAnimation] = useState(false);
-    const [disabled, setDisabled] = useState<boolean>(props.disabled !== undefined ? props.disabled : false);
-
-    const onClick = (): void => {
-        setDisabled(true);
-        setShowAnimation(true)
-        props.onClick(stopAnimation)
-    }
-
-    const stopAnimation = (): void => {
-        setDisabled(false);
-        setShowAnimation(false);
-    }
 
     return (
         <div className={`loading_icon_button ${props.outerClass !== undefined ? props.outerClass : ''}`}>
@@ -30,10 +18,10 @@ export const LoadingIconButton = (props: Props): React.ReactElement => {
                 className={
                     `${props.btnClass !== undefined ? props.btnClass : ''}`
                 }
-                onClick={onClick}
-                disabled={disabled}
+                onClick={props.onClick}
+                disabled={props.disabled !== undefined ? props.disabled : false}
             >{props.label}</button>
-            {showAnimation &&
+            {props.busy &&
                 <div className='loading_icon_button__loader_layer'>
                     <div className='loading_icon_button__loader'></div>
                 </div>

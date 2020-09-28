@@ -8,6 +8,7 @@ export default class RouteStop extends ModelBase {
     public order!: Order;
     public current_index!: number;
     public stop_status!: number;
+    public eta!: number;
 
     /*
     STOP_STATUS = (
@@ -27,6 +28,7 @@ export default class RouteStop extends ModelBase {
         order?: Order,
         current_index?: number,
         stop_status?: number,
+        eta?: number
     )
     {
         super();
@@ -37,5 +39,6 @@ export default class RouteStop extends ModelBase {
         this.order = order || new Order();
         this.current_index = current_index || -1;
         this.stop_status = stop_status || 0;
+        this.eta = eta || 0;
     }
 }

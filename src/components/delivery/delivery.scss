@@ -52,6 +52,10 @@
 .delivery_day_item {
       padding: 5px;
 
+    &__img {
+        width: 100%;
+    }
+
     &__inner{
       border: 2px solid rgba(0, 0, 0, .5);
       padding: 5px;

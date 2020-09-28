@@ -1,6 +1,6 @@
 import { actions } from '../store';
 import { Dispatch } from 'react';
-import User from '../../models/UserModel';
+import User from '../../models/User';
 
 interface Login { type: typeof actions.LOGIN, user: User, operator_token: string };
 export const login = (user: User, operator_token: string): AuthActionTypes => ({ type: actions.LOGIN, user, operator_token });

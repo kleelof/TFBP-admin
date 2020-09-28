@@ -9,7 +9,7 @@ import { AuthState } from './store/auth/authReducer';
 import { AppState, AppActions } from './store/store';
 import { dispatchLogin } from './store/auth/authActions';
 import authService from './services/AuthService';
-import User from './models/UserModel';
+import User from './models/User';
 
 import './App.css';
 
@@ -35,6 +35,7 @@ import {DeliveryWindows} from "./components/delivery_windows/DeliveryWindows";
 import {DeliveryWindowEdit} from "./components/delivery_windows/DeliveryWindowEdit";
 import {Zones} from "./components/zone/Zones";
 import {DeliveryPlanner} from "./components/delivery_planner/DeliveryPlanner";
+import {Profile} from "./components/profile/Profile";
 
 interface LinkStateProps {
   auth: AuthState
@@ -124,6 +125,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path="/dashboard/orders/edit/:id" component={OrderEdit} />
                         <PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
                         <PrivateRoute path="/dashboard/orders" component={Orders} />
+                        <PrivateRoute path='/dashboard/profile' component={Profile} />
                         <PrivateRoute path='/dashboard/zone' component={Zones} />
                         <PrivateRoute path='/dashboard/' component={BrowserTool} />
                         <PrivateRoute path='' component={BrowserTool} />

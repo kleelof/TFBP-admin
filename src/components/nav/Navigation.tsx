@@ -43,54 +43,59 @@ class Navigation extends React.Component<Props, State> {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active">
+                        <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
+                            <Link className="nav-link" to="/dashboard/profile">
+                                Profile</Link>
+                        </li>
+                        <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/browser">
                                 Home</Link>
                         </li>
-                        <li className="nav-item active">
+                        <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/menu/en">
                                 Menu</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/deliveries">
                                 Delivery Menus</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/delivery_window">
                                 Delivery Windows</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/zone">
                                 Delivery Zones</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/coupons">
                                     Coupons</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/mail">
                                     Mail</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/newsletter">
                                     Newsletters</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to='/dashboard/orders'>Orders</Link>
+                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
+                            <Link className="nav-link" to='/dashboard/orders'>
+                                Orders</Link>
                         </li>
                     </ul>
                 </div>
-                <span className="navbar-text">
+                <span className="navbar__login">
                     {
                         this.props.auth.loggedIn ?
-                            <button className="btn btn-danger" onClick={this.logout}>Logout</button>
+                            <button className="btn btn-sm btn-outline-danger" onClick={this.logout}>Logout</button>
                             :
-                            <div 
+                            <div
                                 className="btn btn-outline-success"
                                 onClick={() => this.setState({doLogin: true})}
                                 >Login</div>
                     }
-                </span> 
+                </span>
             </nav>
         )
     }

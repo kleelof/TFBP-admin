@@ -17,41 +17,37 @@ interface Props {
 }
 
 export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
-    const leg: any = JSON.parse(props.stop.leg);
-    const [stop, setStop] = useState(props.stop)
 
-    const atStop = (callback?: any): void => {
+    const [stop, setStop] = useState(props.stop);
+    const [loadButtonActive, setLoadButtonActive] = useState('');
+
+    const atStop = (): void => {
+        setLoadButtonActive('at_stop');
         routeStopService.at_stop(props.stop)
             .then((stop:RouteStop) => setStop(stop))
             .catch(() => window.alert('unable to at_stop'))
-            .then(() => {
-                if (callback) callback();
-            })
+            .then(() => setLoadButtonActive(''))
     }
 
-    const cancelDelivery = (callback?: any): void => {
-        if (!window.confirm('are you sure you want to cancel this stop? \n\nThis cannot be reversed.')) {
-            if (callback) callback();
-            return;
-        }
+    const cancelDelivery = (): void => {
+        if (!window.confirm('are you sure you want to cancel this stop? \n\nThis cannot be reversed.')) return;
+
+        setLoadButtonActive('canceling_delivery');
         routeStopService.cancel(props.stop)
             .then((stop:RouteStop) => setStop(stop))
             .catch(() => window.alert('unable to cancel'))
-            .then(() => {
-                if (callback) callback();
-            })
+            .then(() => setLoadButtonActive(''))
     }
 
-    const completeDelivery = (callback?: any): void => {
+    const completeDelivery = (): void => {
+        setLoadButtonActive('completing_delivery');
         routeStopService.delivered(props.stop)
             .then((s: RouteStop) => {setStop(s)})
             .catch(() => window.alert('unable to complete'))
-            .then(() => {
-                if (callback) callback();
-            })
+            .then(() => setLoadButtonActive('canceling_delivery'))
     }
 
-    const navigate = (sendAlert: boolean = false): void => {
+    const navigate = (): void => {
         openMap();
         routeStopService.en_route(props.stop)
             .then((stop:RouteStop) => setStop(stop))
@@ -72,9 +68,19 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                             {stop.current_index + 1}. &nbsp;
                             {stop.order.street_address}
                         </div>
-                        <div className='organizer_entry__time'>
-                            {leg.duration.text}
-                        </div>
+                        {(props.route.route_status > 0 && props.route.route_status < 4) &&
+                            <div className='organizer_entry__time'>
+                                {`${moment(props.route.delivery_window.start_time, 'HH:mm:ss')
+                                    .add(stop.eta, 'seconds')
+                                    .subtract(10, 'minutes')
+                                    .format('HH:mm')} - 
+                                    ${moment(props.route.delivery_window.start_time, 'HH:mm:ss')
+                                        .add(stop.eta, 'seconds')
+                                        .subtract(10, 'minutes')
+                                        .add(20, 'minutes')
+                                        .format('HH:mm')}`}
+                            </div>
+                        }
                     </div>
                     <div className='col-12 organizer_entry__notes'>
                         {stop.order.notes}
@@ -111,6 +117,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                             <Fragment>
                                                 {stop.stop_status === 1 &&
                                                     <LoadingIconButton
+                                                        busy={loadButtonActive ==='at_stop'}
                                                         outerClass='mr-2 delivery_controls__arrive'
                                                         btnClass={'btn btn-sm btn-outline-info'}
                                                         label={'arrive'}
@@ -118,6 +125,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                                 }
                                                 {stop.stop_status === 2 &&
                                                     <LoadingIconButton
+                                                        busy={loadButtonActive ==='completing_delivery'}
                                                         outerClass='mr-2 delivery_controls__finished'
                                                         btnClass={'btn btn-sm btn-outline-success'}
                                                         label={'finished'}
@@ -127,10 +135,11 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                         }
                                         {props.route.route_status === 2 &&
                                             <LoadingIconButton
-                                                    outerClass='mr-2 organizer_entry__cancel'
-                                                    btnClass={'btn btn-sm btn-outline-danger'}
-                                                    label={'cancel'}
-                                                    onClick={cancelDelivery} />
+                                                busy={loadButtonActive ==='canceling_delivery'}
+                                                outerClass='mr-2 organizer_entry__cancel'
+                                                btnClass={'btn btn-sm btn-outline-danger'}
+                                                label={'cancel'}
+                                                onClick={cancelDelivery} />
                                         }
                                     </div>
                                     {props.route.route_status === 0 && // non commited
