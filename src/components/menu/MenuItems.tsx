@@ -50,9 +50,14 @@ export const MenuItems = (): React.ReactElement => {
                 <h3>
                     { menuType }s
                 </h3>
+                <hr/>
             </div>
-            <div className="col-12">
+            <div className="col-12 col-md-4">
                 <NewMenuItem key={Math.random().toString()} />
+            </div>
+            <div className='d-none d-md-block col-md-8'></div>
+            <div className='col-12'>
+                <hr/>
             </div>
             {
                 sortedItems.sort((a: MenuItem, b: MenuItem) =>

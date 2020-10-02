@@ -76,7 +76,7 @@ export const Navigation = (props: Props): React.ReactElement => {
                         <li onClick={() => navigateToPage("/dashboard/mail/mass_mailer")}>
                             mass mailer
                         </li>
-                        <li onClick={() => navigateToPage("/dashboard/mailer/list")}>
+                        <li onClick={() => navigateToPage("/dashboard/mail/list")}>
                             mailing list
                         </li>
                     </ul>

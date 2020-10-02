@@ -9,7 +9,7 @@ import './delivery_planner.scss';
 import RouteOrganizer from "./RouteOrganizer";
 import RouteStop from "../../models/RouteStopModel";
 import MomentHelper from "../../helpers/MomentHelper";
-import DeliveryWindow from "../../models/DeliveryWindowModel";
+import moment from "moment";
 
 export const DeliveryPlanner = (props: any): React.ReactElement => {
     const params: any = useParams();
@@ -22,7 +22,7 @@ export const DeliveryPlanner = (props: any): React.ReactElement => {
     let markers: any[] = [];
 
     useEffect(() => {
-        deliveryWindowService.retrieveRoute(params.delivery_window, params.target_date)
+        deliveryWindowService.retrieveRoute(params.delivery_window, new Date(moment(params.target_date).format('YYYY-MM-DD')))
             .then((route: Route) => {
                 setRoute(route);
                 setLoading(false);

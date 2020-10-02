@@ -1,6 +1,6 @@
 import React from 'react';
 import Order from "../../models/OrderModel";
-import adminService from '../../services/AdminService';
+import adminService from '../../services/APIActionService';
 
 interface Props {
     order: Order

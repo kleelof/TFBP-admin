@@ -61,7 +61,11 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
 
         return(
             <div className="row coupons">
-                <div className={'col-12 mb-2'}>
+                <div className='col-12'>
+                    <h3>coupons</h3>
+                    <hr/>
+                </div>
+                <div className={'col-12'}>
                     <div className={'add_coupon'} onClick={() => this.props.history.push({pathname: '/dashboard/coupon/add'})}>
                         {
                             this.state.addingCoupon ?
@@ -71,7 +75,7 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                         }
                     </div>
                 </div>
-                <div className={'col-12'}>
+                <div className={'col-12 mt-3'}>
                     {
                         coupons.length > 0 ?
                             <table className={'table'}>

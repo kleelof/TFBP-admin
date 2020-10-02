@@ -131,13 +131,27 @@ input[type=checkbox]
   & .closebtn {
     position: absolute;
     top: 0;
-    right: 25px;
+    right: 70px;
     font-size: 36px;
     margin-left: 50px;
-  }
+    color: rgba(255,255,255, .5);
 
-  @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+    &:hover {
+      cursor:pointer;
+      color: rgba(255, 255, 255, .8)
+    }
   }
 }
+@media(min-width: $media_breakpoint) {
+    .sidenav {
+      padding-top: 15px;
+
+      & a {
+        font-size: 18px;
+      }
+
+      & .closebtn {
+        right: 10px;
+      }
+    }
+  }

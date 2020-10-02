@@ -104,13 +104,10 @@ class App extends React.Component<Props, State> {
     };
     
     return (
-        <Fragment>
-
-
 		<div className="container-fluid app">
 			{this.props.auth.loggedIn &&
 				<div id="mySidenav" className="sidenav">
-                    <a href="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</a>
+                    <div className="closebtn" onClick={this.closeNav}>x</div>
                     <Navigation closeNav={this.closeNav} />
                 </div>
 			}
@@ -156,7 +153,6 @@ class App extends React.Component<Props, State> {
 				</div>
 			</div>
 		</div>
-            </Fragment>
     );
   }
 }

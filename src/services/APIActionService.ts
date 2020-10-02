@@ -2,7 +2,11 @@ import Service from './Service';
 import FunctionsResponsesDTO from '../dto/FunctionsResponsesDTO';
 import Order from "../models/OrderModel";
 
-class AdminService extends Service {
+class APIActionService extends Service {
+
+    public getTimeZones = (): Promise<string[]> => {
+        return this._get<string[]>(`dashboard/get_time_zones/`);
+    }
 
     public sendWeeklyEmails = (): Promise<FunctionsResponsesDTO> => {
         return this._get(`dashboard/send_weekly_email/`);
@@ -22,4 +26,4 @@ class AdminService extends Service {
     }
 }
 
-export default new AdminService();
+export default new APIActionService();

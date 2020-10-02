@@ -4,12 +4,14 @@ import './profile.scss';
 import Operator from "../../models/OperatorModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 import authService from '../../services/AuthService';
+import actionsService from '../../services/APIActionService';
 
 export const Profile = (): React.ReactElement => {
     const [operator, setOperator] = useState<Operator>(new Operator());
     const [errors, setErrors] = useState<string[]>([]);
     const [hasUpdates, setHasUpdates] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [timeZones, setTimeZones] = useState<string[]>([]);
 
     const [updatingPassword, setUpdatingPassword] = useState(false);
     const [currentPassword, setCurrentPassword] = useState('');
@@ -20,12 +22,17 @@ export const Profile = (): React.ReactElement => {
     let savedOperator: Operator;
 
     useEffect(() => {
-        operatorService.getMe()
-            .then((op: Operator) => {
-                updateOperator(op, true);
-                savedOperator = op;
+        Promise.all([
+            operatorService.getMe(),
+            actionsService.getTimeZones()
+        ])
+            .then((values) => {
+                updateOperator(values[0], true);
+                savedOperator = values[0];
+
+                setTimeZones(values[1]);
             })
-            .catch((err) => window.alert('unable to load operator info'))
+            .catch(() => window.alert('unable to load page'))
     }, [])
 
     const savePassword = (): void => {
@@ -101,6 +108,10 @@ export const Profile = (): React.ReactElement => {
 
     return (
         <div className='row profile justify-content-center'>
+            <div className='col-12 col-md-7'>
+                <h3>profile</h3>
+                <hr/>
+            </div>
             <div className='col-12 col-md-7'>
                 <fieldset disabled={saving}>
                     <div className="accordion" id="myAccordion">
@@ -209,14 +220,18 @@ export const Profile = (): React.ReactElement => {
                                         </div>
                                         <div className='col-12 col-md-6'>
                                             time zone:
-                                            <select className={`form-control ${errors.indexOf('timezone') > -1 ? 'profile__error_border' : ''}`} value={operator.timezone}
+                                            <select className={`form-control ${errors.indexOf('timezone') > -1 ? 'profile__error_border' : ''}`}
+                                                    value={operator.timezone}
                                                     onChange={(e:ChangeEvent<HTMLSelectElement>) =>
                                                        updateOperator({...operator, timezone: e.target.value})
                                                    }
                                             >
                                                 <option value={''}>choose</option>
-                                                <option value={'tz1'}>tz1</option>
-                                                <option value={'tz2'}>tz2</option>
+                                                {
+                                                    timeZones.map((zone: string) =>
+                                                        <option value={zone}>{zone}</option>
+                                                    )
+                                                }
                                             </select>
                                         </div>
                                         <div className='col-12 col-md-6 mt-2'>

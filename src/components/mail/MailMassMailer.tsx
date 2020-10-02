@@ -4,7 +4,7 @@ import deliveryWindowService from '../../services/DeliveryWindowService';
 import deliveryDayService from '../../services/DeliveryDayService';
 import DeliveryDay from "../../models/DeliveryDayModel";
 import DeliveryWindow from "../../models/DeliveryWindowModel";
-import adminService from '../../services/AdminService';
+import adminService from '../../services/APIActionService';
 
 interface Props {
     match: any

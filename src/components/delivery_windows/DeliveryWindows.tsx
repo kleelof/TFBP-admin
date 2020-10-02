@@ -45,9 +45,13 @@ export const DeliveryWindows = (props: Props): React.ReactElement => {
 
     return (
         <div className="row delivery_windows">
+            <div className='col-12'>
+                <h3>delivery windows</h3>
+                <hr/>
+            </div>
             <div className={'col-12'}>
                 <div className='row'>
-                    <div className='col-8 col-md-10'>
+                    <div className='col-8 col-md-3'>
                         <input type='text' className='form-control'placeholder='new delivery window name'
                                onChange={(e:ChangeEvent<HTMLInputElement>) => setNewWindow(e.target.value)}
                         />

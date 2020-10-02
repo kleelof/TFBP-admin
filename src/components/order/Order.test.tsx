@@ -4,7 +4,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import OrderEmail from "./OrderEmail";
 import {BuildOrder} from "../../../__mocks__/mockFactories";
 import Order from "../../models/OrderModel";
-import adminService from '../../services/AdminService';
+import adminService from '../../services/APIActionService';
 
 configure ({adapter: new Adapter()});
 
