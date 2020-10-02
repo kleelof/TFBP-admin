@@ -205,11 +205,11 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
             </div>
             <div className='col-12 col-md-10 text-center mt-2'>
                 <button
-                    onClick={() => history.push({pathname: '/dashboard/delivery_window'})}
+                    onClick={() => history.goBack()}
                     className={'btn btn-outline-info ml-2'}
                     disabled={disabled}
                 >
-                    return to delivery windows
+                    go back
                 </button>
             </div>
         </div>

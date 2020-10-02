@@ -80,6 +80,7 @@
       border: 1px solid $warning_fill;
       padding: 3px;
       margin: 5px;
+      overflow-y: auto;
     }
 
     &__time {

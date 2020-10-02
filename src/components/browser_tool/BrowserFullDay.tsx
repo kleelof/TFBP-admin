@@ -47,13 +47,26 @@ export default class BrowserFullDay extends React.Component<Props, State> {
 
         return(
             <div className={'row browser_full_day justify-content-center'}>
+                <div className='col-12 text-center'>
+                    <h5>
+                        {momentHelper.asFullDate(this.state.targetDate)}
+                    </h5>
+                </div>
                 <div className={'col-12 col-md-7'}>
-                    <div className={'col-12'}>
-                        <div className={'col-12 row browser_full_day__date'}>
-                            {momentHelper.asFullDate(this.state.targetDate)}
-                        </div>
+                    <div className={'row'}>
                         <div className={'col-12'}>
-                            <div className={'row mt-2'}>
+                            <div className={'col-12 text-center mt-2'}>
+                                <button
+                                    className={'btn btn-outline-info'}
+                                    onClick={() => this.props.history.goBack()}
+                                    >return to calendar</button>
+
+                                <button
+                                    className={'btn btn-outline-primary ml-2'}
+                                    onClick={() => this.props.history.push({pathname: '/dashboard/delivery_window'})}
+                                    >create delivery window</button>
+                            </div>
+                            <div className={'row mt-2 justify-content-center'}>
                                 {this.state.counts.length > 0 &&
                                     this.state.counts.map((dto:DeliveryWindowWithCountsDTO) =>
                                         <div className={'col-12 col-md-6'} key={`dto_${dto.window.id}`}>
@@ -71,17 +84,6 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                                     </div>
                                 }
                             </div>
-                        </div>
-                        <div className={'col-12 text-center mt-2'}>
-                            <button
-                                className={'btn btn-outline-primary'}
-                                onClick={() => this.props.history.push({pathname: '/dashboard/delivery_window/add'})}
-                                >create delivery window</button>
-
-                            <button
-                                className={'btn btn-outline-info ml-2'}
-                                onClick={() => this.props.history.goBack()}
-                                >return to calendar</button>
                         </div>
                     </div>
                 </div>

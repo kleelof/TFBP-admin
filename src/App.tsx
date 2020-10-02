@@ -122,7 +122,7 @@ class App extends React.Component<Props, State> {
                 </div>
             </div>
 			<div className="row app__page">
-				<div className="col-12">
+				<div className="col-12 mt-2">
 					<Switch>
                         <PrivateRoute path='/dashboard/browser/day/:targetDate' component={BrowserFullDay} />
                         <PrivateRoute path='/dashboard/browser/:month/:year' component={BrowserTool} />
