@@ -1,111 +1,97 @@
-import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React, {useState} from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState, actions } from '../../store/store';
+import './navigation.scss';
 
-import { AuthState } from '../../store/auth/authReducer';
-import { AppState, AppActions } from '../../store/store';
-import { dispatchLogout } from '../../store/auth/authActions';
-
-interface LinkStateProps {
-    auth: AuthState
+interface Props {
+    closeNav: () => void
 }
 
-interface LinkDispatchProps {
-    logout: () => void;
-}
+export const Navigation = (props: Props): React.ReactElement => {
+    const [doLogin, setDoLogin] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(');')
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-type Props = LinkStateProps & LinkDispatchProps
-
-interface State {
-    doLogin: boolean
-}
-
-class Navigation extends React.Component<Props, State> {
-
-    state = {
-        doLogin: false
+    const navigateToPage = (pathname: string): void => {
+        props.closeNav();
+        history.push({pathname})
     }
 
-    private logout = (): void => {
-        this.props.logout();
+    const logout = (): void => {
+        dispatch({type: actions.LOGOUT});
     }
 
-    public render() {
-        if (this.state.doLogin) return <Redirect to="/dashboard/login" />
+    if (doLogin)
+        return <Redirect to="/dashboard/login" />
 
-        return (
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/profile">
-                                profile</Link>
+    return (
+        <div className="navigation">
+            <ul className="">
+                <li onClick={() => navigateToPage("/dashboard/browser")}>
+                    dashboard
+                </li>
+                <li onClick={() => navigateToPage("/dashboard/profile")}>
+                    profile
+                </li>
+                <li onClick={() => setShowDropdown('menu')}>
+                    menu
+                    <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'menu' ? 'open' : 'close'}`}>
+                        <li onClick={() => navigateToPage("/dashboard/menu/en")}>
+                            entrees
                         </li>
-                        <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/browser">
-                                dashboard</Link>
+                        <li onClick={() => navigateToPage("/dashboard/menu/ap")}>
+                            appetizers
                         </li>
-                        <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/menu/en">
-                                menu</Link>
+                        <li onClick={() => navigateToPage("/dashboard/menu/si")}>
+                            sides
                         </li>
-                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/deliveries">
-                                Delivery Menus</Link>
-                        </li>
-                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/delivery_window">
-                                Delivery Windows</Link>
-                        </li>
-                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/zone">
-                                Delivery Zones</Link>
-                        </li>
-                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/coupons">
-                                    Coupons</Link>
-                        </li>
-                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/mail">
-                                    Mail</Link>
-                        </li>
-                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to="/dashboard/newsletter">
-                                    Newsletters</Link>
-                        </li>
-                        <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
-                            <Link className="nav-link" to='/dashboard/orders'>
-                                Orders</Link>
+                        <li onClick={() => navigateToPage("/dashboard/menu/de")}>
+                            desserts
                         </li>
                     </ul>
-                </div>
-                <span className="navbar__login">
-                    {
-                        this.props.auth.loggedIn ?
-                            <button className="btn btn-sm btn-outline-danger" onClick={this.logout}>Logout</button>
-                            :
-                            <div
-                                className="btn btn-outline-success"
-                                onClick={() => this.setState({doLogin: true})}
-                                >Login</div>
-                    }
-                </span>
-            </nav>
-        )
-    }
+                </li>
+                <li onClick={() => setShowDropdown('delivery')}>
+                    delivery
+                    <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'delivery' ? 'open' : 'close'}`}>
+                        <li onClick={() => navigateToPage("/dashboard/deliveries")}>
+                            menus
+                        </li>
+                        <li onClick={() => navigateToPage("/dashboard/delivery_window")}>
+                            windows
+                        </li>
+                        <li onClick={() => navigateToPage("/dashboard/zone")}>
+                            zones
+                        </li>
+                    </ul>
+                </li>
+                <li onClick={() => navigateToPage("/dashboard/coupons")}>
+                    coupons
+                </li>
+                <li onClick={() => setShowDropdown('mail')}>
+                    mail
+                    <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'mail' ? 'open' : 'close'}`}>
+                        <li onClick={() => navigateToPage("/dashboard/mail/mass_mailer")}>
+                            mass mailer
+                        </li>
+                        <li onClick={() => navigateToPage("/dashboard/mailer/list")}>
+                            mailing list
+                        </li>
+                    </ul>
+                </li>
+                <li onClick={() => navigateToPage("/dashboard/newsletter")}>
+                    newsletters
+                </li>
+                <li onClick={() => navigateToPage("/dashboard/orders")}>
+                    orders
+                </li>
+            </ul>
+            <span className="navigation__login text-center">
+                <button className="btn btn-sm btn-outline-danger" onClick={logout}>Logout</button>
+            </span>
+        </div>
+    )
+
 }
-
-const mapStateToProps = (state: AppState): LinkStateProps => ({
-    auth: state.authReducer
-})
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
-    logout: bindActionCreators(dispatchLogout, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation) 

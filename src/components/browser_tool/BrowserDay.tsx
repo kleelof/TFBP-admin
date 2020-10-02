@@ -17,7 +17,6 @@ export const BrowserDay = (props: Props): React.ReactElement => {
     const history = useHistory();
 
     useEffect(() => {
-
         deliveryWindowService.listWithCounts(momentHelper.asDateSlug(props.date))
             .then((countsData: DeliveryWindowWithCountsDTO[]) => {
                 setCountsData(countsData);
@@ -35,6 +34,7 @@ export const BrowserDay = (props: Props): React.ReactElement => {
     let deliveryCount: number = 0;
     let dishCount: number = 0;
 
+    // check if the day has any delivery windows
     if (typeof countsData === 'object'){
         hasWindows = true;
         countsData?.forEach((dto: DeliveryWindowWithCountsDTO) => {
@@ -46,11 +46,11 @@ export const BrowserDay = (props: Props): React.ReactElement => {
     return(
         <div
             className={'row browser_day nopadding'}
-            onClick={() => history.push({pathname: `/dashboard/browser/day/${momentHelper.asDateSlug(props.date)}`})}
         >
             <div className={'col-12 nopadding'}>
-
-                <div className={`browser_day__date ${momentHelper.asDateSlug(props.date) === today ? 'browser_day__date--today' : ''}`}>
+                <div className={`browser_day__date ${momentHelper.asDateSlug(props.date) === today ? 'browser_day__date--today' : ''}`}
+                     onClick={() => history.push({pathname: `/dashboard/browser/day/${momentHelper.asDateSlug(props.date)}`})}
+                >
                     {props.date.getDate()}
                 </div>
                 <div className='browser_day__data'>

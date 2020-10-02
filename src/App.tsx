@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React, { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { bindActionCreators } from 'redux';
@@ -13,10 +13,12 @@ import User from './models/User';
 
 import './App.css';
 
-import Navigation from './components/nav/Navigation';
+import menuIcon from './assets/menu_icon.png';
+
+import {Navigation} from './components/nav/Navigation';
 import Deliveries from './components/delivery/Deliveries';
 import DeliveryDay from './components/delivery/DeliveryDayComponent';
-import Menu from './components/menu/Menu';
+import {Menu} from './components/menu/Menu';
 import Login from './components/authentication/Login';
 import Orders from './components/order/Orders';
 import Export from './components/order/Export';
@@ -28,7 +30,6 @@ import OrderEmail from "./components/order/OrderEmail";
 import {Mail} from "./components/mail/Mail";
 import {Newsletters} from "./components/newsletter/Newsletters";
 import NewsletterEdit from "./components/newsletter/NewsletterEdit";
-import Home from "./components/home/Home";
 import BrowserTool from "./components/browser_tool/BrowserTool";
 import BrowserFullDay from "./components/browser_tool/BrowserFullDay";
 import {DeliveryWindows} from "./components/delivery_windows/DeliveryWindows";
@@ -58,6 +59,17 @@ class App extends React.Component<Props, State> {
     connecting: true,
     loggedIn: false
   }
+
+  openNav = () => {
+      // @ts-ignore
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+
+/* Set the width of the side navigation to 0 */
+ closeNav = () => {
+  // @ts-ignore
+     document.getElementById("mySidenav").style.width = "0";
+}
 
   public componentDidMount = () => {
     const refresh_token: string | null = window.localStorage.getItem('refresh_token');
@@ -92,18 +104,28 @@ class App extends React.Component<Props, State> {
     };
     
     return (
-		<div className="container-fluid">
-			
+        <Fragment>
+
+
+		<div className="container-fluid app">
 			{this.props.auth.loggedIn &&
-				<div className="row">
-					<div className="col-12">
-						<Navigation/>
-					</div>
-				</div>
+				<div id="mySidenav" className="sidenav">
+                    <a href="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</a>
+                    <Navigation closeNav={this.closeNav} />
+                </div>
 			}
-			<div className="row app-page">
+			<div className='row app_header'>
+                <div className='col-12'>
+                    <div className='app_header__title'>
+                        Pearako Operator Dashboard
+                    </div>
+                    <div className='app_header__menu_toggle' onClick={this.openNav}>
+                        <img src={menuIcon} alt='open the menu'/>
+                    </div>
+                </div>
+            </div>
+			<div className="row app__page">
 				<div className="col-12">
-					<br/>
 					<Switch>
                         <PrivateRoute path='/dashboard/browser/day/:targetDate' component={BrowserFullDay} />
                         <PrivateRoute path='/dashboard/browser/:month/:year' component={BrowserTool} />
@@ -134,6 +156,7 @@ class App extends React.Component<Props, State> {
 				</div>
 			</div>
 		</div>
+            </Fragment>
     );
   }
 }

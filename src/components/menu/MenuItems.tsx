@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import menuItemService from '../../services/MenuItemService';
 import {config} from '../../config';
 import './menu.scss';
+import {NewMenuItem} from "./NewMenuItem";
 
 export const MenuItemCategories: any = {
     en: 'Entrees',
@@ -32,9 +33,27 @@ export const MenuItems = (): React.ReactElement => {
     }, [params.category])
 
     const sortedItems: MenuItem[] = menuItems.sort((a: MenuItem, b: MenuItem) => a.name > b.name ? 1 : -1);
-    
+
+    const menuType: string = params.category === 'en' ?
+                            'entree'
+                            :
+                            params.category === 'ap' ?
+                                'appetizer'
+                                :
+                                params.category === 'si' ?
+                                    'side'
+                                    :
+                                    'dessert'
     return(
         <div className="row menu_items mt-3">
+            <div className='col-12 menu__title'>
+                <h3>
+                    { menuType }s
+                </h3>
+            </div>
+            <div className="col-12">
+                <NewMenuItem key={Math.random().toString()} />
+            </div>
             {
                 sortedItems.sort((a: MenuItem, b: MenuItem) =>
                                     a.name.toLowerCase() > b.name.toLowerCase() ?

@@ -28,7 +28,7 @@ export const NewMenuItem = (): React.ReactElement => {
             {
                 open === false ?
                     <div className="col-12 new_menu_item__add_link" onClick={()=> setOpen(true)}>
-                        + Add New Item
+                        + add new menu item
                     </div>
                     :
                     <Fragment>
