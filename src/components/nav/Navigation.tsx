@@ -45,15 +45,15 @@ class Navigation extends React.Component<Props, State> {
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/profile">
-                                Profile</Link>
+                                profile</Link>
                         </li>
                         <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/browser">
-                                Home</Link>
+                                dashboard</Link>
                         </li>
                         <li className="nav-item active" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/menu/en">
-                                Menu</Link>
+                                menu</Link>
                         </li>
                         <li className="nav-item" data-toggle="collapse" data-target="#navbarNav">
                             <Link className="nav-link" to="/dashboard/deliveries">

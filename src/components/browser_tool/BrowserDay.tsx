@@ -5,13 +5,15 @@ import deliveryWindowService from '../../services/DeliveryWindowService';
 import './browser.scss';
 import { useHistory } from 'react-router-dom';
 import momentHelper from '../../helpers/MomentHelper';
+import LoadingOverlay from "../overlays/LoadingOverlay";
 
 interface Props {
     date: Date
 }
 
 export const BrowserDay = (props: Props): React.ReactElement => {
-    const [countsData, setCountsData] = useState<DeliveryWindowWithCountsDTO[] | undefined>(undefined)
+    const [countsData, setCountsData] = useState<DeliveryWindowWithCountsDTO[] | string>([]);
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
 
     useEffect(() => {
@@ -21,10 +23,26 @@ export const BrowserDay = (props: Props): React.ReactElement => {
                 setCountsData(countsData);
             })
             .catch( err => window.alert(`unable to load date: ${props.date.toISOString().slice(0,10)}`))
+            .then(() => setLoading(false))
 
     }, []);
 
+    if (loading)
+        return <LoadingOverlay />
+
     const today: string = momentHelper.asDateSlug(new Date());
+    let hasWindows: boolean = false
+    let deliveryCount: number = 0;
+    let dishCount: number = 0;
+
+    if (typeof countsData === 'object'){
+        hasWindows = true;
+        countsData?.forEach((dto: DeliveryWindowWithCountsDTO) => {
+            deliveryCount += dto.order_count;
+            dishCount += dto.dish_count
+        })
+    }
+
     return(
         <div
             className={'row browser_day nopadding'}
@@ -35,23 +53,15 @@ export const BrowserDay = (props: Props): React.ReactElement => {
                 <div className={`browser_day__date ${momentHelper.asDateSlug(props.date) === today ? 'browser_day__date--today' : ''}`}>
                     {props.date.getDate()}
                 </div>
-                <div className='browser_day__windows'>
-                    {
-                        countsData === undefined ? <div></div> :
-                            countsData.map((dto: DeliveryWindowWithCountsDTO) =>
-                                <div className={'browser_day__window'} key={`dto_${dto.window.id}`}>
-                                    <div className={'d-none d-md-block'}>
-                                        {dto.window.name}
-                                    </div>
-                                    <div className={''}>
-                                        {
-                                            `${dto.order_count}  ${dto.dish_count}`
-                                        }
-                                    </div>
-                                    <hr/>
-                                </div>
-                            )
-
+                <div className='browser_day__data'>
+                    {(hasWindows && deliveryCount === 0) &&
+                            <div className='browser_day__no_orders'>no orders</div>
+                    }
+                    {(hasWindows && deliveryCount > 0) &&
+                        <Fragment>
+                            <div className='browser_day__delivery_count'><span className='d-none d-md-inline'>deliveries: </span>{deliveryCount}</div>
+                            <div className='browser_day__dish_count'><span className='d-none d-md-inline'>dishes: </span>{dishCount}</div>
+                        </Fragment>
                     }
                 </div>
             </div>

@@ -53,13 +53,20 @@ export const Zones = (): React.ReactElement => {
                         <hr/>
                     </div>
                     {
-                        zones.map((zone: Zone) => {
-                            return(
-                                    <div className={'col-12 col-md-6 zones__zone_wrapper'} key={`zone_${zone.id}`}>
-                                        <ZoneTool zone={zone}/>
-                                    </div>
-                                )
-                        })
+                        zones.length > 0 ?
+                            zones.map((zone: Zone) => {
+                                return(
+                                        <div className={'col-12 col-md-6 zones__zone_wrapper'} key={`zone_${zone.id}`}>
+                                            <ZoneTool zone={zone}/>
+                                        </div>
+                                    )
+                            })
+                            :
+                            <div className='col-12'>
+                                <p>
+                                    Delivery zones are defined by a collection of zip codes. Once you creat a zone, you will be ready to create your first Delivery Window.
+                                </p>
+                            </div>
                     }
                 </div>
             </div>

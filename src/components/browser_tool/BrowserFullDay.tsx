@@ -53,8 +53,8 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                             {momentHelper.asFullDate(this.state.targetDate)}
                         </div>
                         <div className={'col-12'}>
-                            <div className={'row'}>
-                                {
+                            <div className={'row mt-2'}>
+                                {this.state.counts.length > 0 &&
                                     this.state.counts.map((dto:DeliveryWindowWithCountsDTO) =>
                                         <div className={'col-12 col-md-6'} key={`dto_${dto.window.id}`}>
                                             <BrowserWindowTools
@@ -65,11 +65,21 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                                         </div>
                                     )
                                 }
+                                {this.state.counts.length === 0 &&
+                                    <div className='col-12 text-center'>
+                                        delivery windows define the days and times of day you will be delivering
+                                    </div>
+                                }
                             </div>
                         </div>
-                        <div className={'col-12 text-center'}>
+                        <div className={'col-12 text-center mt-2'}>
                             <button
-                                className={'btn btn-outline-info'}
+                                className={'btn btn-outline-primary'}
+                                onClick={() => this.props.history.push({pathname: '/dashboard/delivery_window/add'})}
+                                >create delivery window</button>
+
+                            <button
+                                className={'btn btn-outline-info ml-2'}
                                 onClick={() => this.props.history.goBack()}
                                 >return to calendar</button>
                         </div>

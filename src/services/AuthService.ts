@@ -33,6 +33,12 @@ class AuthService extends Service {
         window.localStorage.removeItem('username');
     }
 
+    public updatePassword = (user: User, current_password: string, new_password: string): Promise<any> => {
+        return this._post(`${this.appName}/${this.view}/update_password/`, {
+            current_password, new_password, user_id: user.id
+        })
+    }
+
     public validateToken = (refreshToken: string): Promise<User> => {
         return new Promise<User>((resolve, reject) => {
             this._get<User>(`${this.viewPath}/user`)

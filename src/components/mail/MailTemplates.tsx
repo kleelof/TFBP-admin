@@ -3,8 +3,8 @@ import MailTemplateComponent from "./MailTemplateComponent";
 
 export const MailTemplates = (): React.ReactElement => {
     const templateSlugs: string[] = [
-        'upcoming-delivery',
-        'upcoming-delivery-day',
+        'upcoming_delivery',
+        'upcoming_delivery_day',
         'newsletter'
     ]
 

@@ -88,8 +88,8 @@ describe('RouteOrganizerEntry tests', () => {
                     canMoveUp={false}
                 />
             )
+            const t = component.text()
             expect(component.text()).toContain('street_address_1');
-            expect(component.text()).toContain('5 minutes');
             expect(component.find('.plan_controls__up_btn').props().disabled).toBe(true);
             expect(component.find('.plan_controls__down_btn').props().disabled).toBe(false);
         })

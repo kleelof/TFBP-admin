@@ -72,30 +72,37 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                     </div>
                 </div>
                 <div className={'col-12'}>
-                    <table className={'table'}>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>code</th>
-                                <th>mode</th>
-                                <th>calculation</th>
-                                <th>uses</th>
-                                <th>start value</th>
-                                <th>current value</th>
-                                <th>expire</th>
-                                <th>email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                coupons.map((coupon: Coupon) =>
-                                    <CouponComponent
-                                        coupon={coupon} key={`c_${coupon.id}`}
-                                        couponUpdated={this.couponUpdated} />
-                                )
-                            }
-                        </tbody>
-                    </table>
+                    {
+                        coupons.length > 0 ?
+                            <table className={'table'}>
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>code</th>
+                                    <th>mode</th>
+                                    <th>calculation</th>
+                                    <th>uses</th>
+                                    <th>start value</th>
+                                    <th>current value</th>
+                                    <th>expire</th>
+                                    <th>email</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    coupons.map((coupon: Coupon) =>
+                                        <CouponComponent
+                                            coupon={coupon} key={`c_${coupon.id}`}
+                                            couponUpdated={this.couponUpdated}/>
+                                    )
+                                }
+                                </tbody>
+                            </table>
+                            :
+                            <p>
+                                Coupons can be used for ad campaigns, rewarding great customers or an option to refunding
+                            </p>
+                    }
                 </div>
             </div>
         )

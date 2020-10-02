@@ -12,7 +12,7 @@ export default class DeliveryWindow extends ModelBase {
     public start_time!: string;
     public end_time!: string;
     public day!:number; // 0 = Monday
-    public start_date!: string | null;
+    public start_date: string | null;
     public end_date!: string | null;
     public zones!: Zone[];
 
@@ -24,7 +24,7 @@ export default class DeliveryWindow extends ModelBase {
         this.end_time = end_time || "";
         this.day = day || 0;
         this.id = id || -1;
-        this.active = active || true;
+        this.active = active === undefined ? false : active;
         this.start_date = start_date || null;
         this.end_date = end_date || null;
     }

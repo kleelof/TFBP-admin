@@ -5,6 +5,7 @@ import zoneService from '../../services/ZoneService';
 import { useParams, useHistory } from 'react-router-dom';
 import DeliveryWindow from "../../models/DeliveryWindowModel";
 import Zone from "../../models/ZoneModel";
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 
 
 export const DeliveryWindowEdit = (): React.ReactElement => {
@@ -15,17 +16,23 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
     const [disabled, setDisabled] = useState<boolean>(false);
     const [zones, setZones] = useState<Zone[]>([]);
     const [selectedZone, setSelectedZone] = useState<number>(-1)
+    const [saving, setSaving] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     useEffect(() => {
         if (params.id === undefined) {
-            setShowLoading(false);
+            zoneService.get<Zone[]>()
+                .then((zones: Zone[]) => setZones(zones))
+                .catch(() => window.alert('unable to load zones'))
+                .then(() => setShowLoading(false));
         } else {
             Promise.all([
                 deliveryWindowService.get<DeliveryWindow>(params.id),
                 zoneService.get<Zone[]>()
             ])
                 .then((values) => {
-                    setWindow(values[0]);
+                    let deliveryWindow: DeliveryWindow = values[0];
+                    setWindow(deliveryWindow);
                     setZones(values[1]);
                     if (values[1].length > 0) setSelectedZone(values[1][0].id);
                     setShowLoading(false);
@@ -35,11 +42,24 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
     }, []);
 
     const addZone = (): void => {
-        deliveryWindowService.addZone(deliveryWindow.id, selectedZone)
-            .then((deliveryWindow: DeliveryWindow) => setWindow(deliveryWindow))
-            .catch(() => window.alert('unable to add zone'))
+        if (zones.length === 0) {
+            history.push({pathname: '/dashboard/zone'})
+        } else {
+            deliveryWindowService.addZone(deliveryWindow.id, selectedZone)
+                .then((deliveryWindow: DeliveryWindow) => setWindow(deliveryWindow))
+                .catch(() => window.alert('unable to add zone'))
+        }
     }
 
+    const deleteWindow = (): void => {
+        if (!window.confirm('are you sure you want to delete this window? \n\nWARNING:\nthis cannot be reversed.')) return;
+
+        setDeleting(true)
+        deliveryWindowService.delete(deliveryWindow.id)
+            .then(() => history.goBack())
+            .catch(err => window.alert('unable to delete'))
+            .then(() => setDeleting(false))
+    }
     const removeZone = (zone: Zone): void => {
         if (!window.confirm(`Are you sure you want to remove '${zone.name}'?`)) return
 
@@ -50,21 +70,11 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
 
     const saveWindow = (): void => {
         setDisabled(true);
+        setSaving(true);
 
-        if (deliveryWindow.id === -1) {
-            deliveryWindowService.add<DeliveryWindow>(deliveryWindow)
-                .then((deliveryWindow: DeliveryWindow) => {
-                    setWindow(deliveryWindow);
-                    window.alert('your delivery window has been created')
-                })
-                .catch( err => window.alert('unable to create window'))
-                .then(() => setDisabled(false))
-        } else {
-            deliveryWindowService.update<DeliveryWindow>(deliveryWindow.id, deliveryWindow)
-                .then(() => {})
+        deliveryWindowService.update<DeliveryWindow>(deliveryWindow.id, deliveryWindow)
+                .then(() => history.goBack())
                 .catch( err => window.alert('unable to update window'))
-                .then(() => setDisabled(false))
-        }
     }
 
     const updateData = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -127,7 +137,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                                value={deliveryWindow.start_date || ''} onChange={updateData}/>
                     </div>
                     <div className={'col-2 mt-4'}>
-                        <button className={'btn btn-outline-danger'}
+                        <button className={'btn btn-sm btn-outline-danger'}
                                 onClick={() => setWindow({...deliveryWindow, start_date: null})}
                         >clear</button>
                     </div>
@@ -137,17 +147,8 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                                value={deliveryWindow.end_date || ''} onChange={updateData} />
                     </div>
                     <div className={'col-2 mt-4'}>
-                        <button className={'btn btn-outline-danger'}
+                        <button className={'btn btn-sm btn-outline-danger'}
                                 onClick={() => setWindow({...deliveryWindow, end_date: null})}>clear</button>
-                    </div>
-                    <div className={'col-12 mt-2 text-right'}>
-                        <button
-                            className={'btn btn-outline-success'}
-                            disabled={disabled}
-                            onClick={saveWindow}
-                        >
-                            save updates
-                        </button>
                     </div>
                 </div>
             </div>
@@ -158,13 +159,21 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                 <h5>zones</h5>
                 <div className='row'>
                     <div className='col-9'>
-                        <select className='form-control' onChange={(e:ChangeEvent<HTMLSelectElement>) => setSelectedZone(parseInt(e.target.value))}>
-                            {
-                                zones.map((zone: Zone) =>
-                                    <option key={`zone_${zone.id}`} value={zone.id}>{zone.name}</option>
-                                )
-                            }
-                        </select>
+                        {
+                            zones.length > 0 ?
+                                <select className='form-control'
+                                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedZone(parseInt(e.target.value))}>
+                                    {
+                                        zones.map((zone: Zone) =>
+                                            <option key={`zone_${zone.id}`} value={zone.id}>{zone.name}</option>
+                                        )
+                                    }
+                                </select>
+                                :
+                                <div className='dwe__no_zones_message'>
+                                    no zones available
+                                </div>
+                        }
                     </div>
                     <div className='col-2'>
                         <button className='btn btn-outline-success' onClick={addZone}>
@@ -174,7 +183,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                 </div>
                 <hr/>
                 <div className='dwe_zones__zones'>
-                    {
+                    {deliveryWindow.zones &&
                         deliveryWindow.zones.map((zone: Zone) =>
                             <div className='row dwe_zones__zone mt-1'>
                                 <div className='col-9'>{zone.name}</div>
@@ -185,6 +194,14 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                         )
                     }
                 </div>
+            </div>
+            <div className={'col-12 col-md-10 mt-2 text-center'}>
+                <LoadingIconButton label='save updates' onClick={saveWindow} busy={saving} disabled={disabled}
+                                   btnClass={'btn btn-outline-success'}
+                />
+                <LoadingIconButton label='delete' onClick={deleteWindow} busy={deleting} disabled={disabled}
+                                   btnClass={'btn btn-outline-danger'} outerClass={'ml-2'}
+                />
             </div>
             <div className='col-12 col-md-10 text-center mt-2'>
                 <button

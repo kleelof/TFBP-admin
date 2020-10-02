@@ -54,6 +54,11 @@
     cursor: pointer;
   }
 
+  &__data {
+    font-weight: bold;
+    color: rgba(255, 255, 255, .8);
+  }
+
   &__date {
     padding: 5px;
     background-color: $info_highlight;
@@ -64,6 +69,18 @@
       background-color: $success_fill;
       color: white;
     }
+  }
+
+  &__delivery_count {
+    background-color: $primary_fill;
+  }
+
+  &__dish_count {
+    background-color: $secondary_fill;
+  }
+
+  &__no_orders {
+    background-color: $danger_highlight;
   }
 }
 

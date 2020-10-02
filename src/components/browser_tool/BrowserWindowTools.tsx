@@ -198,7 +198,7 @@ export const PrepDisplay = (props: PrepDisplayProps): React.ReactElement => {
 
     return (
         <div className={'prep_list'}>
-            <span className='prep_list__header'>{momentHelper.asDateSlug(props.date)} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
+            <span className='prep_list__header'>{moment(props.date).utc().format('YYYY-MM-DD')} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
             <table className='prep_list__list'>
                 <thead>
                     <tr>

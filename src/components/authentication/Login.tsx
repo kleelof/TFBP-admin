@@ -48,6 +48,7 @@ class Login extends React.Component<Props, State> {
 
         authService.authenticate(this.state.email, this.state.password)
             .then( (dto: AuthenticateDTO) => {
+                console.log(dto);
                 this.props.login(dto.user, dto.operator_token);
             })
             .catch((err: any) => {

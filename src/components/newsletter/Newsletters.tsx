@@ -33,22 +33,29 @@ export const Newsletters = (): React.ReactElement => {
                 <NewsletterAdd />
             </div>
             <div className={'col-12'}>
-                <table className={'table'}>
-                    <thead>
-                        <tr>
-                            <th>title</th>
-                            <th>release</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            newsLetters.map((newsletter: Newsletter) =>
-                                <NewslettersNewsletter newsletter={newsletter} key={`nl_${newsletter.id}`} />
-                            )
-                        }
-                    </tbody>
-                </table>
+                {
+                    newsLetters.length > 0 ?
+                        <table className={'table'}>
+                            <thead>
+                                <tr>
+                                    <th>title</th>
+                                    <th>release</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    newsLetters.map((newsletter: Newsletter) =>
+                                        <NewslettersNewsletter newsletter={newsletter} key={`nl_${newsletter.id}`} />
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                        :
+                        <p>
+                            Newsletters are a great way to keep your customers updated about new menu items and your success
+                        </p>
+                }
             </div>
         </div>
 

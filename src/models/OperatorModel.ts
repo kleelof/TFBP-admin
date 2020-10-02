@@ -18,11 +18,13 @@ export default class Operator extends ModelBase {
     public domain!: string;
     public support_email!: string;
     public timezone!: string;
+    public storefront_template!: string;
 
     public ordering_cutoff_time!: number;
     public upcoming_delivery_notification_time!: number;
     public upcoming_delivery_days_notification_time!: number;
     public auto_notify_upcoming_deliveries!: boolean;
+    public max_future_delivery_windows_time!: number;
 
     public user!: User;
 
@@ -47,7 +49,9 @@ export default class Operator extends ModelBase {
         upcoming_delivery_notification_time: number = 0,
         upcoming_delivery_days_notification_time: number = 0,
         user: User = new User(),
-        auto_notify_upcoming_deliveries: boolean = false
+        auto_notify_upcoming_deliveries: boolean = false,
+        storefront_template: string = '',
+        max_future_delivery_windows_time: number = 0
     ) {
         super();
         this.id = id;
@@ -70,6 +74,8 @@ export default class Operator extends ModelBase {
         this.upcoming_delivery_notification_time = upcoming_delivery_notification_time;
         this.upcoming_delivery_days_notification_time = upcoming_delivery_days_notification_time;
         this.user = user;
-        this.auto_notify_upcoming_deliveries = auto_notify_upcoming_deliveries
+        this.auto_notify_upcoming_deliveries = auto_notify_upcoming_deliveries;
+        this.storefront_template = storefront_template;
+        this.max_future_delivery_windows_time = max_future_delivery_windows_time;
     }
 }
