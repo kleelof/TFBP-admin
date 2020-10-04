@@ -45,9 +45,9 @@ export const BrowserDay = (props: Props): React.ReactElement => {
 
     return(
         <div
-            className={'row browser_day nopadding'}
+            className={'browser_day'}
         >
-            <div className={'col-12 nopadding'}>
+            <div className={'nopadding'}>
                 <div className={`browser_day__date ${momentHelper.asDateSlug(props.date) === today ? 'browser_day__date--today' : ''}`}
                      onClick={() => history.push({pathname: `/dashboard/browser/day/${momentHelper.asDateSlug(props.date)}`})}
                 >
@@ -55,13 +55,22 @@ export const BrowserDay = (props: Props): React.ReactElement => {
                 </div>
                 <div className='browser_day__data'>
                     {(hasWindows && deliveryCount === 0) &&
-                            <div className='browser_day__no_orders'>no orders</div>
+                            <div className='browser_day__no_orders'>
+                                <span className='d-none d-md-inline'>
+                                    no orders
+                                </span>
+                                <br/>
+                                &nbsp;
+                            </div>
                     }
                     {(hasWindows && deliveryCount > 0) &&
                         <Fragment>
                             <div className='browser_day__delivery_count'><span className='d-none d-md-inline'>deliveries: </span>{deliveryCount}</div>
                             <div className='browser_day__dish_count'><span className='d-none d-md-inline'>dishes: </span>{dishCount}</div>
                         </Fragment>
+                    }
+                    {!hasWindows &&
+                        <div>&nbsp;<br/>&nbsp;</div>
                     }
                 </div>
             </div>

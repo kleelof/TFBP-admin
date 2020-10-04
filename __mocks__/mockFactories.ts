@@ -13,6 +13,8 @@ import Route from "../src/models/RouteModel";
 import DeliveryWindow from "../src/models/DeliveryWindowModel";
 import RouteStop from "../src/models/RouteStopModel";
 import {BuildDeliveryWindow} from "./deliveryMocks";
+import PagedResultsDTO from "../src/dto/PagedResultsDTO";
+import ModelBase from "../src/models/ModelBase";
 
 interface BuildCoupon {
     count: number,
@@ -263,6 +265,15 @@ export const BuildRouteStop = (params: IBuildRouteStop): any => {
     }
 
     return items.length > 1 ? items : items[0];
+}
+
+interface IBuildSearchResultsDTO {
+    count: number,
+    results: ModelBase[]
+}
+
+export const BuildSearchResultsDTO = (params: IBuildSearchResultsDTO): PagedResultsDTO => {
+    return new PagedResultsDTO(params.count, params.results);
 }
 
 interface IBuildZone {

@@ -1,5 +1,6 @@
 import { config } from '../config.js';
 import axiosInstance from './axiosApi';
+import PagedResultsDTO from "../dto/PagedResultsDTO";
 
 interface AxiosResponse {
     data: any
@@ -99,6 +100,10 @@ export default class Service {
 
     public search<T>(search: String): Promise<T> {
         return this._get(`${this.appName}/${this.view}/?search=${search}`);
+    }
+
+    public pagedSearchResults = (pageNumber: number = 0): Promise<PagedResultsDTO> => {
+        return this._get(`${this.appName}/${this.view}/${pageNumber === 0 ? '' : '?page=' + pageNumber.toString()}`);
     }
 
     private querizeObject(object: any): String {

@@ -10,6 +10,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import './browser.scss';
 import moment from "moment";
+import {EmailWidget} from "../widgets/email_widget/EmailWidget";
+import MomentHelper from "../../helpers/MomentHelper";
 
 interface Props extends RouteComponentProps {
     dto: DeliveryWindowWithCountsDTO,
@@ -19,7 +21,8 @@ interface Props extends RouteComponentProps {
 
 interface State {
     showLoading: boolean,
-    orders: Order[]
+    orders: Order[],
+    sendingEmail: boolean
 }
 
 class BrowserWindowTools extends React.Component<Props, State>{
@@ -29,7 +32,8 @@ class BrowserWindowTools extends React.Component<Props, State>{
 
         this.state = {
             showLoading: true,
-            orders: []
+            orders: [],
+            sendingEmail: false
         }
     }
 
@@ -55,7 +59,11 @@ class BrowserWindowTools extends React.Component<Props, State>{
         a.download = `delivery_route_${momentHelper.asDateSlug(this.props.date)}.tsv`;
         a.href = window.URL.createObjectURL(bb);
         a.click();
-        console.log(a);
+    }
+
+    private emailingComplete = (): void => {
+        this.setState({sendingEmail: false})
+
     }
 
     private print = (pullType: string): void => {
@@ -100,13 +108,25 @@ class BrowserWindowTools extends React.Component<Props, State>{
 
                             <button
                                 className={'btn-block btn-info'}
-                                onClick={() =>
-                                    this.props.history.push(
-                                        {pathname: `/dashboard/mail/mass_mailer/upcoming_delivery/${momentHelper.asDateSlug(this.props.date)}`})}
+                                onClick={() => this.setState({sendingEmail: true})}
                                 disabled={this.state.orders.length === 0}>
                                 send mail</button>
                         </div>
                     </div>
+
+                    {this.state.sendingEmail &&
+                        <div className='browser_window_tools__emailer'>
+                            <EmailWidget
+                                finished={this.emailingComplete}
+                                prompt='send email to all deliveries'
+                                config={{
+                                    email_type: 'deliveries_email',
+                                    entity_id: this.props.dto.window.id,
+                                    target_date: MomentHelper.asDateSlug(this.props.date, true)
+                                }}
+                            />
+                        </div>
+                    }
                 </div>
             </div>
         )

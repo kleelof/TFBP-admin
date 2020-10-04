@@ -6,10 +6,9 @@
     font-size: 1.5em;
   }
 
-  &_calendar td {
-    height: 100px;
-    width: 150px;
-    max-width: 150px;
+  &__calendar td {
+    height: 70px;
+    width: 14vw;
     border: 2px solid rgba(0, 0, 0, .1);
   }
 
@@ -32,15 +31,7 @@
         cursor: pointer;
       }
     }
-
-    @media(min-width: $media_breakpoint) {
-      &__date {
-        min-width: 300px;
-      }
-    }
   }
-
-
 }
 
 .browser_day {
@@ -57,7 +48,7 @@
   }
 
   &__date {
-    padding: 5px;
+    //padding: 5px;
     background-color: $info_highlight;
     font-weight: bold;
 
@@ -82,6 +73,7 @@
 
   &__no_orders {
     background-color: $danger_highlight;
+    width: 100%;
   }
 }
 
@@ -99,6 +91,17 @@
     border: 2px solid rgba(0, 0, 0, .3);
     padding: 5px;
   }
+
+  &__emailer {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 1);
+  }
+
 }
 
 .print-sheet {
@@ -151,6 +154,20 @@
   }
 }
 
+@media(min-width: $media_breakpoint) {
+  .month_nav {
+    &__date {
+    min-width: 300px;
+  }
+  }
+
+  .browser_tool {
+    &__calendar td {
+      width: 10vw;
+    }
+  }
+}
+
 @media print {
     body * {
         visibility: hidden;
@@ -169,6 +186,8 @@
     .quarter-page {
         page-break-after: always;
     }
+
+
 }
 
 

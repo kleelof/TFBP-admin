@@ -55,14 +55,14 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                 <div className={'col-12 col-md-7'}>
                     <div className={'row'}>
                         <div className={'col-12'}>
-                            <div className={'col-12 text-center mt-2'}>
+                            <div className={'col-12 text-center'}>
                                 <button
-                                    className={'btn btn-outline-info'}
+                                    className={'btn btn-outline-info mt-2'}
                                     onClick={() => this.props.history.goBack()}
                                     >return to calendar</button>
 
                                 <button
-                                    className={'btn btn-outline-primary ml-2'}
+                                    className={'btn btn-outline-primary ml-2 mt-2'}
                                     onClick={() => this.props.history.push({pathname: '/dashboard/delivery_window'})}
                                     >create delivery window</button>
                             </div>

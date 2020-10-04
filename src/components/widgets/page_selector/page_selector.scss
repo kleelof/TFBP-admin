@@ -1,0 +1,24 @@
+@import '../../../scss_variables';
+
+.page_selector {
+  display: inline;
+  clear: both;
+  float: right;
+
+  &__item {
+    float: left;
+    margin-left: 3px;
+    padding: 3px;
+    border: 1px solid rgba(0, 0, 0, .5);
+    min-width: 20px;
+
+    &--selectable:hover {
+      cursor: pointer;
+      background-color: $info_highlight;
+    }
+
+    &--selected {
+      background-color: $success_highlight;
+    }
+  }
+}

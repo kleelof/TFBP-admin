@@ -7,7 +7,6 @@ import RouteStop from "../../models/RouteStopModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 import routeService from '../../services/RouteService';
 import MomentHelper from "../../helpers/MomentHelper";
-import DeliveryWindow from "../../models/DeliveryWindowModel";
 
 interface Props {
     route: Route,
@@ -78,7 +77,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         stops.splice(currentNdx, 0, stop)
 
         for (let x: number = 0; x < stops.length; x ++)
-            stop.current_index = x
+            stops[x].current_index = x
 
         this.setState({stops, routeUpdated: true});
     }

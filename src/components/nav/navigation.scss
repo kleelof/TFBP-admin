@@ -8,10 +8,11 @@
 }
 
 .subnav {
-    background-color: rgba(0, 0, 0, .5);
 
     &__item {
-        color: white;
+        color: black;
         margin: 0 5px;
+        font-size: 1.5em;
+        font-weight: bold;
     }
 }

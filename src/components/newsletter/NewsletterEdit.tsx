@@ -109,6 +109,10 @@ export default class NewsletterEdit extends React.Component<any, State> {
         const saveDisabled: boolean = (this.state.title === this.state.newsletter.title &&
                                             this.state.content === this.state.newsletter.content) ||
                                                 this.state.saving
+
+        const titlePresent: boolean = this.state.content.indexOf('newsletter__email_title') !== -1
+        const contentPresent: boolean = this.state.content.indexOf('newsletter__email_content') !== -1
+
         return (
             <div className={'row newsletter_edit justify-content-center'}>
                 <div className={'col-12 col-md-5'}>
@@ -143,23 +147,27 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                 disabled={saveDisabled}
                                 onClick={this.saveNewsletter}
                                 >save</button>
-                            {this.state.newsletter.release_date === null &&
+                            {(this.state.newsletter.release_date === null && !(!saveDisabled || !titlePresent || !contentPresent)) &&
                                 <button
                                     className={'btn btn-outline-warning newsletter_edit__control_btn mt-2 mr-2'}
-                                    disabled={!saveDisabled}
                                     onClick={this.release}
                                     >release</button>
                             }
                         </div>
                         <div className={'col-12'}>
-                            {this.state.content.indexOf('newsletter__email_title') === -1 &&
+                            { !titlePresent &&
                                 <div className={'newsletter_edit__error'}>
-                                    Missing 'newsletter__email_title' class
+                                    missing 'newsletter__email_title' class
                                 </div>
                             }
-                            {this.state.content.indexOf('newsletter__email_content') === -1 &&
+                            { !contentPresent &&
                                 <div className={'newsletter_edit__error'}>
-                                    Missing 'newsletter__email_content' class
+                                    missing 'newsletter__email_content' class
+                                </div>
+                            }
+                            { !saveDisabled &&
+                                <div className={'newsletter_edit__error'}>
+                                    save updates
                                 </div>
                             }
                         </div>

@@ -7,11 +7,15 @@ import './coupon.scss';
 import {CouponComponent} from "./CouponComponent";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import {RouteComponentProps} from 'react-router-dom';
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
+import {PageSelector} from "../widgets/page_selector/PageSelector";
 
 interface State {
     loading: boolean,
     coupons: Coupon[],
-    addingCoupon: boolean
+    addingCoupon: boolean,
+    currentPage: number,
+    paginationCount: number
 }
 
 export default class Coupons extends React.Component<RouteComponentProps, State> {
@@ -19,13 +23,23 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
     state = {
         loading: true,
         coupons: [],
-        addingCoupon: false
+        addingCoupon: false,
+        currentPage: 0,
+        paginationCount: 0
     }
 
     public componentDidMount = (): void => {
-        couponService.get<Coupon[]>()
-            .then((coupons: Coupon[]) =>
-                this.setState({coupons, loading: false}))
+        this.changePages(1);
+    }
+
+    private changePages = (pageNumber: number): void => {
+        this.setState({currentPage: pageNumber, loading: true});
+
+        couponService.pagedSearchResults(pageNumber)
+            .then((dto: PagedResultsDTO) => {
+                this.setState({coupons: dto.results as Coupon[], loading: false, paginationCount: dto.count})
+                }
+            )
             .catch( err => console.log(err))
     }
 
@@ -74,6 +88,7 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                                 '+ Add Coupon'
                         }
                     </div>
+                    <PageSelector numItems={this.state.paginationCount} currentPage={this.state.currentPage} gotoPage={this.changePages} />
                 </div>
                 <div className={'col-12 mt-3'}>
                     {

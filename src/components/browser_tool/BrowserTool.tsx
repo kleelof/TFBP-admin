@@ -4,7 +4,7 @@ import {months} from '../../constants';
 import './browser.scss';
 import {BrowserDay} from "./BrowserDay";
 import { RouteComponentProps } from 'react-router-dom';
-import helpers from '../../helpers/helpers';
+import {NavItem, SubNavigation} from "../nav/SubNavigation";
 
 interface Props extends RouteComponentProps {
     match: any
@@ -85,7 +85,7 @@ export default class BrowserTool extends React.Component<Props, State>{
 
         return(
             <div className={'row browser_tool'}>
-                <div className={`col-12 browser_tool_calendar`}>
+                <div className={`col-12 browser_tool__calendar`}>
                     <div className='row justify-content-center'>
                         <div className={'col-12 col-md-8 browser_tool_calendar__month_nav'}>
                             <div
@@ -101,7 +101,7 @@ export default class BrowserTool extends React.Component<Props, State>{
                             >&gt;&gt;</div>
                         </div>
                         <div className={'col-12'}>
-                            <table className={'table'}>
+                            <table className={''}>
                                 <thead>
                                     <tr>
                                         <th>Sun</th>

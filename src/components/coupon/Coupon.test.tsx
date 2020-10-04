@@ -7,22 +7,25 @@ import Coupon from "../../models/Coupon";
 import couponService from '../../services/CouponService';
 import Coupons from '../coupon/Coupons';
 import CouponAdd from "./CouponAdd";
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
 
 configure({adapter: new Adapter()});
 
 let component: any;
 const couponGetSpy: jest.SpyInstance = jest.spyOn(couponService, 'get');
 const couponAddSpy: jest.SpyInstance = jest.spyOn(couponService, 'add');
-const couponUpdateSpy: jest.SpyInstance = jest.spyOn(couponService, 'update');
+const couponUpdateSpy: jest.SpyInstance = jest.spyOn(couponService, 'pagedSearchResults');
 
 describe('Coupons tests', () => {
     beforeAll(() => {
-        couponGetSpy.mockImplementation(() => Promise.resolve(BuildCoupon({count: 2})));
+        couponGetSpy.mockImplementation(() => Promise.resolve(
+            new PagedResultsDTO(1,BuildCoupon({count: 2}))
+        ));
     })
 
     beforeEach(async () => {
         const props: any = {history: []};
-        component = await shallow(
+        component = await mount(
             <Coupons {...props}/>
         )
         await component.update();

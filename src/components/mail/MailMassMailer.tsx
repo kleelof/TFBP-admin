@@ -110,7 +110,7 @@ export default class MailMassMailer extends React.Component<Props, State> {
         }
 
         if (!window.confirm(`You about to initiate the following: \n\n${confirmMessage}\n\nContinue?`)) return
-
+        /*
         adminService.sendMassMail(this.state.message, options)
             .then((resp: any) => {
                 if(resp.count === 0 ){
@@ -124,6 +124,8 @@ export default class MailMassMailer extends React.Component<Props, State> {
                         .then((resp: any) => window.alert(`${resp.count} emails were sent`))
                 }
             })
+
+         */
     }
 
     public render() {

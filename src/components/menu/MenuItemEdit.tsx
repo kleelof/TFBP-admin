@@ -3,9 +3,14 @@ import React from 'react';
 import MenuItem, {MenuItemDTO} from '../../models/MenuItemModel';
 import menuItemService from '../../services/MenuItemService';
 import ImageUploader from '../widgets/imageUploader/ImageUploader';
+import {RouteComponentProps} from 'react-router-dom';
 
 import './menu.scss';
 import LoadingOverlay from '../overlays/LoadingOverlay';
+
+interface Props extends RouteComponentProps {
+    match: any;
+}
 
 interface State {
     menuItem: MenuItemDTO,
@@ -22,7 +27,7 @@ export enum ItemModes {
     deliveryDay
 }
 
-export default class MenuItemEdit extends React.Component<any, State> {
+export default class MenuItemEdit extends React.Component<Props, State> {
 
     private temporaryImage: File | null = null;
 
@@ -99,7 +104,7 @@ export default class MenuItemEdit extends React.Component<any, State> {
                         saving: false,
                         hasBeenUpdated: false
                     });
-                    if (this.props.itemAdded) this.props.itemAdded(menuItemDTO);
+                    // if (this.props.itemAdded) this.props.itemAdded(menuItemDTO);
                 })
     }
 
@@ -128,8 +133,8 @@ export default class MenuItemEdit extends React.Component<any, State> {
         if (!this.state.loaded)
             return <LoadingOverlay />
 
-        const saveBtnDisabled: boolean = this.state.saving || this.props.mode === ItemModes.view
-        const disabled: boolean = this.props.mode === ItemModes.view || this.props.mode === ItemModes.deliveryDay
+        const saveBtnDisabled: boolean = this.state.saving; // || this.props.mode === ItemModes.view
+        const disabled: boolean = false;// this.props.mode === ItemModes.view || this.props.mode === ItemModes.deliveryDay
 
 
         const allergens: any[] = [
@@ -225,101 +230,63 @@ export default class MenuItemEdit extends React.Component<any, State> {
                                 <div className="col-12 col-md-6 mt-2">
                                     <h5>Allergens:</h5>
                                         {
-                                            allergens.map((allergen: any) => 
-                                                {
-                                                    if (this.props.mode === ItemModes.deliveryDay){
-                                                        if (this.state.menuItem.allergens.length === 0)
-                                                            return <div className="checker-week" key={`allergens_${allergen.code}`}>&nbsp;</div>
-
-                                                        if(this.state.menuItem.allergens.indexOf(allergen.code) !== -1){
-                                                            return (
-                                                                <div className="checker-week" key={`allergens_${allergen.code}`}>
-                                                                    {allergen.name}
-                                                                </div>
-                                                            )
-                                                        } else {
-                                                            return null
-                                                        }
-                                                    }
-
-                                                    return( 
-                                                        <div className="menuedititem__checker" key={allergen.code}>
-                                                            <input
-                                                                type="checkbox"
-                                                                id={allergen.code}
-                                                                checked={this.state.menuItem.allergens.indexOf(allergen.code) !== -1}
-                                                                disabled={this.props.mode === ItemModes.view}
-                                                                onChange={this.allergenSelected}/>
-                                                            <span>{allergen.name}</span>
-                                                        </div>
-                                                    ) }
+                                            allergens.map((allergen: any) =>
+                                                <div className="menuedititem__checker" key={allergen.code}>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={allergen.code}
+                                                        checked={this.state.menuItem.allergens.indexOf(allergen.code) !== -1}
+                                                        onChange={this.allergenSelected}/>
+                                                    <span>{allergen.name}</span>
+                                                </div>
                                             )
                                         }
                                 </div>
                                 <div className="col-12 col-md-6 mt-2">
                                     <h5>Proteins:</h5>
                                         {
-                                            proteins.map((protein: any) => {
-                                                if (this.props.mode === ItemModes.deliveryDay){
-                                                    if (this.state.menuItem.proteins.length === 0)
-                                                        return <div className="checker-week" key={`proteins_${protein.code}`}>&nbsp;</div>
+                                            proteins.map((protein: any) =>
 
-                                                    if(this.state.menuItem.proteins.indexOf(protein.code) !== -1){
-                                                        return (
-                                                            <div className="checker-week" key={`proteins_${protein.code}`}>
-                                                                {protein.name}
-                                                            </div>
-                                                        )
-                                                    } else {
-                                                        return null
-                                                    }
-                                                }
 
-                                                return(
-                                                    <div className="menuedititem__checker" key={protein.code}>
-                                                        <input
-                                                            type="checkbox"
-                                                            id={protein.code}
-                                                            checked={this.state.menuItem.proteins.indexOf(protein.code) > -1}
-                                                            disabled={this.props.mode === ItemModes.view}
-                                                            onChange={this.proteinSelected}/>
-                                                        <span>{protein.name}</span>
-                                                    </div>
-                                                )} 
+                                                <div className="menuedititem__checker" key={protein.code}>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={protein.code}
+                                                        checked={this.state.menuItem.proteins.indexOf(protein.code) > -1}
+                                                        onChange={this.proteinSelected}/>
+                                                    <span>{protein.name}</span>
+                                                </div>
+
                                             )
                                         }
                                 </div>
                                 <div className="col-12 col-md-6 mt-2">
                                     <hr/>
-                                    {
-                                        this.props.mode === ItemModes.deliveryDay ?
-                                            this.state.menuItem.spicy ?
-                                                <div className="menuedititem__checker_week">Spicy</div>
-                                                :
-                                                <div className="menuedititem__checker_week">Not Spicy</div>
-                                            :
-                                                <div className="menuedititem__checker">
-                                                    <input
-                                                        type="checkbox"
-                                                        id="spicy"
-                                                        checked={this.state.menuItem.spicy}
-                                                        disabled={this.props.mode === ItemModes.view}
-                                                        onChange={this.updateOptions}
-                                                        />
-                                                        <span>Spicy</span>
-                                                </div>
-
-                                    }
+                                    <div className="menuedititem__checker">
+                                        <input
+                                            type="checkbox"
+                                            id="spicy"
+                                            checked={this.state.menuItem.spicy}
+                                            onChange={this.updateOptions}
+                                            />
+                                            <span>Spicy</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-12 menuedititem__controls_area menuedititem__area text-center mt-2">
                             <hr/>
+                            <button
+                                className="btn btn-outline-info"
+                                disabled={saveBtnDisabled}
+                                onClick={() => this.props.history.goBack()}
+                                >back to menu</button>
+
                             <button 
                                 className="btn btn-outline-success"
                                 disabled={saveBtnDisabled} 
                                 onClick={this.save}
-                                >Save</button>
+                                >save</button>
                         </div>
                     </div>
                 </div>

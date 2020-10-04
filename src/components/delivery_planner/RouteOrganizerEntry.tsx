@@ -65,7 +65,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                     <div className='col-12'>
 
                         <div className='organizer_entry__address'>
-                            {stop.current_index + 1}. &nbsp;
+                            { stop.current_index > -1 ? (stop.current_index + 1).toString() : ''} &nbsp;
                             {stop.order.street_address}
                         </div>
                         {(props.route.route_status > 0 && props.route.route_status < 4) &&
