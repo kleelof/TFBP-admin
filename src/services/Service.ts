@@ -102,8 +102,13 @@ export default class Service {
         return this._get(`${this.appName}/${this.view}/?search=${search}`);
     }
 
-    public pagedSearchResults = (pageNumber: number = 0): Promise<PagedResultsDTO> => {
-        return this._get(`${this.appName}/${this.view}/${pageNumber === 0 ? '' : '?page=' + pageNumber.toString()}`);
+    public pagedSearchResults = (pageNumber: number = 1, searchPattern?: string): Promise<PagedResultsDTO> => {
+        let params: string = '?';
+        params += pageNumber === 0 ? '' : 'page=' + pageNumber.toString();
+        if (searchPattern && searchPattern !== '')
+            params += `&search=${searchPattern}`;
+
+        return this._get(`${this.appName}/${this.view}/${params}`);
     }
 
     private querizeObject(object: any): String {

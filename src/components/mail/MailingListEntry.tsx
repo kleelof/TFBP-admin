@@ -24,7 +24,7 @@ export const MailingListEntry = (props: Props): React.ReactElement => {
 
     return (
         <tr>
-            <td>
+            <td className='d-none d-md-table-cell'>
                 <input className={'form-control mailing_list__code'} value={code} type={'text'}
                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCode(e.target.value)} />
             </td>

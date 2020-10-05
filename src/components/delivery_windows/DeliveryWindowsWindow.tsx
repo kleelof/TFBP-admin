@@ -25,10 +25,13 @@ export const DeliveryWindowsWindow = (props: Props): React.ReactElement => {
             className={`delivery_windows__window ${props.window.active ? '' : 'delivery_windows__window-inactive'}`}
             onClick={() => history.push({pathname: `/dashboard/delivery_window/edit/${props.window.id}`})}
         >
-            <td>{props.window.active ? 'yes' : 'no'}</td>
-            <td>{props.window.name}</td>
+            <td className='d-none d-md-table-cell'>{props.window.name}</td>
             <td>{pythonDays[props.window.day]}</td>
-            <td>{moment(props.window.start_time, 'HH:mm:ss').format('h:mm a') + ' - ' + moment(props.window.end_time, 'HH:mm:ss').format('h:mm a')}</td>
+            <td>
+                <div>{moment(props.window.start_time, 'HH:mm:ss').format('h:mm a')} -</div>
+                <div>{moment(props.window.end_time, 'HH:mm:ss').format('h:mm a')}</div>
+
+            </td>
             <td>{runText}</td>
         </tr>
     )

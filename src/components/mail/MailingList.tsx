@@ -2,12 +2,17 @@ import React, {ChangeEvent} from 'react';
 import MailingListModel from '../../models/MailingListModel';
 import mailingListService from '../../services/MailingListService';
 import {MailingListEntry} from "./MailingListEntry";
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
+import LoadingOverlay from "../overlays/LoadingOverlay";
+import InputWidget from "../widgets/inputWidget/InputWidget";
 
 interface State {
     mailingList: MailingListModel[],
-    loaded: boolean,
+    loading: boolean,
     newCode: string,
     newEmail: string,
+    currentPage: number,
+    paginationCount: number
 }
  
 export default class MailingList extends React.Component<any, State> {
@@ -17,9 +22,11 @@ export default class MailingList extends React.Component<any, State> {
 
         this.state = {
             mailingList: [],
-            loaded: false,
+            loading: true,
             newCode: '',
-            newEmail: ''
+            newEmail: '',
+            currentPage: 0,
+            paginationCount: 0
         }
     }
 
@@ -35,19 +42,35 @@ export default class MailingList extends React.Component<any, State> {
     }
 
     public componentDidMount = (): void => { 
-        mailingListService.get<MailingListModel[]>()
-            .then((mailingList: MailingListModel[]) => this.setState({mailingList, loaded: true}))
+        this.changePage(1);
+    }
+
+    private changePage = (pageNumber: number, searchPattern?: string): void => {
+        this.setState({loading: true, currentPage: pageNumber});
+
+        mailingListService.pagedSearchResults(pageNumber, searchPattern)
+            .then((dto: PagedResultsDTO) => {
+                this.setState({
+                    mailingList: dto.results as MailingListModel[],
+                    loading: false,
+                    paginationCount: dto.count
+                })
+            })
     }
 
     public render() {
-        if (!this.state.loaded)
-            return <div>Loading...</div>
-
         return(
             <div className="row mailing_list">
                 <div className={'col-12'}>
                     <h3>mailing list</h3>
                     <hr/>
+                </div>
+                <div className='col-12'>
+                    <InputWidget
+                        id='search_widget'
+                        type='text'
+                        onUpdate={(id: string, searchPattern: string) => this.changePage(this.state.currentPage, searchPattern)}
+                    />
                 </div>
                 <div className={'col-12 mb-2'}>
                     <h5>add email address</h5>
@@ -70,25 +93,35 @@ export default class MailingList extends React.Component<any, State> {
                     </div>
                 </div>
                 <div className="col-12">
-                    <table className={'table'}>
-                        <thead>
-                            <tr>
-                                <th className={'mailing_list__zip_header'}>zip</th>
-                                <th>email</th>
-                                <th>active</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    {this.state.loading &&
+                        <LoadingOverlay />
+                    }
+                    {!this.state.loading &&
+                        <table className={'table'}>
+                            <thead>
+                                <tr>
+                                    <th className={'mailing_list__zip_header d-none d-md-table-cell'}>zip</th>
+                                    <th>email</th>
+                                    <th>active</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
                             {
-                                this.state.mailingList.sort(
-                                    (a,b) =>
-                                        (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((dto: MailingListModel) =>
-                                        <MailingListEntry dto={dto} key={dto.email}/>
-                                )
+                                this.state.mailingList.length === 0 ?
+                                    <div>no results found</div>
+                                    :
+                                    <tbody>
+                                        {
+                                            this.state.mailingList.sort(
+                                                (a,b) =>
+                                                    (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((dto: MailingListModel) =>
+                                                    <MailingListEntry dto={dto} key={dto.email}/>
+                                            )
+                                        }
+                                    </tbody>
                             }
-                        </tbody>
-                    </table>
+                        </table>
+                    }
                 </div>
             </div>
         )

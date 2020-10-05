@@ -16,8 +16,15 @@
 
 .delivery_days {
     font-weight: bold;
-    border: 2px solid rgba(0, 0, 0, .2);
     padding: 5px;
+    height: 350px;
+
+    &__inner {
+        border: 2px solid rgba(0, 0, 0, .5);
+        width: 100%;
+        height: 100%;
+        padding: 3px;
+    }
 
     & .delivery_days_item img, .delivery_day_item__img {
         width: 100%;

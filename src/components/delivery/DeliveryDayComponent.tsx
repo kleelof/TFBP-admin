@@ -1,3 +1,6 @@
+/*
+    Mange MenuItems in DelliveryDay
+ */
 import React from 'react';
 
 import {MenuItemDTO} from '../../models/MenuItemModel';
@@ -39,7 +42,7 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
         deliveryDayItemService.add(new DeliveryDayItemDTO(this.state.deliveryDay.id, item.id, false, item.price))
             .then((item: any) => {
                 const deliveryDay: DeliveryDay = this.state.deliveryDay;
-                deliveryDay.day_items.push(item);
+                deliveryDay.day_items.unshift(item);
                 this.setState({deliveryDay});
                 console.log(deliveryDay);
             })
@@ -65,7 +68,8 @@ export default class DeliveryDayComponent extends React.Component<any, State> {
                 </div>
                 <div className="col-12 col-md-6">
                     <h5>
-                        {momentHelper.asFullDate(this.state.deliveryDay.date)} - {momentHelper.asFullDate(this.state.deliveryDay.end_date)}
+                        <div>{momentHelper.asFullDate(this.state.deliveryDay.date)} -</div>
+                        <div>{momentHelper.asFullDate(this.state.deliveryDay.end_date)}</div>
                     </h5>
                     <hr/>
                 </div>

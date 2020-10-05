@@ -1,3 +1,6 @@
+/*
+    Handles listing DeliveryDayComponent
+ */
 import React from 'react';
 import {format} from 'date-fns';
 import deliveryDayService from '../../services/DeliveryDayService';
@@ -7,31 +10,54 @@ import { Redirect } from 'react-router-dom';
 import DeliveryDay from '../../models/DeliveryDayModel';
 
 import { DeliveryDays } from './DeliveryDays';
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
+import couponService from "../../services/CouponService";
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
+import Coupon from "../../models/Coupon";
+import LoadingOverlay from "../overlays/LoadingOverlay";
+import {PageSelector} from "../widgets/page_selector/PageSelector";
 
 interface State {
-    loaded: boolean,
+    loading: boolean,
     deliveryDays: DeliveryDay[],
     startDate: string,
     endDate: string,
     creatingDeliveryDay: boolean,
-    editId: number
+    editId: number,
+    currentPage: number,
+    paginationCount: number
 }
 
 export default class Deliveries extends React.Component<any, State> {
 
     state = {
-        loaded: false,
+        loading: true,
         deliveryDays: [],
         startDate: "",
         endDate: "",
         creatingDeliveryDay: false,
-        editId: 0
+        editId: 0,
+        currentPage: 0,
+        paginationCount: 0
     }
 
     public componentDidMount = (): void => {
-        deliveryDayService.get<DeliveryDay[]>(null, {start_date: format(new Date(), 'yyyy-MM-dd')})
-            .then((deliveryDays: DeliveryDay[]) => this.setState({deliveryDays, loaded: true}))
-            .catch( err => window.alert("Unable to load weeks"))
+        this.changePages(1);
+    }
+
+    private changePages = (pageNumber: number): void => {
+        this.setState({currentPage: pageNumber, loading: true});
+
+        deliveryDayService.pagedSearchResults(pageNumber)
+            .then((dto: PagedResultsDTO) => {
+                this.setState({
+                    deliveryDays: dto.results as DeliveryDay[],
+                    loading: false,
+                    paginationCount: dto.count
+                })
+                }
+            )
+            .catch( err => console.log(err))
     }
 
     private createDeliveryDay = (): void => {
@@ -49,6 +75,7 @@ export default class Deliveries extends React.Component<any, State> {
                     creatingDeliveryDay: false}) 
             }) 
             .catch( err => window.alert("Unable to create week"))
+            .then(() => this.setState({creatingDeliveryDay: false}))
     }
 
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -58,8 +85,8 @@ export default class Deliveries extends React.Component<any, State> {
     }
 
     public render() {
-        if (!this.state.loaded)
-            return <div>Loading...</div> 
+        if (this.state.loading)
+            return <LoadingOverlay />
 
         if (this.state.editId !== 0)
             return <Redirect to={`delivery/edit/${this.state.editId}`} />
@@ -90,16 +117,20 @@ export default class Deliveries extends React.Component<any, State> {
                         disabled={this.state.creatingDeliveryDay}
                         onChange={this.updateData} />
 
-                    <button 
-                        className="btn btn-outline-success ml-2 mt-2 mt-m-0"
+                    <LoadingIconButton
+                        label='create'
+                        busy={this.state.creatingDeliveryDay}
+                        btnClass="btn btn-sm btn-outline-success"
+                        outerClass='ml-2 mt-2 mt-m-0'
                         onClick={this.createDeliveryDay}
                         disabled={this.state.creatingDeliveryDay}
-                        >create</button>
+                        />
+                    <PageSelector numItems={this.state.paginationCount} currentPage={this.state.currentPage} gotoPage={this.changePages} />
                     <hr/>
                 </div>
                 {
                     deliveries.map((deliveryDay: DeliveryDay) =>
-                        <div className="col-12 deliveries__delivery_days" key={`dd_${deliveryDay.id}`}>
+                        <div className="col-12 col-md-6 deliveries__delivery_days" key={`dd_${deliveryDay.id}`}>
                             <DeliveryDays 
                                 deliveryDay={deliveryDay}
                                 key={`dd_${deliveryDay.id}`}/>

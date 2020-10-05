@@ -58,7 +58,7 @@ export const DeliveryWindows = (props: Props): React.ReactElement => {
                     </div>
                     <div className='col-2'>
                         <LoadingIconButton label={'add window'} onClick={addWindow} busy={addingWindow}
-                                           btnClass='btn btn-outline-success' disabled={newWindow === ''}
+                                           btnClass='btn btn-sm btn-outline-success' disabled={newWindow === ''}
                         />
                     </div>
                 </div>
@@ -67,8 +67,7 @@ export const DeliveryWindows = (props: Props): React.ReactElement => {
                 <table className={'table'}>
                     <thead>
                         <tr>
-                            <th>active</th>
-                            <th>name</th>
+                            <th className='d-none d-md-table-cell'>name</th>
                             <th>day</th>
                             <th>time</th>
                             <th>run</th>

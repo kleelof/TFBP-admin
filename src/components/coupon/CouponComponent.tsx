@@ -41,10 +41,10 @@ export const CouponComponent = (props: Props): React.ReactElement => {
                 }
             </td>
             <td className={'coupon__code'}>{coupon.code}</td>
-            <td className={'coupon__mode'}>{modes[coupon.mode]}</td>
-            <td className={'coupon__mode'}>{calculation_types[coupon.calculation_type]}</td>
+            <td className={'coupon__mode d-none d-md-table-cell'}>{modes[coupon.mode]}</td>
+            <td className={'coupon__mode d-none d-md-table-cell'}>{calculation_types[coupon.calculation_type]}</td>
             <td className={'coupon__uses'}>{coupon.remaining_uses}</td>
-            <td className={'coupon__start_value'}>
+            <td className={'coupon__start_value d-none d-md-table-cell'}>
                 {
                     props.coupon.calculation_type === 0 ?
                         `${coupon.start_value * 100}%`
@@ -52,7 +52,7 @@ export const CouponComponent = (props: Props): React.ReactElement => {
                         `$${coupon.start_value.toFixed(2)}`
                 }
             </td>
-            <td className={'coupon__end_value'}>
+            <td className={'coupon__end_value d-none d-md-table-cell'}>
                 {
                     coupon.calculation_type === 0 ?
                         ``
@@ -63,7 +63,7 @@ export const CouponComponent = (props: Props): React.ReactElement => {
             <td className={'coupon__expire'}>
                 {momentHelper.asFullDate(coupon.expire)}
             </td>
-            <td className={'coupon__email'}>
+            <td className={'coupon__email d-none d-md-table-cell'}>
                 {coupon.email}
             </td>
         </tr>

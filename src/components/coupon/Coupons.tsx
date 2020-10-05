@@ -37,7 +37,11 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
 
         couponService.pagedSearchResults(pageNumber)
             .then((dto: PagedResultsDTO) => {
-                this.setState({coupons: dto.results as Coupon[], loading: false, paginationCount: dto.count})
+                this.setState({
+                    coupons: dto.results as Coupon[],
+                    loading: false,
+                    paginationCount: dto.count
+                })
                 }
             )
             .catch( err => console.log(err))
@@ -98,13 +102,13 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                                 <tr>
                                     <th></th>
                                     <th>code</th>
-                                    <th>mode</th>
-                                    <th>calculation</th>
+                                    <th className='d-none d-md-table-cell'>mode</th>
+                                    <th className='d-none d-md-table-cell'>calculation</th>
                                     <th>uses</th>
-                                    <th>start value</th>
-                                    <th>current value</th>
+                                    <th className='d-none d-md-table-cell'>start value</th>
+                                    <th className='d-none d-md-table-cell'>current value</th>
                                     <th>expire</th>
-                                    <th>email</th>
+                                    <th className='d-none d-md-table-cell'>email</th>
                                 </tr>
                                 </thead>
                                 <tbody>

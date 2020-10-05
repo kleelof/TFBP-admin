@@ -10,9 +10,11 @@
             padding: 9px;
         }
 
-        tbody tr:hover {
-            background-color: rgba(85, 224, 92, 0.3);
-            cursor: pointer;
+        tbody{
+            & tr:hover {
+                background-color: rgba(85, 224, 92, 0.3);
+                cursor: pointer;
+            }
         }
     }
 

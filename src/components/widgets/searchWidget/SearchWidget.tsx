@@ -66,7 +66,7 @@ export default class SearchWidget extends React.Component<Props, State> {
                                                 {item.name}
                                             </div>
                                             <div className="col-3">
-                                                <img src={config.API_URL + item.image} alt={item.name}/>
+                                                <img src={item.image} alt={item.name}/>
                                             </div>
                                         </div>
                                     )

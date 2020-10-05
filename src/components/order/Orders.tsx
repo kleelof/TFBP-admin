@@ -7,13 +7,18 @@ import helpers from '../../helpers/helpers';
 import momentHelper from '../../helpers/MomentHelper';
 import { Redirect } from 'react-router-dom';
 import PagedResultsDTO from "../../dto/PagedResultsDTO";
+import LoadingOverlay from "../overlays/LoadingOverlay";
+import {PageSelector} from "../widgets/page_selector/PageSelector";
+import InputWidget from "../widgets/inputWidget/InputWidget";
 
 interface State {
     loading: boolean,
     orders: Order[],
     editId: number,
     startDate: string,
-    endDate: string
+    endDate: string,
+    currentPage: number,
+    paginationCount: number
 }
 
 export default class Orders extends React.Component<any, State> {
@@ -23,29 +28,30 @@ export default class Orders extends React.Component<any, State> {
         orders: [],
         editId: 0,
         startDate: '',
-        endDate: ''
+        endDate: '',
+        currentPage: 0,
+        paginationCount: 0
     }
 
     private orderStatuses: string[] = ['canceled', 'pending', 'paid'];
 
     public componentDidMount = (): void => {
-        this.getByDateRange();
+        this.changePage(1);
     }
 
-    private getByDateRange = (startDate?: string, endDate?: string): void => {
-        this.setState({loading: true});
+    private changePage = (pageNumber: number, searchPattern?: string): void => {
+        this.setState({loading: true, currentPage: pageNumber});
 
-        orderService.pagedSearchResults()
+        orderService.pagedSearchResults(pageNumber, searchPattern)
             .then((dto: PagedResultsDTO) => {
-                this.setState({orders: dto.results as Order[], loading: false})
+                this.setState({
+                    orders: dto.results as Order[],
+                    loading: false,
+                    paginationCount: dto.count
+                })
             })
     }
 
-    private searchByOrderDateRange = (): void => {
-        this.getByDateRange(this.state.startDate !== "" ? this.state.startDate : undefined, 
-                                    this.state.endDate !== "" ? this.state.endDate : undefined)
-    }
-    
     private updateData = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             [e.target.id]: e.target.value as any,
@@ -53,9 +59,6 @@ export default class Orders extends React.Component<any, State> {
     }
 
     public render() {
-        if (this.state.loading)
-            return <div>Loading...</div>
-
         if (this.state.editId > 0)
             return <Redirect to={`/dashboard/orders/edit/${this.state.editId}`} /> 
 
@@ -63,16 +66,23 @@ export default class Orders extends React.Component<any, State> {
             <div className="row orders">
                 <div className="col-12">
                     <div className="row">
-                        <div className="col-12 col-md-3">
-                            Start Date: <input type="date" id="startDate" value={this.state.startDate} onChange={this.updateData}/>
-                        </div>
-                        <div className={'col-12 col-md-9'}>
-                            End Date: <input type="date" id="endDate" value={this.state.endDate} onChange={this.updateData} />
-                            &nbsp;&nbsp;
-                            <button className="btn btn-outline-success" onClick={this.searchByOrderDateRange}>Search</button>
+                        <div className='col-12'>
+                            <InputWidget
+                                id='orders_search_input'
+                                type='text'
+                                onUpdate={(id: string, searchPattern: string) => this.changePage(this.state.currentPage, searchPattern)}
+                                />
+                            <PageSelector
+                                numItems={this.state.paginationCount}
+                                currentPage={this.state.currentPage}
+                                gotoPage={this.changePage}
+                                />
                         </div>
                     </div>
-                    {
+                    {this.state.loading &&
+                        <LoadingOverlay />
+                    }
+                    {!this.state.loading &&
                         this.state.orders.length === 0 ?
                             <div>No Orders Found</div>
                             :
@@ -80,9 +90,9 @@ export default class Orders extends React.Component<any, State> {
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Order ID</th>
+                                        <th className='d-none d-md-block'>Order ID</th>
                                         <th>Contact</th>
-                                        <th>Date</th>
+                                        <th className='d-none d-md-block'>Date</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -93,7 +103,6 @@ export default class Orders extends React.Component<any, State> {
                                                 let menuItemCount: number = 0;
                                                 let total: number = 0;
                                                 let deliveryDates: string[] = [];
-
                                                 order.items.forEach((orderItem: OrderItem) => {
                                                     menuItemCount += orderItem.cart_item.quantity;
                                                     total += orderItem.cart_item.quantity * orderItem.cart_item.price;
@@ -105,9 +114,9 @@ export default class Orders extends React.Component<any, State> {
                                                     <tr key={order.id} className={index % 2 ? '' : 'orders-line-highlight'}
                                                         onClick={()=> this.setState({editId: order.id})}>
                                                         <td>{order.contact_name}</td>
-                                                        <td>{order.public_id}</td>
+                                                        <td className='d-none d-md-block'>{order.public_id}</td>
                                                         <td>{order.email}<br/>{order.phone_number}</td>
-                                                        <td>{momentHelper.asFullDate(order.created_at)}</td>
+                                                        <td className='d-none d-md-block'>{momentHelper.asFullDate(order.created_at)}</td>
 
                                                         <td className={`order-status-${order.order_status}`}>
                                                             {this.orderStatuses[order.order_status]}

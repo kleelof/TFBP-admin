@@ -196,6 +196,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                 </div>
             </div>
             <div className={'col-12 col-md-10 mt-2 text-center'}>
+                <hr/>
                 <LoadingIconButton label='save updates' onClick={saveWindow} busy={saving} disabled={disabled}
                                    btnClass={'btn btn-outline-success'}
                 />

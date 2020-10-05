@@ -16,7 +16,7 @@ import React, {Component} from 'react';
 
 interface Props {
     id: string,
-    type: string,
+    type: string, // 'textarea', 'text'
     onUpdate: any,
     required?: boolean,
     initialValue?: any,
@@ -62,7 +62,7 @@ export default class InputWidget extends Component<Props, State> {
     };
 
     private sendUpdate = () => {
-        if (this.props.initialValue !== this.state.value) {
+        if (this.lastSavedValue !== this.state.value) {
             this.lastSavedValue = this.state.value;
             let value = (this.props.defaultUpdateValue !== '' && this.props.initialValue === '') ?
                 this.props.defaultUpdateValue : this.state.value;
