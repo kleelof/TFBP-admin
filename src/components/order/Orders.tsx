@@ -6,6 +6,7 @@ import OrderItem from '../../models/OrderItemModel';
 import helpers from '../../helpers/helpers';
 import momentHelper from '../../helpers/MomentHelper';
 import { Redirect } from 'react-router-dom';
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
 
 interface State {
     loading: boolean,
@@ -34,9 +35,9 @@ export default class Orders extends React.Component<any, State> {
     private getByDateRange = (startDate?: string, endDate?: string): void => {
         this.setState({loading: true});
 
-        orderService.get<Order[]>()
-            .then((orders: Order[]) => {
-                this.setState({orders, loading: false})
+        orderService.pagedSearchResults()
+            .then((dto: PagedResultsDTO) => {
+                this.setState({orders: dto.results as Order[], loading: false})
             })
     }
 
