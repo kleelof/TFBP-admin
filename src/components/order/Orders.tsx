@@ -89,7 +89,6 @@ export default class Orders extends React.Component<any, State> {
                                 <tbody>
                                     {
                                         this.state.orders
-                                            .sort((a: Order, b: Order) => a.id > b.id ? -11 : a.id < b.id ? 1 : 0)
                                             .map((order: Order, index: number) => {
                                                 let menuItemCount: number = 0;
                                                 let total: number = 0;
