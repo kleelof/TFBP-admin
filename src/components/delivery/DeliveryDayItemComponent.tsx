@@ -17,10 +17,7 @@ export const DeliveryDayItemComponent = (props:Props) => {
                     <div className="col-12">
                         <img
                             className={'delivery_day_item__img'}
-                            src={
-                                props.item.menu_item.image.indexOf('http') === -1 ?
-                                config.API_URL + props.item.menu_item.image : props.item.menu_item.image
-                            }
+                            src={`${config.API_URL}/uploads/${props.item.menu_item.name}`}
                             alt={props.item.menu_item.name} />
                     </div>
                     <div className="col-12">

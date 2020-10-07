@@ -35,7 +35,7 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
                                         <small>{item.menu_item.name}</small>
                                         <div>
                                             <img
-                                                src={item.menu_item.image}
+                                                src={`${config.API_URL}/uploads/${item.menu_item.image}`}
                                                 alt={item.menu_item.name} />
                                         </div>
                                     </div>
