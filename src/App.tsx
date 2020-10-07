@@ -69,7 +69,7 @@ class App extends React.Component<Props, State> {
  closeNav = () => {
   // @ts-ignore
      document.getElementById("mySidenav").style.width = "0";
-}
+    }
 
   public componentDidMount = () => {
     const refresh_token: string | null = window.localStorage.getItem('refresh_token');

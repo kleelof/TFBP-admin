@@ -102,7 +102,8 @@ export default class Coupons extends React.Component<RouteComponentProps, State>
                                 <tr>
                                     <th></th>
                                     <th>code</th>
-                                    <th className='d-none d-md-table-cell'>mode</th>
+                                    <th className='yes
+                                    '>mode</th>
                                     <th className='d-none d-md-table-cell'>calculation</th>
                                     <th>uses</th>
                                     <th className='d-none d-md-table-cell'>start value</th>

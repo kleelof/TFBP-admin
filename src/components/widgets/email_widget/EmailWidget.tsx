@@ -2,10 +2,14 @@ import React, {ChangeEvent, useState} from 'react';
 import './email_widget.scss';
 import {LoadingIconButton} from "../loading_icon_button/LoadingIconButton";
 import apiActionsService from "../../../services/APIActionService";
+import MassMailResponseDTO from "../../../dto/MassMailResponseDTO";
+
 
 interface EmailConfig {
     email_type: string,
-    entity_id: number
+    entity_id: number,
+    message?: string,
+    send_email?: boolean
 }
 
 interface DeliveriesEmailConfig extends  EmailConfig{
@@ -26,15 +30,29 @@ export const EmailWidget = (props: Props): React.ReactElement => {
         if (!window.confirm('do you want to cancel this email?')) return;
         props.finished();
     }
-    const sendEmail = (): void => {
-        setSending(true);
-        apiActionsService.sendMassMail({...props.config, ...{message}})
-            .then(() => {
-                window.alert('message sent');
-                props.finished();
+
+    const confirmEmailSend = (): void => {
+        sendEmail()
+            .then((dto: MassMailResponseDTO) => {
+                if (window.confirm(`You are about to send ${dto.count} emails.`)) {
+                    sendEmail(true)
+                        .then(() => {
+                            props.finished();
+                        })
+                        .catch(() => window.alert('unable to send emails'))
+                        .then(() => setSending(false))
+                } else {
+                    setSending(false);
+                }
             })
             .catch(() => window.alert('unable to send message'))
-            .then(() => setSending(false))
+
+    }
+
+    const sendEmail = (send_email: boolean = false): Promise<any> => {
+        setSending(true);
+        return apiActionsService.sendMassMail({...props.config, ...{message, send_email}})
+
     }
 
     return(
@@ -54,7 +72,7 @@ export const EmailWidget = (props: Props): React.ReactElement => {
             <div className='col-12 text-center'>
                 <LoadingIconButton
                     label='send'
-                    onClick={sendEmail}
+                    onClick={confirmEmailSend}
                     disabled={message === ''}
                     busy={sending}
                     btnClass='btn btn-sm btn-outline-success'

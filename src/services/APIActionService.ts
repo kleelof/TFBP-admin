@@ -1,6 +1,7 @@
 import Service from './Service';
 import FunctionsResponsesDTO from '../dto/FunctionsResponsesDTO';
 import Order from "../models/OrderModel";
+import MassMailResponseDTO from "../dto/MassMailResponseDTO";
 
 class APIActionService extends Service {
 
@@ -20,8 +21,8 @@ class APIActionService extends Service {
         return this._post<any>('dashboard/send_support_email/', payload)
     }
 
-    public sendMassMail = (params: any): Promise<any> => {
-        return this._post<any>('dashboard/send_mass_email/', params);
+    public sendMassMail = (dto: any): Promise<MassMailResponseDTO> => {
+        return this._post<any>('dashboard/send_mass_email/', dto);
     }
 }
 

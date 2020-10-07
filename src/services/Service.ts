@@ -57,6 +57,17 @@ export default class Service {
         }
     }
 
+    private buildSearchQuery = (search: string = '', searchField: string = '', page: number = 0 ): string => {
+        let params: string = `?`;
+        if (search !== '')
+            params += `search=${search}`;
+        if (searchField !== '')
+            params += `&search_field=${searchField}`;
+        if (page !== 0)
+            params += `&page=${page}`;
+        return params;
+    }
+
     public delete<T>(id: number): Promise<T> {
         return this._delete<T>(`${this.appName}/${this.view}/${id}/`);
     }
@@ -98,17 +109,12 @@ export default class Service {
         return this._patch<T>(`${this.appName}/${this.view}/${id}/`, formData, {headers: {'Content-Type': 'multipart/form-data'}});
     }
 
-    public search<T>(search: String): Promise<T> {
-        return this._get(`${this.appName}/${this.view}/?search=${search}`);
+    public search<T>(search: string, searchColumn: string = ''): Promise<T> {
+        return this._get(`${this.appName}/${this.view}/${this.buildSearchQuery(search, searchColumn)}`);
     }
 
-    public pagedSearchResults = (pageNumber: number = 1, searchPattern?: string): Promise<PagedResultsDTO> => {
-        let params: string = '?';
-        params += pageNumber === 0 ? '' : 'page=' + pageNumber.toString();
-        if (searchPattern && searchPattern !== '')
-            params += `&search=${searchPattern}`;
-
-        return this._get(`${this.appName}/${this.view}/${params}`);
+    public pagedSearchResults = (pageNumber: number = 1, search: string = '', searchColumn: string = ''): Promise<PagedResultsDTO> => {
+         return this._get(`${this.appName}/${this.view}/${this.buildSearchQuery(search, searchColumn, pageNumber)}`);
     }
 
     private querizeObject(object: any): String {

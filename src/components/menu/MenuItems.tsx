@@ -23,7 +23,7 @@ export const MenuItems = (): React.ReactElement => {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([])
 
     useEffect(() => {
-        menuItemService.loadByCategory(params.category)
+        menuItemService.search<MenuItem[]>(params.category, 'category')
             .then((items: MenuItem[]) => {
                 setMenuItems(items);
             })
