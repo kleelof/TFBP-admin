@@ -7,6 +7,7 @@ import {RouteComponentProps} from 'react-router-dom';
 
 import './menu.scss';
 import LoadingOverlay from '../overlays/LoadingOverlay';
+import {config} from "../../config";
 
 interface Props extends RouteComponentProps {
     match: any;
@@ -170,7 +171,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                 <div className="col-12 menuedititem__imagearea menuedititem__area">
                                     <ImageUploader
                                         id={`image_uploader__menuItem-${this.state.menuItem.id}`}
-                                        imageURL={this.state.menuItem.image}
+                                        imageURL={config.API_URL + '/uploads/' + this.state.menuItem.image}
                                         newImageLoaded={this.onNewImageLoaded}
                                         maximumSizeInMb={100}
                                         allowedFileTypes=".jpg,.png,.jpeg"

@@ -69,7 +69,7 @@ export const MenuItems = (): React.ReactElement => {
                             <Link className="row" to={`/dashboard/menu/edit/${item.id}/`}>
                                     <div className="col-12 menu_items__menuitem_name no_wrap_text">{item.name}</div>
                                     <div className="col-12 item__item_image">
-                                        <img src={`${item.image}`} alt={item.name}/>
+                                        <img src={`${config.API_URL}/uploads/${item.image}`} alt={item.name}/>
                                     </div>
                             </Link>
                         </div>
