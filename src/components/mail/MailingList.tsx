@@ -5,6 +5,7 @@ import {MailingListEntry} from "./MailingListEntry";
 import PagedResultsDTO from "../../dto/PagedResultsDTO";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import InputWidget from "../widgets/inputWidget/InputWidget";
+import {PageSelector} from "../widgets/page_selector/PageSelector";
 
 interface State {
     mailingList: MailingListModel[],
@@ -71,6 +72,11 @@ export default class MailingList extends React.Component<any, State> {
                         type='text'
                         onUpdate={(id: string, searchPattern: string) => this.changePage(this.state.currentPage, searchPattern)}
                     />
+                    <PageSelector
+                        numItems={this.state.paginationCount}
+                        currentPage={this.state.currentPage}
+                        gotoPage={this.changePage}
+                        />
                 </div>
                 <div className={'col-12 mb-2'}>
                     <h5>add email address</h5>

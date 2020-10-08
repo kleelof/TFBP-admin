@@ -21,7 +21,7 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
     return(
         <div className="row delivery_days" key={`days_${props.deliveryDay.id}`}>
             <div className='delivery_days__inner'>
-                <div className="col-12 col-md-6 delivery_days__date">
+                <div className="col-12 delivery_days__date">
                     {momentHelper.asFullDate(props.deliveryDay.date)} -
                 </div>
                 <div className="col-12 col-md-6 delivery_days__end_date">

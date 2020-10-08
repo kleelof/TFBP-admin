@@ -3,6 +3,7 @@ import deliveryDayItemService from '../../services/DeliveryDayItemService';
 import DeliveryDayItem, { DeliveryDayItemDTO } from '../../models/DeliveryDayItemModel';
 
 import './delivery.scss';
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 
 interface Props {
     deliveryDayItem: DeliveryDayItem,
@@ -79,11 +80,13 @@ export default class DeliveryMenuItemOptions extends React.Component<Props, Stat
                         type="checkbox"/> 
                 </div>
                 <div className="col-12 text-center mt-3">
-                    <button 
-                        className="btn btn-sm btn-outline-success"
-                        disabled={this.state.saving || !this.state.active} 
+                    <LoadingIconButton
+                        label='save'
                         onClick={this.save}
-                        >Save</button>
+                        busy={this.state.saving}
+                        btnClass='btn btn-sm btn-outline-success'
+                        disabled={this.state.saving || !this.state.active}
+                        />
 
                     <button
                         className="btn btn-sm btn-danger ml-3"
