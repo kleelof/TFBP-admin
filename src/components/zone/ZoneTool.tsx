@@ -75,7 +75,7 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                 <input className={'form-control'} placeholder={'new code'} value={newCode}
                        onChange={(e:ChangeEvent<HTMLInputElement>) => setNewCode(e.target.value)}
                 />
-                <div className={'btn btn-outline-success zone_tool__add_btn mt-2'} onClick={addCode}>add code</div>
+                <div className={'btn btn-sm btn-outline-success zone_tool__add_btn mt-2'} onClick={addCode}>add code</div>
             </div>
         </div>
     )

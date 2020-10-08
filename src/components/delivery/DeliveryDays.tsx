@@ -33,9 +33,9 @@ export const DeliveryDays = (props: Props): React.ReactElement => {
                             helpers.sortDeliveryDayItemsByCategory(props.deliveryDay.day_items).map((item: DeliveryDayItem) =>
                                     <div className="delivery_days__item" key={`ddi_${item.id}`}>
                                         <small>{item.menu_item.name}</small>
-                                        <div>
+                                        <div className='delivery_days__item_img'>
                                             <img
-                                                src={`${config.API_URL}/uploads/${item.menu_item.image}`}
+                                                src={`${config.API_URL + config.UPLOADS_PATH}/${item.menu_item.image}`}
                                                 alt={item.menu_item.name} />
                                         </div>
                                     </div>

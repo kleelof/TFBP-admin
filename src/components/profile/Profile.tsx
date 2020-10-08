@@ -29,7 +29,6 @@ export const Profile = (): React.ReactElement => {
             .then((values) => {
                 updateOperator(values[0], true);
                 savedOperator = values[0];
-
                 setTimeZones(values[1]);
             })
             .catch(() => window.alert('unable to load page'))
@@ -148,11 +147,17 @@ export const Profile = (): React.ReactElement => {
                                                    }/>
                                         </div>
                                         <div className='col-12 col-md-6 text-center'>
-                                            <button className='btn btn-outline-info mt-4'
+                                            <button className={`btn btn-sm btn-outline-${
+                                                updatingPassword ? 'warning' : 'info'
+                                                } mt-4`}
                                                     onClick={() => {
-                                                        setUpdatingPassword(true);
+                                                        setUpdatingPassword(!updatingPassword);
                                                     }}
-                                            >update password</button>
+                                            >
+                                                {
+                                                    updatingPassword ? 'cancel update' : 'update password'
+                                                }
+                                            </button>
                                         </div>
                                         {updatingPassword &&
                                             <div className='col-12'>

@@ -32,7 +32,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
             route: props.route,
             routeUpdated: false,
             loading: true,
-            stops: props.route.stops.sort((a,b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0)),
+            stops: this.extractStopsFromRoute(props.route),
             loadingButtonInUse: ''
         }
     }
@@ -43,7 +43,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
         this.setState({loadingButtonInUse: 'committing'});
 
         routeService.commitRoute(this.state.route)
-            .then((route: Route) => this.setState({route}))
+            .then((route: Route) => this.setState({route, stops: this.extractStopsFromRoute(route)}))
             .catch(() => window.alert('cannot commit route'))
             .then(() => this.setState({loadingButtonInUse: ''}))
     }
@@ -53,7 +53,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
 
         this.setState({loadingButtonInUse: 'completing_route'})
         routeService.completeRoute(this.state.route)
-            .then((route: Route) => this.setState({route}))
+            .then((route: Route) => this.setState({route, stops: this.extractStopsFromRoute(route)}))
             .catch(() => window.alert('unable to complete route'))
             .then(() => this.setState({loadingButtonInUse: ''}))
     }
@@ -96,6 +96,10 @@ export default class RouteOrganizer extends React.Component<Props, State> {
             .then(() => this.setState({loadingButtonInUse: ''}))
     }
 
+    private extractStopsFromRoute = (route: Route): RouteStop[] => {
+        return route.stops.sort((a,b) => (a.current_index > b.current_index) ? 1 : ((b.current_index > a.current_index) ? -1 : 0))
+    }
+
     private startRoute = (): void => {
         if (!window.confirm('Are you sure you want to start the route?')) return;
 
@@ -108,10 +112,8 @@ export default class RouteOrganizer extends React.Component<Props, State> {
 
     public render() {
         const routeStatus: string[] = ['uncommitted', 'committed', 'in progress', 'completed', 'waiting for cutoff'];
-        let needToSave: boolean = false;
         let canOptimize: boolean = false;
         this.state.stops.forEach((stop: RouteStop, index: number) => {
-            if (index !== stop.current_index) needToSave = true;
             if (stop.index !== stop.current_index) canOptimize = true;
         })
 
@@ -123,16 +125,16 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                         {routeStatus[this.state.route.route_status]}
                     </span>
                 </div>
-                {this.state.route.route_status === 3 &&
+                {this.state.route.route_status === 3 && //completed
                     <Fragment>
-                        <div className='col-12'>started: {MomentHelper.asFullDateTime(this.state.route.started_at)}</div>
-                        <div className='col-12'>completed: {MomentHelper.asFullDateTime(this.state.route.finished_at)}</div>
+                        <div className='col-12'>started: {MomentHelper.asShortDateTime(this.state.route.started_at)}</div>
+                        <div className='col-12'>completed: {MomentHelper.asShortDateTime(this.state.route.finished_at)}</div>
                     </Fragment>
                 }
                 <div className='col-12'>
                     {this.state.route.route_status === 0 && //uncommitted
                         <Fragment>
-                            {needToSave &&
+                            {this.state.routeUpdated &&
                                 <LoadingIconButton
                                     outerClass='mr-2'
                                     busy={this.state.loadingButtonInUse ==='saving_changes'}
@@ -143,7 +145,7 @@ export default class RouteOrganizer extends React.Component<Props, State> {
                                         this.saveChanges();
                                     }} />
                             }
-                            {(!needToSave) &&
+                            {(!this.state.routeUpdated) &&
                                 <LoadingIconButton
                                     outerClass='mr-2'
                                     busy={this.state.loadingButtonInUse ==='committing'}

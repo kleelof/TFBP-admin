@@ -90,7 +90,7 @@ export const RouteOrganizerEntry = (props: Props): React.ReactElement => {
                                 <Fragment>
                                     {
                                         <Fragment>
-                                            delivered: {MomentHelper.asFullDateTime(stop.delivered_at)}
+                                            delivered: {MomentHelper.asShortDateTime(stop.delivered_at)}
                                         </Fragment>
                                     }
 

@@ -5,10 +5,12 @@ import newsletterService from '../../services/NewsletterService';
 
 import Newsletter from "../../models/Newsletter";
 import { Link } from 'react-router-dom';
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 
 interface State {
     loading: boolean,
     saving: boolean,
+    releasing: boolean,
     title: string,
     content: string,
     newsletter: Newsletter,
@@ -24,6 +26,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
         this.state = {
             loading: true,
             saving: false,
+            releasing: false,
             title: '',
             content: '',
             newsletter: new Newsletter(),
@@ -48,17 +51,17 @@ export default class NewsletterEdit extends React.Component<any, State> {
     }
 
     private release = (): void => { //TODO: add testing
-        let options: any = {
-            mailing_list: true
-        }
-
+        this.setState({releasing: true});
         newsletterService.release(this.state.newsletter.id)
             .then((resp: any) => {
                 if(resp.count === 0) {
                     window.alert('no emails found');
                     return;
                 } else {
-                    if(!window.confirm(`You are about to send ${resp.count} emails.\n\nContinue?`)) return
+                    if(!window.confirm(`You are about to send ${resp.count} emails.\n\nContinue?`)) {
+                        this.setState({releasing: false});
+                        return;
+                    }
                     newsletterService.release(this.state.newsletter.id, true)
                         .then((resp: any) => {
                             window.alert(`${resp.count} emails sent`);
@@ -67,6 +70,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
                             this.setState({newsletter});
                         })
                         .catch( err => window.alert('unable to release newsletter'))
+                        .then(() => this.setState({releasing: false}))
                 }
             })
             .catch( err => window.alert('unable to release newsletter'))
@@ -108,7 +112,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
 
         const saveDisabled: boolean = (this.state.title === this.state.newsletter.title &&
                                             this.state.content === this.state.newsletter.content) ||
-                                                this.state.saving
+                                                this.state.saving || this.state.releasing
 
         const titlePresent: boolean = this.state.content.indexOf('newsletter__email_title') !== -1
         const contentPresent: boolean = this.state.content.indexOf('newsletter__email_content') !== -1
@@ -138,20 +142,26 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                 value={this.state.content}
                                 rows={10}
                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                                                this.setState({content: e.target.value})}
+                                    this.setState({content: e.target.value})}
                                 disabled={this.state.saving}
-                                ></textarea>
+                                />
                             ({this.state.content.length} characters)
-                            <button
-                                className={'btn btn-outline-success newsletter_edit__control_btn newsletter_edit__save_btn mt-2'}
-                                disabled={saveDisabled}
+                            <LoadingIconButton
+                                label='save'
                                 onClick={this.saveNewsletter}
-                                >save</button>
+                                busy={this.state.saving}
+                                btnClass='btn btn-sm btn-outline-success'
+                                outerClass='newsletter_edit__control_btn newsletter_edit__save_btn mt-2'
+                                disabled={saveDisabled}
+                                />
                             {(this.state.newsletter.release_date === null && !(!saveDisabled || !titlePresent || !contentPresent)) &&
-                                <button
-                                    className={'btn btn-outline-warning newsletter_edit__control_btn mt-2 mr-2'}
+                                <LoadingIconButton
+                                    label='release'
                                     onClick={this.release}
-                                    >release</button>
+                                    busy={this.state.releasing}
+                                    btnClass='btn btn-sm btn-outline-warning'
+                                    outerClass='newsletter_edit__control_btn mt-2 mr-2'
+                                    />
                             }
                         </div>
                         <div className={'col-12'}>
@@ -184,14 +194,17 @@ export default class NewsletterEdit extends React.Component<any, State> {
                                             this.setState({email: e.target.value})}
                                         disabled={!saveDisabled || this.state.sendingEmail}
                                            />
-                                    <button
-                                        className={'btn btn-outline-success mt-2 newsletter_edit_controls__email_btn'}
-                                        disabled={!saveDisabled || this.state.sendingEmail}
+                                    <LoadingIconButton
+                                        label='send email test'
                                         onClick={this.sendTestEmail}
-                                        >Send Email Test</button>
+                                        busy={this.state.sendingEmail}
+                                        disabled={!saveDisabled || this.state.sendingEmail}
+                                        btnClass='btn btn-sm btn-outline-success'
+                                        outerClass='mt-2 newsletter_edit_controls__email_btn'
+                                        />
 
                                     <Link
-                                        className={'btn btn-outline-info newsletter_edit__control_btn mt-2 mr-2'}
+                                        className={'btn btn-sm btn-outline-info newsletter_edit__control_btn mt-2 mr-2'}
                                         to={'/dashboard/newsletter'}
                                         >return to newsletters</Link>
                                 </div>

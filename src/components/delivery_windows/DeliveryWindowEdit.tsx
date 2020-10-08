@@ -176,7 +176,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                         }
                     </div>
                     <div className='col-2'>
-                        <button className='btn btn-outline-success' onClick={addZone}>
+                        <button className='btn btn-sm btn-outline-success' onClick={addZone}>
                             add zone
                         </button>
                     </div>
@@ -188,7 +188,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                             <div className='row dwe_zones__zone mt-1'>
                                 <div className='col-9'>{zone.name}</div>
                                 <div className='col-2'>
-                                    <button className='btn btn-outline-danger' onClick={()=>removeZone(zone)}>X</button>
+                                    <button className='btn btn-sm btn-outline-danger' onClick={()=>removeZone(zone)}>X</button>
                                 </div>
                             </div>
                         )

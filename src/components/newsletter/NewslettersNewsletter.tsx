@@ -26,7 +26,7 @@ export const NewslettersNewsletter = (props: Props): React.ReactElement => {
             </td>
             <td>
                 <button
-                    className={'btn btn-outline-success'}
+                    className={'btn btn-sm btn-outline-success'}
                     onClick={() => history.push({pathname: `/dashboard/newsletter/edit/${props.newsletter.id}`})}
                     >Edit</button>
             </td>

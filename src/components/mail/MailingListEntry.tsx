@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import MailingListModel from "../../models/MailingListModel";
 import mailingListService from '../../services/MailingListService';
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 
 interface Props {
     dto: MailingListModel
@@ -11,11 +12,14 @@ export const MailingListEntry = (props: Props): React.ReactElement => {
     const [code, setCode] = useState<string>(checkDTO.code);
     const [active, setActive] = useState<boolean>(checkDTO.active);
     const [email, setEmail] = useState<string>(checkDTO.email);
+    const [saving, setSaving] = useState(false);
 
     const save = (): void => {
+        setSaving(true);
         mailingListService.update<MailingListModel>(checkDTO.id, new MailingListModel(email, code, active))
             .then((dto:MailingListModel) => {
                 checkDTO = dto;
+                setSaving(false);
             })
             .catch( err => window.alert('unable to update entry'))
     }
@@ -37,8 +41,14 @@ export const MailingListEntry = (props: Props): React.ReactElement => {
                        onChange={() => setActive(!active)} />
             </td>
             <td>
-                <button className={'btn btn-outline-success mailing_list__save_btn'} disabled={disabled} onClick={save}
-                >save</button>
+                <LoadingIconButton
+                    label='save'
+                    onClick={save}
+                    busy={saving}
+                    btnClass='btn btn-outline-success'
+                    outerClass='mailing_list__save_btn'
+                    disabled={disabled}
+                    />
             </td>
         </tr>
     )

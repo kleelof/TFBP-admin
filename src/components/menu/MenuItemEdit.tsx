@@ -171,7 +171,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                 <div className="col-12 menuedititem__imagearea menuedititem__area">
                                     <ImageUploader
                                         id={`image_uploader__menuItem-${this.state.menuItem.id}`}
-                                        imageURL={config.API_URL + '/uploads/' + this.state.menuItem.image}
+                                        imageURL={this.state.menuItem.image !== null ? config.API_URL + config.UPLOADS_PATH + '/' + this.state.menuItem.image : ''}
                                         newImageLoaded={this.onNewImageLoaded}
                                         maximumSizeInMb={100}
                                         allowedFileTypes=".jpg,.png,.jpeg"

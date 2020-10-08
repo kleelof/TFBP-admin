@@ -65,11 +65,13 @@ export const MenuItems = (): React.ReactElement => {
                                         1 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 0 )
                             .map((item: MenuItem) => {
                     return(
-                        <div className="col-6 col-md-2 menu_items__item" key={`mi_${item.id}`}>
+                        <div className="col-6 col-md-3 menu_items__item" key={`mi_${item.id}`}>
                             <Link className="row" to={`/dashboard/menu/edit/${item.id}/`}>
                                     <div className="col-12 menu_items__menuitem_name no_wrap_text">{item.name}</div>
-                                    <div className="col-12 item__item_image">
-                                        <img src={`${config.API_URL}/uploads/${item.image}`} alt={item.name}/>
+                                    <div className="col-12">
+                                        <div className='menu_items__image'>
+                                            <img src={`${config.API_URL + config.UPLOADS_PATH}/${item.image}`} alt={item.name}/>
+                                        </div>
                                     </div>
                             </Link>
                         </div>

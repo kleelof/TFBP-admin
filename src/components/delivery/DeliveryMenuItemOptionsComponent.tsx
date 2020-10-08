@@ -80,13 +80,13 @@ export default class DeliveryMenuItemOptions extends React.Component<Props, Stat
                 </div>
                 <div className="col-12 text-center mt-3">
                     <button 
-                        className="btn btn-outline-success"
+                        className="btn btn-sm btn-outline-success"
                         disabled={this.state.saving || !this.state.active} 
                         onClick={this.save}
                         >Save</button>
 
                     <button
-                        className="btn btn-danger ml-3"
+                        className="btn btn-sm btn-danger ml-3"
                         disabled={this.state.saving}
                         onClick={this.remove}>
                         Remove</button>
