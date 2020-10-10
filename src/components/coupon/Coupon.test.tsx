@@ -3,7 +3,7 @@ import {shallow, configure, mount, render} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import {CouponComponent} from "./CouponComponent";
 import {BuildCoupon} from "../../../__mocks__/mockFactories";
-import Coupon from "../../models/Coupon";
+import Coupon from "../../models/CouponModel";
 import couponService from '../../services/CouponService';
 import Coupons from '../coupon/Coupons';
 import CouponAdd from "./CouponAdd";

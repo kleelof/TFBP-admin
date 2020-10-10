@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 
 import couponService from '../../services/CouponService';
-import Coupon from "../../models/Coupon";
+import Coupon from "../../models/CouponModel";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import {RouteComponentProps} from 'react-router-dom'
 

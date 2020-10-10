@@ -7,6 +7,7 @@ import momentHelper from '../../helpers/MomentHelper';
 import LoadingOverlay from '../overlays/LoadingOverlay';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
 import {RouteComponentProps} from 'react-router-dom';
+import {config} from "../../config";
 
 interface Props extends RouteComponentProps {
     match: any
@@ -70,6 +71,7 @@ export default class DeliveryDuplicate extends React.Component<Props, State> {
         return(
             <div className="row delivery_duplicate">
                 <div className="col-12 delivery_duplicate__dates">
+                    <h3>duplicate delivery menu</h3>
                     {momentHelper.asFullDate(this.state.deliveryDay.date)} - {momentHelper.asFullDate(this.state.deliveryDay.end_date)}
                     <hr/>
                 </div>
@@ -118,7 +120,9 @@ export default class DeliveryDuplicate extends React.Component<Props, State> {
                                 return(
                                     <div className="col-12 col-md-3 delivery_duplicate_items__item" key={`di_${item.id}`}>
                                         {item.menu_item.name}
-                                        <img src={item.menu_item.image} alt={item.menu_item.name}/>
+                                        <div className='delivery_duplicate_items__item_image'>
+                                            <img src={`${config.API_URL + config.UPLOADS_PATH}/${item.menu_item.image}`} alt={item.menu_item.name}/>
+                                        </div>
                                     </div>
                                 )
                             })

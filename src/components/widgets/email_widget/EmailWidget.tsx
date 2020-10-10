@@ -9,17 +9,13 @@ interface EmailConfig {
     email_type: string,
     entity_id: number,
     message?: string,
-    send_email?: boolean
-}
-
-interface DeliveriesEmailConfig extends  EmailConfig{
-    target_date: string
+    target_date?: string
 }
 
 interface Props {
     finished: () => void,
     prompt: string,
-    config: DeliveriesEmailConfig
+    config: EmailConfig
 }
 
 export const EmailWidget = (props: Props): React.ReactElement => {
@@ -33,10 +29,11 @@ export const EmailWidget = (props: Props): React.ReactElement => {
 
     const confirmEmailSend = (): void => {
         sendEmail()
-            .then((dto: MassMailResponseDTO) => {
-                if (window.confirm(`You are about to send ${dto.count} emails.`)) {
+            .then((emails: string[]) => {
+                if (window.confirm(`You are about to send ${emails.length} emails.`)) {
                     sendEmail(true)
                         .then(() => {
+                            window.alert('emails have been sent');
                             props.finished();
                         })
                         .catch(() => window.alert('unable to send emails'))
@@ -69,7 +66,7 @@ export const EmailWidget = (props: Props): React.ReactElement => {
                     onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
                 ></textarea>
             </div>
-            <div className='col-12 text-center'>
+            <div className='col-12 text-center mt-2'>
                 <LoadingIconButton
                     label='send'
                     onClick={confirmEmailSend}

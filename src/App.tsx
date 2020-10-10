@@ -37,6 +37,9 @@ import {DeliveryWindowEdit} from "./components/delivery_windows/DeliveryWindowEd
 import {Zones} from "./components/zone/Zones";
 import {DeliveryPlanner} from "./components/delivery_planner/DeliveryPlanner";
 import {Profile} from "./components/profile/Profile";
+import {Recipes} from "./components/recipe/Recipes";
+import {Ingredients} from "./components/ingredient/Ingredients";
+import {IngredientEdit} from "./components/ingredient/IngredientEdit";
 
 interface LinkStateProps {
   auth: AuthState
@@ -136,6 +139,8 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/delivery_window/add' component={DeliveryWindowEdit} />
                         <PrivateRoute path="/dashboard/delivery_window" component={DeliveryWindows} />
                         <PrivateRoute path='/dashboard/delivery_planner/:delivery_window/:target_date' component={DeliveryPlanner} />
+                        <PrivateRoute path='/dashboard/ingredient/edit/:id' component={IngredientEdit} />
+                        <PrivateRoute path='/dashboard/ingredient' component={Ingredients} />
                         <PrivateRoute path="/dashboard/mail" component={Mail} />
                         <PrivateRoute path="/dashboard/menu" component={Menu} />
                         <PrivateRoute path='/dashboard/newsletter/edit/:id' component={NewsletterEdit} />
@@ -145,6 +150,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
                         <PrivateRoute path="/dashboard/orders" component={Orders} />
                         <PrivateRoute path='/dashboard/profile' component={Profile} />
+                        <PrivateRoute path='/dashboard/recipe' component={Recipes} />
                         <PrivateRoute path='/dashboard/zone' component={Zones} />
                         <PrivateRoute path='/dashboard/' component={BrowserTool} />
                         <PrivateRoute path='' component={BrowserTool} />

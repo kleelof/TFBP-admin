@@ -6,6 +6,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import DeliveryWindow from "../../models/DeliveryWindowModel";
 import Zone from "../../models/ZoneModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
+import {EmailWidget} from "../widgets/email_widget/EmailWidget";
 
 
 export const DeliveryWindowEdit = (): React.ReactElement => {
@@ -18,6 +19,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
     const [selectedZone, setSelectedZone] = useState<number>(-1)
     const [saving, setSaving] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [sendEmail, setSendEmail] = useState(false);
 
     useEffect(() => {
         if (params.id === undefined) {
@@ -90,7 +92,29 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                 <h3>Edit Delivery Window</h3>
                 <hr/>
             </div>
-            <div className={'col-12 col-md-5'}>
+            <div className='col-12 col-md-10 text-right'>
+                <button
+                    onClick={() => history.goBack()}
+                    className={'btn btn-sm btn-outline-info ml-2 delivery_window_edit__go_back'}
+                    disabled={disabled}
+                >
+                    go back
+                </button>
+                <LoadingIconButton label='save updates' onClick={saveWindow} busy={saving} disabled={disabled}
+                                   btnClass={'btn btn-sm btn-outline-success'}
+                />
+                <LoadingIconButton label='delete' onClick={deleteWindow} busy={deleting} disabled={disabled}
+                                   btnClass={'btn btn-sm btn-outline-danger'} outerClass={'ml-2'}
+                />
+                <button
+                    onClick={() => {setSendEmail(!sendEmail)}}
+                    className={`btn btn-sm btn-outline-${sendEmail? 'warning' : 'primary'} ml-2`}
+                >
+                    { sendEmail ? 'cancel email' : 'send email' }
+                </button>
+                <hr/>
+            </div>
+            <div className={'col-12 col-md-5 mt-2'}>
                 <div className={'row'}>
                     <div className={'col-12'}>
                         <div className={'delivery_window_edit__prompt'}>name:</div>
@@ -195,24 +219,22 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
                     }
                 </div>
             </div>
-            <div className={'col-12 col-md-10 mt-2 text-center'}>
-                <hr/>
-                <LoadingIconButton label='save updates' onClick={saveWindow} busy={saving} disabled={disabled}
-                                   btnClass={'btn btn-outline-success'}
-                />
-                <LoadingIconButton label='delete' onClick={deleteWindow} busy={deleting} disabled={disabled}
-                                   btnClass={'btn btn-outline-danger'} outerClass={'ml-2'}
-                />
-            </div>
-            <div className='col-12 col-md-10 text-center mt-2'>
-                <button
-                    onClick={() => history.goBack()}
-                    className={'btn btn-outline-info ml-2'}
-                    disabled={disabled}
-                >
-                    go back
-                </button>
-            </div>
+            {sendEmail &&
+                <div className='col-12 delivery_window_edit__emailer'>
+                    <div className='row justify-content-center'>
+                        <div className='col-12 col-md-6'>
+                            <EmailWidget
+                                finished={() => setSendEmail(false)}
+                                prompt={'this email will be sent to anyone in your mailing list who can order during this delivery window'}
+                                config={{
+                                    email_type: 'delivery_window',
+                                    entity_id: deliveryWindow.id
+                                }}
+                                />
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     )
 }

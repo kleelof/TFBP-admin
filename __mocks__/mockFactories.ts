@@ -3,7 +3,7 @@ import Order from '../src/models/OrderModel';
 import CartItem from '../src/models/CartItemModel';
 import { BuildCartItem } from './cartMocks';
 import MenuItem from "../src/models/MenuItemModel";
-import Coupon from "../src/models/Coupon";
+import Coupon from "../src/models/CouponModel";
 import MailTemplate from "../src/models/MailTemplate";
 import Newsletter from "../src/models/Newsletter";
 import MailingListModel from "../src/models/MailingListModel";

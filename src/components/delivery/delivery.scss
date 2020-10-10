@@ -1,13 +1,19 @@
 @import '../../scss_variables.scss';
 
 .delivery_day_component {
+    &__date {
+        float: left;
+        display: block;
+    }
+
+    &__header {
+    }
 
     &__search_widget {
         position: relative;
         display: inline-block;
     }
 }
-
 .delivery_item_options {
     &__price {
         width: 80px;
@@ -60,9 +66,22 @@
 }
 
 .delivery_duplicate {
-    .delivery_duplicate_items__item img {
-        width: 100%;
+    .delivery_duplicate_items {
+        &__item_image {
+            display: inline-block;
+            height: 100%;
+            width: 100%;
+            vertical-align: middle;
+            text-align: center;
+
+            & img {
+                height: 100px;
+                border: 1px solid black;
+            }
+        }
     }
+
+
 }
 
 .delivery_day_item {

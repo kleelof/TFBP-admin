@@ -2,7 +2,6 @@
     Handles listing DeliveryDayComponent
  */
 import React from 'react';
-import {format} from 'date-fns';
 import deliveryDayService from '../../services/DeliveryDayService';
 
 import './delivery.scss';
@@ -11,9 +10,7 @@ import DeliveryDay from '../../models/DeliveryDayModel';
 
 import { DeliveryDays } from './DeliveryDays';
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
-import couponService from "../../services/CouponService";
 import PagedResultsDTO from "../../dto/PagedResultsDTO";
-import Coupon from "../../models/Coupon";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import {PageSelector} from "../widgets/page_selector/PageSelector";
 

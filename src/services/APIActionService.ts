@@ -21,7 +21,7 @@ class APIActionService extends Service {
         return this._post<any>('dashboard/send_support_email/', payload)
     }
 
-    public sendMassMail = (dto: any): Promise<MassMailResponseDTO> => {
+    public sendMassMail = (dto: any): Promise<string[]> => {
         return this._post<any>('dashboard/send_mass_email/', dto);
     }
 }

@@ -1,0 +1,29 @@
+@import '../../scss_variables';
+
+.ingredients {
+  &__ingredient {
+    &:hover {
+      background-color: $success_highlight;
+      cursor: pointer;
+    }
+  }
+}
+
+.ingredient_edit {
+  &__back_btn {
+    float: left;
+  }
+}
+
+.allergens {
+  &__allergen_select {
+    float: left;
+    margin-right: 5px;
+    padding: 5px;
+    width: 150px;
+
+    & span {
+      margin-left: 15px;
+    }
+  }
+}

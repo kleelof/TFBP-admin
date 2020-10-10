@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import Coupon from '../../models/Coupon';
+import Coupon from '../../models/CouponModel';
 import momentHelper from '../../helpers/MomentHelper';
 
 import './coupon.scss';

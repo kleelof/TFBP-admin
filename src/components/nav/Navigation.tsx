@@ -67,6 +67,20 @@ export const Navigation = (props: Props): React.ReactElement => {
                         </li>
                     </ul>
                 </li>
+                <li onClick={() => setShowDropdown('recipe')}>
+                    recipes
+                    <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'recipe' ? 'open' : 'close'}`}>
+                        <li onClick={() => navigateToPage("/dashboard/recipe")}>
+                            recipes
+                        </li>
+                        <li onClick={() => navigateToPage("/dashboard/ingredient")}>
+                            ingredients
+                        </li>
+                        <li onClick={() => navigateToPage("/dashboard/allergen")}>
+                            allergens
+                        </li>
+                    </ul>
+                </li>
                 <li onClick={() => navigateToPage("/dashboard/coupons")}>
                     coupons
                 </li>

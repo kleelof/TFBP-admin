@@ -76,7 +76,7 @@ export default class Service {
         if (id !== null) {
             return this._get(`${this.appName}/${this.view}/${id}/${this.querizeObject(params)}`);
         } else {
-            return this._get(`${this.appName}/${this.view}/?${this.querizeObject(params)}`);
+            return this._get(`${this.appName}/${this.view}/${this.querizeObject(params)}`);
         }
     }
 
@@ -118,7 +118,11 @@ export default class Service {
     }
 
     private querizeObject(object: any): String {
-        return Object.keys(object).map(key => key + '=' + object[key]).join('&')
+        let query: string = Object.keys(object).map(key => key + '=' + object[key]).join('&');
+        if (query.length > 0)
+            query = '?' + query;
+
+        return query;
     }
 
     public softDelete<T>(id: number): Promise<T> {

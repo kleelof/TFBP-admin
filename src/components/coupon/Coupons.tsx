@@ -1,5 +1,5 @@
 import React from 'react';
-import Coupon from '../../models/Coupon';
+import Coupon from '../../models/CouponModel';
 
 import couponService from '../../services/CouponService';
 
