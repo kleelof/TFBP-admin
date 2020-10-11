@@ -16,7 +16,7 @@ export const MailingListEntry = (props: Props): React.ReactElement => {
 
     const save = (): void => {
         setSaving(true);
-        mailingListService.update<MailingListModel>(checkDTO.id, new MailingListModel(email, code, active))
+        mailingListService.update<MailingListModel>(new MailingListModel(checkDTO.id, email, code, active))
             .then((dto:MailingListModel) => {
                 checkDTO = dto;
                 setSaving(false);

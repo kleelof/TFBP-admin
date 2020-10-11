@@ -101,6 +101,7 @@ export const Ingredients = (): React.ReactElement => {
                         {
                             (dto.results as Ingredient[]).map((ingredient: Ingredient) =>
                                 <tr
+                                    key={`ingredient_${ingredient.id}`}
                                     className='ingredients__ingredient'
                                     onClick={() => history.push({pathname: `/dashboard/ingredient/edit/${ingredient.id}`})}
                                 >

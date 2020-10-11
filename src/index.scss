@@ -82,9 +82,16 @@ input[type=checkbox]
     clear: both;
 }
 
-.spinner_button {
+.checkbox_selector {
+    float: left;
+    margin-right: 5px;
+    padding: 5px;
+    width: 150px;
 
-}
+    & span {
+      margin-left: 15px;
+    }
+  }
 
 
 /* The side navigation menu */

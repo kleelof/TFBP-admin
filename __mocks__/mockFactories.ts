@@ -190,6 +190,7 @@ export const BuildMailingList = (params: IBuildMailingListEntry): any => {
     for (let x: number =1; x <= params.count; x ++) {
         items.push(
             new MailingListModel(
+                x,
                 params.email || `email_${x}@mail.com`,
                 params.code || x.toString(),
                 params.active || true
@@ -288,6 +289,7 @@ export const BuildZone = (params: IBuildZone): any =>  {
     for (let x: number =1; x <= params.count; x ++) {
         items.push(
             new Zone(
+                x,
                 params.name || `zone_${x}`,
                 params.zip_codes || []
             )

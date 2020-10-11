@@ -7,6 +7,7 @@ import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButto
 import {PageSelector} from "../widgets/page_selector/PageSelector";
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import { useHistory } from 'react-router-dom';
+import './recipe.scss';
 
 export const Recipes = (): React.ReactElement => {
     const history = useHistory();
@@ -21,7 +22,11 @@ export const Recipes = (): React.ReactElement => {
     }, [])
 
     const addRecipe = (): void => {
-
+        setAddingRecipe(true);
+        recipeService.add<Recipe>(new Recipe(newRecipe))
+            .then((recipe: Recipe) => history.push({pathname: `/dashboard/recipe/edit/${recipe.id}`}))
+            .catch(() => window.alert('unable to create recipe'))
+            .then(() => setAddingRecipe(false))
     }
 
     const loadPage = (pageNumber: number, searchPattern?: string): void => {
@@ -93,6 +98,7 @@ export const Recipes = (): React.ReactElement => {
                         {
                             (dto.results as Recipe[]).map((recipe: Recipe) =>
                                 <tr
+                                    key={`recipe_list_${recipe.id}`}
                                     className='recipes__recipe'
                                     onClick={() => history.push({pathname: `/dashboard/recipe/edit/${recipe.id}`})}
                                 >

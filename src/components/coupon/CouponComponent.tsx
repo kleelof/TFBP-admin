@@ -21,7 +21,7 @@ export const CouponComponent = (props: Props): React.ReactElement => {
         if (!window.confirm(`Are you sure you want to deactivate:\n${coupon.code}\n\nCoupons cannot be reactivated!`)) return;
         setDeactivating(true);
         coupon.active = false;
-        couponService.update(coupon.id, coupon)
+        couponService.update(coupon)
             .then((coupon: Coupon) => {
                 setCoupon(coupon);
                 props.couponUpdated(coupon);

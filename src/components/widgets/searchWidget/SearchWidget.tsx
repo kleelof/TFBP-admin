@@ -2,16 +2,19 @@ import React from 'react';
 import InputWidget from '../inputWidget/InputWidget';
 import Service from '../../../services/Service';
 
-import {config} from '../../../config';
 import './search_widget.scss';
+import PagedResultsDTO from "../../../dto/PagedResultsDTO";
 
 interface Props {
     service: Service,
-    itemSelected: (item: any) => void
+    itemSelected: (item: any) => void,
+    placeholder?: string
 }
 
 interface State {
-    items: any[]
+    dto: PagedResultsDTO,
+    showChoices: boolean,
+    currentValue: string
 }
 
 export default class SearchWidget extends React.Component<Props, State> {
@@ -20,63 +23,69 @@ export default class SearchWidget extends React.Component<Props, State> {
         super(props);
     
         this.state = {
-            items: []
+            dto: new PagedResultsDTO(),
+            showChoices: false,
+            currentValue: ''
         }  
     }
 
-    public componentDidMount = (): void => {
-        window.onclick = function(event: any) {
-            this.close()
-        }
-    }
-
     private itemSelected = (item: any): void => {
-        this.setState({items: []});
+        this.setState({showChoices: false, currentValue: item.name});
         this.props.itemSelected(item);
     }
 
     private doSearch = (id: string, text: string): void => {
-        this.props.service.search<any[]>(text)
-            .then((items: any[]) => this.setState({items}))
-            .catch( err => {})
+        this.setState({currentValue: text});
+
+        if (text === '') {
+            this.setState({showChoices: false});
+            return;
+        }
+
+        this.props.service.pagedSearchResults(1, text)
+            .then((dto: PagedResultsDTO) => {
+                this.setState({dto, showChoices: dto.count > 0});
+                this.props.itemSelected(text);
+            })
+            .catch( () => window.alert('unable to search'))
     }
 
     public render() {
         return(
-            <div className="row search_widget">
+            <div
+                className="row search_widget"
+                onBlur={() => this.setState({showChoices: false, currentValue: ''})}
+            >
                 <div className="col-12">
                     <InputWidget
+                        key={Math.random()}
                         id='search_widget__InputWidget'
                         type=""
-                        initialValue=''
+                        initialValue={this.state.currentValue}
                         onUpdate={this.doSearch}
-                        placeholder='Enter Menu Item to Add'
+                        placeholder={this.props.placeholder || ''}
                         defaultUpdateValue={''}
                     />
                 </div>
-                { this.state.items.length > 0 &&
-                    <div className="col-12 search_widget_results">
-                        <div className="search_widget_results__content">
-                            {
-                                this.state.items.map((item: any) => {
-                                    return(
-                                        <div className="row result"
-                                            onClick={() => this.itemSelected(item)}>
-                                            <div className="col-9 result__name">
-                                                {item.name}
-                                            </div>
-                                            {/*
-                                            <div className="col-3">
-                                                <img src={`${config.API_URL + config.UPLOADS_PATH}/${item.image}`} alt={item.name}/>
-                                            </div>
-                                            */}
+                <div className={`col-12 search_widget_results--${this.state.showChoices ? 'show' : 'hide'}`}>
+                    <div className="search_widget_results__content">
+                        {
+                            this.state.dto.results.map((item: any) => {
+                                return(
+                                    <div
+                                        key={`search_result_${item.id}`}
+                                        className="row search_widget__result"
+                                        onClick={() => this.itemSelected(item)}
+                                    >
+                                        <div className="col-12 result__name">
+                                            {item.name}
                                         </div>
-                                    )
-                                })
-                            }
-                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
-                }   
+                </div>
             </div>
         )
     }

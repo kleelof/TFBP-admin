@@ -54,7 +54,7 @@ export default class MailTemplateComponent extends React.Component<Props, State>
                 .catch( err => window.alert('unable to save'))
                 .then(() => this.setState({updating: false}))
         } else {
-            mailTemplateService.update<MailTemplate>(template.id, template)
+            mailTemplateService.update<MailTemplate>(template)
                 .then(() => this.setState({originalText: this.state.text}))
                 .catch( err => window.alert('unable to update'))
                 .then(() => this.setState({updating: false}))

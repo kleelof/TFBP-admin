@@ -98,7 +98,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
         } else if (typeof menuItem.image === 'string') {
             delete menuItem.image;
         }
-         menuItemService.update<MenuItemDTO>(menuItem.id, menuItem, menuItem.image !== null && typeof menuItem.image !== 'string')
+         menuItemService.update<MenuItemDTO>(menuItem, menuItem.image !== null && typeof menuItem.image !== 'string')
                 .then((menuItemDTO: MenuItemDTO) => {
                     this.setState({
                         menuItem: menuItem,

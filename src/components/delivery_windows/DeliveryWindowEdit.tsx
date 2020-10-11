@@ -74,7 +74,7 @@ export const DeliveryWindowEdit = (): React.ReactElement => {
         setDisabled(true);
         setSaving(true);
 
-        deliveryWindowService.update<DeliveryWindow>(deliveryWindow.id, deliveryWindow)
+        deliveryWindowService.update<DeliveryWindow>(deliveryWindow)
                 .then(() => history.goBack())
                 .catch( err => window.alert('unable to update window'))
     }

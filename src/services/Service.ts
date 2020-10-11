@@ -1,6 +1,7 @@
 import { config } from '../config.js';
 import axiosInstance from './axiosApi';
 import PagedResultsDTO from "../dto/PagedResultsDTO";
+import ModelBase from "../models/ModelBase";
 
 interface AxiosResponse {
     data: any
@@ -129,11 +130,11 @@ export default class Service {
         return this._get(`${this.appName}/${this.view}/soft_delete/${id}/`);
     }
 
-    public update<T>(id: number, DTO: T, useFormData:boolean = false): Promise<T> {
+    public update<T>(DTO: any, useFormData:boolean = false): Promise<any> {
         if (useFormData){
-            return this.multipartFormUpdate<T>(id, DTO);
+            return this.multipartFormUpdate<T>(DTO.id, DTO);
         } else {
-            return this._patch<T>(`${this.appName}/${this.view}/${id}/`, DTO);
+            return this._patch<T>(`${this.appName}/${this.view}/${DTO.id}/`, DTO);
         }
     }
 }

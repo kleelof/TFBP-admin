@@ -6,10 +6,14 @@ export default class Zone extends ModelBase {
     public name!: string;
     public zip_codes!: Zipcode[]
 
-    constructor(name?: string, zip_codes?: Zipcode[]) {
+    constructor(
+        id: number = -1,
+        name: string = '',
+        zip_codes: Zipcode[] = []
+    ) {
         super();
-
-        this.name = name || ''
-        this.zip_codes = zip_codes || []
+        this.id = id;
+        this.name = name;
+        this.zip_codes = zip_codes;
     }
 }

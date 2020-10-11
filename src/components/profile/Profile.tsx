@@ -50,7 +50,7 @@ export const Profile = (): React.ReactElement => {
 
     const saveUpdates = (): void => {
         setSaving(true);
-        operatorService.update(operator.id, operator)
+        operatorService.update(operator)
             .then((op: Operator) => {
                 savedOperator = op;
                 updateOperator(op);

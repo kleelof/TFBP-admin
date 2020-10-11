@@ -104,7 +104,9 @@ export default class InputWidget extends Component<Props, State> {
                             value={this.state.value}
                             onBlur={() => this.sendUpdate()}
                             onChange={(e) => this.updateValue(e)}
-                            onKeyDown={(e) => this.handleOnKeyPress(e)}/>
+                            onKeyDown={(e) => this.handleOnKeyPress(e)}
+                            autoComplete="off"
+                        />
                     </div>
                 </div>
             )

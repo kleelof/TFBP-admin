@@ -31,7 +31,7 @@ export const IngredientEdit = (): React.ReactElement => {
 
     const save = (): void => {
         setSaving(true);
-        ingredientService.update(ingredient.id, ingredient)
+        ingredientService.update(ingredient)
             .then((ingredient: Ingredient) => history.goBack())
     }
 
@@ -77,11 +77,11 @@ export const IngredientEdit = (): React.ReactElement => {
                 <h5>allergens</h5>
                 {
                     allergens.map((allergen: Allergen) =>
-                        <div className='allergens__allergen_select'>
+                        <div className='checkbox_selector' key={`allergen_${allergen.id}`}>
                             <input
                                 type='checkbox'
                                 checked={ingredient.allergens_ids.indexOf(allergen.id) > -1}
-                                onClick={() => {
+                                onChange={() => {
                                     let allergens: number[] = ingredient.allergens_ids;
                                     if (allergens.indexOf(allergen.id) > -1 ) {
                                         allergens = allergens.filter((al: number) => al !== allergen.id)

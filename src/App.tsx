@@ -40,6 +40,8 @@ import {Profile} from "./components/profile/Profile";
 import {Recipes} from "./components/recipe/Recipes";
 import {Ingredients} from "./components/ingredient/Ingredients";
 import {IngredientEdit} from "./components/ingredient/IngredientEdit";
+import {RecipeEdit} from "./components/recipe/RecipeEdit";
+import {RecipeNotes} from "./components/recipe/RecipeNotes";
 
 interface LinkStateProps {
   auth: AuthState
@@ -150,6 +152,8 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
                         <PrivateRoute path="/dashboard/orders" component={Orders} />
                         <PrivateRoute path='/dashboard/profile' component={Profile} />
+                        <PrivateRoute path='/dashboard/recipe/edit/:id' component={RecipeEdit} />
+                        <PrivateRoute path='/dashboard/recipe/notes/:id' component={RecipeNotes} />
                         <PrivateRoute path='/dashboard/recipe' component={Recipes} />
                         <PrivateRoute path='/dashboard/zone' component={Zones} />
                         <PrivateRoute path='/dashboard/' component={BrowserTool} />

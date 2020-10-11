@@ -32,7 +32,7 @@ export default class MailingList extends React.Component<any, State> {
     }
 
     private addNewEntry = (): void => {
-        mailingListService.add<MailingListModel>(new MailingListModel(this.state.newEmail, this.state.newCode, true))
+        mailingListService.add<MailingListModel>(new MailingListModel(-1, this.state.newEmail, this.state.newCode, true))
             .then((entry: MailingListModel) => this.setState({
                 ...this.state,
                 mailingList: [...this.state.mailingList, entry],

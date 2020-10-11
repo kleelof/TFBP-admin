@@ -42,7 +42,7 @@ export default class DeliveryMenuItemOptions extends React.Component<Props, Stat
 
     private save = (): void => {
         this.setState({saving: true});
-        deliveryDayItemService.update<DeliveryDayItem>(this.state.deliveryDayItem.id, this.state.deliveryDayItem)
+        deliveryDayItemService.update<DeliveryDayItem>(this.state.deliveryDayItem)
             .then((item: DeliveryDayItem) => this.setState({deliveryDayItem: item, saving: false}))
             .catch( resp => window.alert("Unable to update"))
     }

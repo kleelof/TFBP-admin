@@ -36,7 +36,7 @@ export default class OrderEdit extends React.Component<any, State> {
 
     private saveUpdates = (): void => {
         this.setState({updating: true});
-        orderService.update<any>(this.state.order.id, new OrderDTO(this.state.order))
+        orderService.update<any>(new OrderDTO(this.state.order))
             .then((order: Order) => this.setState({order, updating: false, updatesPending: false, returnToOrders: true}))
             .catch ( err => window.alert(err))
     }

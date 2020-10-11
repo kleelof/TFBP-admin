@@ -82,7 +82,7 @@ export default class NewsletterEdit extends React.Component<any, State> {
         const newsletter: Newsletter = this.state.newsletter;
         newsletter.title = this.state.title;
         newsletter.content = this.state.content;
-        newsletterService.update<Newsletter>(newsletter.id, newsletter)
+        newsletterService.update<Newsletter>(newsletter)
             .then((nl: Newsletter) => {
                 this.setState({
                     newsletter: nl,

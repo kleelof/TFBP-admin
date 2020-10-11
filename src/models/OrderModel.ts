@@ -75,6 +75,7 @@ export class OrderDTO extends ModelBase {
     constructor(order: Order) {
                     super();
 
+                    this.id = order.id;
                     this.order_status = order.order_status;
                     this.contact_name = order.contact_name;
                     this.phone_number = order.phone_number;

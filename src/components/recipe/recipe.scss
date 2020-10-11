@@ -1,1 +1,27 @@
 @import '../../scss_variables';
+
+.recipes {
+  &__recipe {
+    &:hover {
+      background-color: $success_highlight;
+      cursor: pointer;
+    }
+  }
+}
+
+.recipe_ingredient_panel {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, .5);
+  &__name {
+    font-weight: bold;
+  }
+}
+
+.recipe_edit {
+  & .recipe_scale {
+    & input {
+      width: 100px;
+    }
+  }
+}

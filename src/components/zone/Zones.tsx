@@ -20,7 +20,7 @@ export const Zones = (): React.ReactElement => {
     }, [])
 
     const addZone = (): void => {
-        zoneService.add<Zone>(new Zone(newZone))
+        zoneService.add<Zone>(new Zone(-1, newZone))
             .then((zone: Zone) => {
                 setZones([...zones, zone]);
                 setNewZone('');

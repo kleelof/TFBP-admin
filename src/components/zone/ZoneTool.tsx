@@ -41,7 +41,7 @@ export const ZoneTool = (props: Props): React.ReactElement => {
 
     const updateZone = (): void => {
         setUpdating(true)
-        zoneService.update<Zone>(props.zone.id, new Zone(zoneName))
+        zoneService.update<Zone>(new Zone(props.zone.id, zoneName))
             .then(() => setUpdating(false))
     }
 
