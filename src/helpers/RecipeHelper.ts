@@ -1,7 +1,19 @@
 import RecipeIngredient from "../models/RecipeIngredientModel";
 import {INGREDIENT_UNIT} from '../models/RecipeIngredientModel';
+import Ingredient from "../models/IngredientModel";
+import Allergen from "../models/AllergenModel";
 
 class RecipeHelper {
+
+    public createStringListOfAllergensFromIngredient = (ingredient: Ingredient): string => {
+        let list: string = '';
+        ingredient.allergens.forEach((allergen: Allergen, index: number) => {
+            list += allergen.name;
+            if (index < ingredient.allergens.length -1)
+                list += ', '
+        })
+        return list;
+    }
 
     public scaleRecipeIngredient = (ingredient: RecipeIngredient, servings: number, count: number): string => {
         let rawValue: number =  (ingredient.quantity / servings) * count;
@@ -17,17 +29,17 @@ class RecipeHelper {
             unit = 3;
         }
 
-        if (unit === 4 && rawValue > 5) { // tsp > oz
+        if (unit === 4 && rawValue > 5) { // tsp > fl_oz
             rawValue /= 6;
             unit = 6;
         }
 
-        if (unit === 5 && rawValue > 2) {// tbl > oz
+        if (unit === 5 && rawValue > 2) {// tbl > fl_oz
             rawValue /= 3;
             unit = 6;
         }
 
-        if (unit === 6 && rawValue > 7) {// oz > c
+        if (unit === 6 && rawValue > 7) {// fl_oz > c
             rawValue /= 8;
             unit = 7;
         }
@@ -47,7 +59,7 @@ class RecipeHelper {
             unit = 10;
         }
 
-        if (unit === 11 && rawValue > 1000) { // ml > l
+        if (unit === 11 && rawValue > 999) { // ml > l
             rawValue /= 1000;
             unit = 12;
         }

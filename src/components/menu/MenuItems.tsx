@@ -5,6 +5,7 @@ import menuItemService from '../../services/MenuItemService';
 import {config} from '../../config';
 import './menu.scss';
 import {NewMenuItem} from "./NewMenuItem";
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
 
 export const MenuItemCategories: any = {
     en: 'Entrees',
@@ -20,19 +21,19 @@ export enum ItemsModes {
 
 export const MenuItems = (): React.ReactElement => {
     const params: any = useParams();
-    const [menuItems, setMenuItems] = useState<MenuItem[]>([])
+    const [DTO, setDTO] = useState(new PagedResultsDTO());
 
     useEffect(() => {
-        menuItemService.search<MenuItem[]>(params.category, 'category')
-            .then((items: MenuItem[]) => {
-                setMenuItems(items);
+        menuItemService.search<PagedResultsDTO>(params.category, 'category')
+            .then((dto: PagedResultsDTO) => {
+                setDTO(dto);
             })
             .catch( err => {window.alert('Unable To Load Menu Items')})
         return () => {
         }
     }, [params.category])
 
-    const sortedItems: MenuItem[] = menuItems.sort((a: MenuItem, b: MenuItem) => a.name > b.name ? 1 : -1);
+    const sortedItems: MenuItem[] = (DTO.results as any).sort((a: MenuItem, b: MenuItem) => a.name > b.name ? 1 : -1);
 
     const menuType: string = params.category === 'en' ?
                             'entree'

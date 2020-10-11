@@ -76,9 +76,6 @@ export const Navigation = (props: Props): React.ReactElement => {
                         <li onClick={() => navigateToPage("/dashboard/ingredient")}>
                             ingredients
                         </li>
-                        <li onClick={() => navigateToPage("/dashboard/allergen")}>
-                            allergens
-                        </li>
                     </ul>
                 </li>
                 <li onClick={() => navigateToPage("/dashboard/coupons")}>

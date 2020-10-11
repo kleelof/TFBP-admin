@@ -4,7 +4,6 @@ import {months} from '../../constants';
 import './browser.scss';
 import {BrowserDay} from "./BrowserDay";
 import { RouteComponentProps } from 'react-router-dom';
-import {NavItem, SubNavigation} from "../nav/SubNavigation";
 
 interface Props extends RouteComponentProps {
     match: any

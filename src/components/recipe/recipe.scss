@@ -25,3 +25,16 @@
     }
   }
 }
+
+.recipe_printout {
+  width: 100%;
+  font-size: 1.5em;
+}
+
+.recipe_scale {
+  &__print {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

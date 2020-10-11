@@ -8,6 +8,8 @@ import {RouteComponentProps} from 'react-router-dom';
 import './menu.scss';
 import LoadingOverlay from '../overlays/LoadingOverlay';
 import {config} from "../../config";
+import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
+import {MenuComponents} from "./MenuComponents";
 
 interface Props extends RouteComponentProps {
     match: any;
@@ -43,7 +45,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
     private allergenSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         let menuItem: MenuItemDTO = this.state.menuItem;
         menuItem.allergens = this.checkboxesToString(menuItem.allergens, e.target.id)
-        this.setState({menuItem});
+        this.setState({menuItem, hasBeenUpdated: true});
     }
 
     public componentDidMount = (): void => {
@@ -86,7 +88,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
     private proteinSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         let menuItem: MenuItemDTO = this.state.menuItem;
         menuItem.proteins = this.checkboxesToString(menuItem.proteins, e.target.id);
-        this.setState({menuItem});
+        this.setState({menuItem, hasBeenUpdated: true});
     }
 
     private save = (): void => {
@@ -112,7 +114,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
     private updateMenuItem = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
         let menuItem: any = this.state.menuItem;
         menuItem[e.target.name] = e.target.value;
-        this.setState({menuItem});
+        this.setState({menuItem, hasBeenUpdated: true});
     }
 
     private updateOptions = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -120,11 +122,11 @@ export default class MenuItemEdit extends React.Component<Props, State> {
         switch(e.target.id) {
             case 'spicy':
                 menuItem.spicy = !menuItem.spicy
-                this.setState({menuItem})
+                this.setState({menuItem, hasBeenUpdated: true})
                 break;
             case 'price':
                 menuItem.price = parseFloat(e.target.value);
-                this.setState({menuItem});
+                this.setState({menuItem, hasBeenUpdated: true});
                 break;
         }
     }
@@ -134,9 +136,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
         if (!this.state.loaded)
             return <LoadingOverlay />
 
-        const saveBtnDisabled: boolean = this.state.saving; // || this.props.mode === ItemModes.view
         const disabled: boolean = false;// this.props.mode === ItemModes.view || this.props.mode === ItemModes.deliveryDay
-
 
         const allergens: any[] = [
             { name: 'Milk', code: 'milk' },
@@ -160,13 +160,29 @@ export default class MenuItemEdit extends React.Component<Props, State> {
         ]
         
         return (
-            <div className="row menuedititem mt-3">
-                <div className="col-12 col-md-6 menuedititem__header">
-                    
+            <div className="row menuedititem">
+                <div className="col-12">
+                    <h3>edit menu item</h3>
+                    <hr/>
+                </div>
+                <div className='col-12'>
+                    <button
+                        className='btn btn-sm btn-outline-info'
+                        onClick={() => this.props.history.goBack()}
+                        >back</button>
+                    <LoadingIconButton
+                        outerClass='float-right'
+                        btnClass={`btn btn-outline-${this.state.hasBeenUpdated ? 'success' : 'secondary'}`}
+                        label='save'
+                        onClick={this.save}
+                        busy={this.state.saving}
+                        disabled={!this.state.hasBeenUpdated}
+                        />
+                    <hr/>
                 </div>
                 <div className="col-12 menuedititem__inner p-3">
                     <div className="row">
-                        <div className="col-12 col-md-6">
+                        <div className="col-12 col-md-6 mt-2 mt-md-0">
                             <div className="row">
                                 <div className="col-12 menuedititem__imagearea menuedititem__area">
                                     <ImageUploader
@@ -178,13 +194,10 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                         disabled={disabled}
                                         />
                                 </div>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <div className="row">
-                                <div className="col-12 mt-1 mt-md-0">
+                                <div className="col-12 mt-2">
+                                    name
                                     <input
-                                        id='menuedititem__name' 
+                                        id='menuedititem__name'
                                         type="text"
                                         className="form-control"
                                         placeholder="Meal Name"
@@ -194,8 +207,38 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                         disabled={disabled}
                                         />
                                 </div>
-                                <div className="col-12 mt-1">
-                                    <textarea 
+                                <div className="col-6 mt-2">
+                                    category
+                                    <select
+                                        name="category"
+                                        className="form-control"
+                                        defaultValue={this.state.menuItem.category}
+                                        disabled={disabled}
+                                        onChange={this.updateMenuItem}>
+                                        <option value="en">Entree</option>
+                                        <option value="ap">Apetizer</option>
+                                        <option value="si">Side Item</option>
+                                        <option value="de">Dessert</option>
+                                    </select>
+                                </div>
+                                <div className="col-6 mt-2">
+                                    price
+                                    <input type="text" name="price" className="form-control" value={this.state.menuItem.price}
+                                        disabled={disabled} onChange={this.updateMenuItem} />
+                                </div>
+                                <div className='col-12 mt-2'>
+                                    <div className="checkbox_selector">
+                                        <input
+                                            type="checkbox"
+                                            id="spicy"
+                                            checked={this.state.menuItem.spicy}
+                                            onChange={this.updateOptions}
+                                            />
+                                            <span>Spicy</span>
+                                    </div>
+                                </div>
+                                <div className="col-12 mt-2">
+                                    <textarea
                                         className="form-control"
                                         rows={2}
                                         placeholder="Description"
@@ -205,34 +248,11 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                         disabled={disabled}
                                         ></textarea>
                                 </div>
-                                <div className="col-12 mt-1">
-                                    Category:
-                                    <select
-                                        name="category"
-                                        className="form-control"
-                                        defaultValue={this.state.menuItem.category}
-                                        disabled={disabled}
-                                        onChange={this.updateMenuItem}> 
-                                        <option value="en">Entree</option>
-                                        <option value="ap">Apetizer</option>
-                                        <option value="si">Side Item</option>
-                                        <option value="de">Dessert</option>
-                                    </select>
-                                </div>
-                                <div className="col-12 mt-1">
-                                    Price:
-                                    <input type="text" name="price" className="form-control" value={this.state.menuItem.price}
-                                        disabled={disabled} onChange={this.updateMenuItem} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-12">
-                            <div className="row">
-                                <div className="col-12 col-md-6 mt-2">
-                                    <h5>Allergens:</h5>
+                                <div className="col-12 mt-2">
+                                    <h5>allergens</h5>
                                         {
                                             allergens.map((allergen: any) =>
-                                                <div className="menuedititem__checker" key={allergen.code}>
+                                                <div className="checkbox_selector" key={allergen.code}>
                                                     <input
                                                         type="checkbox"
                                                         id={allergen.code}
@@ -243,13 +263,14 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                             )
                                         }
                                 </div>
-                                <div className="col-12 col-md-6 mt-2">
-                                    <h5>Proteins:</h5>
+                                <div className="col-12 mt-2">
+                                    <hr/>
+                                    <h5>proteins:</h5>
                                         {
                                             proteins.map((protein: any) =>
 
 
-                                                <div className="menuedititem__checker" key={protein.code}>
+                                                <div className="checkbox_selector" key={protein.code}>
                                                     <input
                                                         type="checkbox"
                                                         id={protein.code}
@@ -261,33 +282,13 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                             )
                                         }
                                 </div>
-                                <div className="col-12 col-md-6 mt-2">
-                                    <hr/>
-                                    <div className="menuedititem__checker">
-                                        <input
-                                            type="checkbox"
-                                            id="spicy"
-                                            checked={this.state.menuItem.spicy}
-                                            onChange={this.updateOptions}
-                                            />
-                                            <span>Spicy</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                        <div className="col-12 menuedititem__controls_area menuedititem__area text-center mt-2">
+                        <div className={'col-12 d-block d-md-none'}>
                             <hr/>
-                            <button
-                                className="btn btn-outline-info"
-                                disabled={saveBtnDisabled}
-                                onClick={() => this.props.history.goBack()}
-                                >back to menu</button>
-
-                            <button 
-                                className="btn btn-outline-success"
-                                disabled={saveBtnDisabled} 
-                                onClick={this.save}
-                                >save</button>
+                        </div>
+                        <div className='col-12 col-md-6 mt-2 mt-md-0'>
+                            <MenuComponents menuItem={this.state.menuItem} />
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,8 @@ import { DeliveryWindowDTO } from '../models/DeliveryWindowModel';
 import OrderItem from '../models/OrderItemModel';
 import { BuildOrderItem } from '../../__mocks__/mockFactories';
 import { BuildCartItem } from '../../__mocks__/cartMocks';
+import RecipeIngredient from "../models/RecipeIngredientModel";
+import recipeHelper from '../helpers/RecipeHelper';
 
 describe('Helpers Tests', () => {
     it('Should convert 24hr to 12hr time', () => {
@@ -57,6 +59,57 @@ describe('Helpers Tests', () => {
                 window: BuildDeliveryWindow({count: 1, start_time: '03:03:03', end_time: '04:03:03'})
             }
             expect(helpers.formatDeliveryWindow(tDeliveryWindow)).toContain('between');
+        })
+    })
+})
+
+describe('RecipeHelper tests', () => {
+    describe('scaling tests', () => {
+        const recipeIngredient: RecipeIngredient = new RecipeIngredient(1, 0)
+
+        it('should oz > lb', () => {
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 16)).toBe('1.00 lb');
+        })
+
+        it('should g > kg', () => {
+            recipeIngredient.unit = 2;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 1000)).toBe('1.00 kg');
+        })
+
+        it('should tsp > fl_oz', () => {
+            recipeIngredient.unit = 4;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 6)).toBe('1.00 fl oz');
+        })
+
+        it('should tbl > fl_oz', () => {
+            recipeIngredient.unit = 5;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 3)).toBe('1.00 fl oz');
+        })
+
+        it('should fl_oz > c', () => {
+            recipeIngredient.unit = 6;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 8)).toBe('1.00 cup');
+        })
+
+
+        it('should c > pint', () => {
+            recipeIngredient.unit = 7;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 2)).toBe('1.00 pint');
+        })
+
+        it('should p > qt', () => {
+            recipeIngredient.unit = 8;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 2)).toBe('1.00 qt');
+        })
+
+        it('should qt > gal', () => {
+            recipeIngredient.unit = 9;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 4)).toBe('1.00 gal');
+        })
+
+        it('should ml > l', () => {
+            recipeIngredient.unit = 11;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 1000)).toBe('1.00 l');
         })
     })
 })
