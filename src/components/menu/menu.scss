@@ -12,6 +12,17 @@
     }
 }
 
+.menu_component {
+    margin: 2px 0;
+    padding: 2px 2px 10px;
+    border-bottom: 1px solid $primary_fill;
+
+    &__title, &__portion {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+}
+
 .menu_items {
 
     &__item {
@@ -154,4 +165,17 @@
 .new_menu_item {
     padding: 5px;
     border: 2px solid rgba(0, 0, 0, .2);
+}
+
+.plating_sheet {
+    margin-left: 10px;
+
+    &__title {
+        font-size: 2.0em;
+        font-weight: bold;
+    }
+
+    & td {
+        font-size: 1.2em;
+    }
 }

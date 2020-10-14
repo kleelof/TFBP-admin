@@ -1,0 +1,20 @@
+@import "../../../scss_variables";
+
+.print_button {
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  & img {
+    margin-left: 25%;
+    height: 30px;
+  }
+
+  & span {
+    width: 100%;
+    font-size: .8em;
+    font-weight: bold;
+  }
+}

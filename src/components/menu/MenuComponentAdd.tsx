@@ -2,13 +2,16 @@
     Handles adding and editing MenuItemComponent
  */
 import React, {ChangeEvent, useState, Fragment} from 'react';
-import SearchWidget from "../widgets/searchWidget/SearchWidget";
-import recipeService from '../../services/RecipeService';
 import Recipe from "../../models/RecipeModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
-import menuItemComponentService from '../../services/MenuItemComponentService';
 import MenuItemComponent from "../../models/MenuItemComponentModel";
+import menuItemService from '../../services/MenuItemService';
 import MenuItem from "../../models/MenuItemModel";
+import actionsService from '../../services/APIActionService';
+import SearchRecipesAndIngredientsDTO from "../../dto/SearchRecipesAndIngredientsDTO";
+import RecipeAndIngredientSearcher from "./RecipeAndIngredientSearcher";
+import AttachComponentDTO from "../../dto/AttachComponentDTO";
+import {INGREDIENT_UNIT} from "../../models/RecipeIngredientModel";
 
 interface Props {
     menuItem: MenuItem
@@ -16,28 +19,41 @@ interface Props {
 }
 
 export const MenuComponentAdd = (props: Props): React.ReactElement => {
-    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+    const [selectedItem, setSelectedItem] = useState<SearchRecipesAndIngredientsDTO | string | null>(null);
     const [isAddOn, setIsAddOn] = useState(false);
     const [addOnPrice, setAddOnPrice] = useState(0);
     const [addOnName, setAddOnName] = useState('');
+    const [quantity, setQuantity] = useState(0);
+    const [unit, setUnit] = useState(0);
     const [saving, setSaving] = useState(false);
 
     const save = (): void => {
         setSaving(true);
 
-        menuItemComponentService.add<MenuItemComponent>(new MenuItemComponent(-1, selectedRecipe?.id, props.menuItem.id, isAddOn, addOnPrice, addOnName))
+        menuItemService.attachComponent(
+            props.menuItem,
+            new AttachComponentDTO(
+                (selectedItem as SearchRecipesAndIngredientsDTO).type,
+                (selectedItem as SearchRecipesAndIngredientsDTO).item.id,
+                quantity, unit, isAddOn, addOnName, addOnPrice
+                ))
             .then((menuItemComponent: MenuItemComponent) => props.addComponent(menuItemComponent))
             .catch(() => window.alert('unable to add component'))
             .then(() => setSaving(false))
     }
 
+    const search = (id: string, text: string): void => {
+        actionsService.searchRecipesAndIngredients(text)
+            .then((resp: SearchRecipesAndIngredientsDTO[]) => console.log(resp))
+    }
+
     let canSave: boolean =
-        (selectedRecipe !== null && typeof selectedRecipe !== 'string') &&
+        (selectedItem !== null && typeof selectedItem !== 'string') &&
         (!isAddOn || (isAddOn && addOnName !== ''))
 
     return(
         <fieldset disabled={saving}>
-        <div className='row menu_component_add'>
+            <div className='row menu_component_add'>
             <div className='col-12'>
                 <h5 className='float-left'>add component</h5>
                 <LoadingIconButton
@@ -50,11 +66,30 @@ export const MenuComponentAdd = (props: Props): React.ReactElement => {
                     />
             </div>
             <div className='col-12 mt-2'>
-                <SearchWidget
-                    service={recipeService}
-                    itemSelected={(recipe: Recipe) => setSelectedRecipe(recipe)}
-                    placeholder='component recipe'
+                <RecipeAndIngredientSearcher itemSelected={(item: SearchRecipesAndIngredientsDTO) => setSelectedItem(item)} />
+            </div>
+            <div className='col-6 col-md-2 mt-2'>
+                <h6>quantity</h6>
+                <input
+                    type='number'
+                    className='form-control'
+                    value={quantity}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseFloat(e.target.value))}
                     />
+            </div>
+            <div className='col-6 col-md-2 mt-2'>
+                <h6>unit</h6>
+                <select
+                    className='form-control'
+                    value={unit}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setUnit(parseInt(e.target.value))}
+                >
+                    {
+                        INGREDIENT_UNIT.map((unit: string, index: number) =>
+                            <option value={index} key={`opt_${unit}`}>{unit}</option>
+                        )
+                    }
+                </select>
             </div>
             <div className='col-12 mt-2'>
                 <div className='checkbox_selector'>

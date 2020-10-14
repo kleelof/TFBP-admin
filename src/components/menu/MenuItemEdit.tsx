@@ -195,7 +195,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                         />
                                 </div>
                                 <div className="col-12 mt-2">
-                                    name
+                                    <h5>name</h5>
                                     <input
                                         id='menuedititem__name'
                                         type="text"
@@ -208,7 +208,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                         />
                                 </div>
                                 <div className="col-6 mt-2">
-                                    category
+                                    <h5>category</h5>
                                     <select
                                         name="category"
                                         className="form-control"
@@ -222,7 +222,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                     </select>
                                 </div>
                                 <div className="col-6 mt-2">
-                                    price
+                                    <h5>price</h5>
                                     <input type="text" name="price" className="form-control" value={this.state.menuItem.price}
                                         disabled={disabled} onChange={this.updateMenuItem} />
                                 </div>
@@ -238,6 +238,7 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                                     </div>
                                 </div>
                                 <div className="col-12 mt-2">
+                                    <h5>description</h5>
                                     <textarea
                                         className="form-control"
                                         rows={2}

@@ -1,4 +1,6 @@
 import ModelBase from "./ModelBase";
+import MenuItemComponent from "./MenuItemComponentModel";
+import MenuItemAddOnModel from "./MenuItemAddOnModel";
 
 export default class MenuItem {
 
@@ -12,6 +14,9 @@ export default class MenuItem {
     public active!: boolean;
     public spicy!: boolean;
     public category: string = 'en';
+    public components!: MenuItemComponent[];
+    public add_ons!: MenuItemAddOnModel[];
+
 
     constructor(
         id: number = -1,

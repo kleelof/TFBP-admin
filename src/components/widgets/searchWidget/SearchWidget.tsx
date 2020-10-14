@@ -4,11 +4,13 @@ import Service from '../../../services/Service';
 
 import './search_widget.scss';
 import PagedResultsDTO from "../../../dto/PagedResultsDTO";
+import {SearchWidgetDefaultDisplay} from "./SearchWidgetDefaultDisplay";
 
 interface Props {
     service: Service,
     itemSelected: (item: any) => void,
-    placeholder?: string
+    placeholder?: string,
+    resultDisplayComponent?: React.ReactElement
 }
 
 interface State {
@@ -21,7 +23,7 @@ export default class SearchWidget extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-    
+
         this.state = {
             dto: new PagedResultsDTO(),
             showChoices: false,
@@ -34,7 +36,7 @@ export default class SearchWidget extends React.Component<Props, State> {
         this.props.itemSelected(item);
     }
 
-    private doSearch = (id: string, text: string): void => {
+    protected doSearch = (id: string, text: string): void => {
         this.setState({currentValue: text});
 
         if (text === '') {
@@ -45,7 +47,7 @@ export default class SearchWidget extends React.Component<Props, State> {
         this.props.service.pagedSearchResults(1, text)
             .then((dto: PagedResultsDTO) => {
                 this.setState({dto, showChoices: dto.count > 0});
-                this.props.itemSelected(text);
+                //this.props.itemSelected(text);
             })
             .catch( () => window.alert('unable to search'))
     }
@@ -70,19 +72,13 @@ export default class SearchWidget extends React.Component<Props, State> {
                 <div className={`col-12 search_widget_results--${this.state.showChoices ? 'show' : 'hide'}`}>
                     <div className="search_widget_results__content">
                         {
-                            this.state.dto.results.map((item: any) => {
-                                return(
-                                    <div
-                                        key={`search_result_${item.id}`}
-                                        className="row search_widget__result"
-                                        onClick={() => this.itemSelected(item)}
-                                    >
-                                        <div className="col-12 result__name">
-                                            {item.name}
-                                        </div>
-                                    </div>
+                            this.state.dto.results.map((item: any) =>
+                                <SearchWidgetDefaultDisplay
+                                    key={`swdd_${item.id}`}
+                                    item={item}
+                                    itemSelected={() => this.itemSelected(item)}
+                                    />
                                 )
-                            })
                         }
                     </div>
                 </div>

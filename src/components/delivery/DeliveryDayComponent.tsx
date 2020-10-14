@@ -65,9 +65,10 @@ export default class DeliveryDayComponent extends React.Component<Props, State> 
                 const deliveryDay: DeliveryDay = this.state.deliveryDay;
                 deliveryDay.day_items.unshift(item);
                 this.setState({deliveryDay});
-                console.log(deliveryDay);
             })
             .catch( err => window.alert('unable to add menu item'))
+
+
     }
 
     private refreshDay = (id: number): void => {

@@ -119,11 +119,11 @@ export const RecipeEdit = (): React.ReactElement => {
                 </div>
                 <div className='col-12 align-self-center'>
                     <button
-                        className='btn btn-sm btn-outline-info'
+                        className='btn btn-sm btn-md-md btn-outline-info'
                         onClick={() => history.goBack()}
                         >back</button>
                     <img
-                        className='recipe_scale__print float-right ml-2 d-none d-md-block'
+                        className='recipe_scale__print float-right ml-2'
                         src={printIcon}
                         alt='print scaled recipe'
                         onClick={printRecipe}
