@@ -23,11 +23,17 @@ export const Ingredients = (): React.ReactElement => {
         loadPage(1);
     }, [])
 
-    const addIngredient = (): void => {
+    const addIngredient = (edit: boolean = false): void => {
         setAddingIngredient(true);
 
         ingredientService.add(new Ingredient(newIngredient))
-            .then((ingredient: Ingredient) => history.push({pathname: `/dashboard/ingredient/edit/${ingredient.id}`}))
+            .then((ingredient: Ingredient) => {
+                if (edit) {
+                    history.push({pathname: `/dashboard/ingredient/edit/${ingredient.id}`});
+                } else {
+                    setNewIngredient('');
+                }
+            })
             .catch(() => window.alert('unable to create ingredient'))
             .then(() => setAddingIngredient(false))
     }
@@ -64,10 +70,19 @@ export const Ingredients = (): React.ReactElement => {
                     <div className='col-2'>
                         <LoadingIconButton
                             label={'add'}
-                            onClick={addIngredient}
+                            onClick={() => addIngredient(false)}
                             busy={addingIngredient}
                             disabled={addingIngredient || newIngredient.length === 0}
                             btnClass='btn btn-sm btn-outline-success'
+                            />
+
+                        <LoadingIconButton
+                            label={'add and edit'}
+                            onClick={() => addIngredient(true)}
+                            busy={addingIngredient}
+                            disabled={addingIngredient || newIngredient.length === 0}
+                            btnClass='btn btn-sm btn-outline-success'
+                            outerClass='ml-2'
                             />
                     </div>
                 </div>

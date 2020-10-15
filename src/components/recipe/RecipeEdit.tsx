@@ -68,9 +68,8 @@ export const RecipeEdit = (): React.ReactElement => {
         setDocumentToPrint(
             <RecipePrintout
                 recipe={recipe}
-                count={
-                    showScaling ? scale : recipe.servings
-                } />);
+                count={showScaling ? scale : recipe.servings}
+            />);
         setTimeout(function () {
             window.print();
         }, 500);
@@ -123,7 +122,7 @@ export const RecipeEdit = (): React.ReactElement => {
                         onClick={() => history.goBack()}
                         >back</button>
                     <img
-                        className='recipe_scale__print float-right ml-2'
+                        className='recipe_scale__print float-right ml-2 d-none d-md-block'
                         src={printIcon}
                         alt='print scaled recipe'
                         onClick={printRecipe}
@@ -161,39 +160,50 @@ export const RecipeEdit = (): React.ReactElement => {
                         />
                 </div>
                 <div className='col-12 col-md-6 mt-2'>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>is vegan: </td>
-                                <td>
-                                    &nbsp;&nbsp;
-                                    <input
-                                        type='checkbox'
-                                        checked={recipe.is_vegan}
-                                        onChange={() => {
-                                            setRecipe({...recipe, is_vegan: !recipe.is_vegan});
-                                            setUpdated(true);
-                                        }}
-                                        />
-                                </td>
-                            </tr>
-                        <tr>
-                            <td>servings: </td>
-                            <td>
-                                <input
-                                    type='number'
-                                    className='form-control'
-                                    value={recipe.servings}
-                                    min={1}
-                                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                        setRecipe({...recipe, servings: parseInt(e.target.value)});
-                                        setUpdated(true);
-                                    }}
-                                    />
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div className='row'>
+                        <div className='col-4 col-md-2'>
+                            is vegan
+                            <br/>
+                            <input
+                                type='checkbox'
+                                checked={recipe.is_vegan}
+                                onChange={() => {
+                                    setRecipe({...recipe, is_vegan: !recipe.is_vegan});
+                                    setUpdated(true);
+                                }}
+                                />
+                        </div>
+                        <div className='col-4 col-md-2'>
+                            servings
+                            <input
+                                type='number'
+                                className='form-control'
+                                value={recipe.servings}
+                                min={1}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                    setRecipe({...recipe, servings: parseInt(e.target.value)});
+                                    setUpdated(true);
+                                }}
+                                />
+                        </div>
+                        <div className='col-4 col-md-2'>
+                            yield
+                            <br/>
+                            <input
+                                type='number'
+                                className='form-control'
+                                value={recipe.yld}
+                                max='100'
+                                step='0.1'
+                                min='0.1'
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                    setRecipe({...recipe, yld: parseFloat(e.target.value)});
+                                    setUpdated(true);
+                                }}
+                                />
+                        </div>
+                    </div>
+
                 </div>
                 <div className='col-12 col-md-6 mt-2'>
                     <h5>description</h5>
@@ -246,7 +256,7 @@ export const RecipeEdit = (): React.ReactElement => {
                                         </div>
                                         :
                                         newIngredient.id === -1 ?
-                                            <Fragment></Fragment>
+                                            <div> </div>
                                             :
                                             <Fragment>
                                                 <div className='col-4'>
@@ -304,21 +314,19 @@ export const RecipeEdit = (): React.ReactElement => {
                     }
                     <hr/>
                 </div>
-                <div className='col-12'>
-                    <div className='row'>
-                        {
-                            recipe.ingredients.map((ingredient: RecipeIngredient) =>
-                                <div className='col-12 col-md-4' key={`rip_${ingredient.id}`}>
-                                    <RecipeIngredientPanel
-                                        recipeIngredient={ingredient}
-                                        removeIngredient={removeIngredient}
-                                        servings={recipe.servings}
-                                        scale_to={showScaling ? scale : 0}
-                                    />
-                                </div>
-                            )
-                        }
-                    </div>
+                <div className='col-12 recipe_edit__ingredients'>
+                    {
+                        recipe.ingredients.map((ingredient: RecipeIngredient) =>
+                            <RecipeIngredientPanel
+                                key={`rip_${ingredient.id}`}
+                                recipeIngredient={ingredient}
+                                removeIngredient={removeIngredient}
+                                servings={recipe.servings}
+                                scale_to={showScaling ? scale : 0}
+                                yield={recipe.yld}
+                            />
+                        )
+                    }
                 </div>
             </div>
             <div className="col-12 print-sheet">

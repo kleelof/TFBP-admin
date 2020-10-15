@@ -19,6 +19,8 @@ import { Link } from 'react-router-dom';
 import {RouteComponentProps} from 'react-router-dom';
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 import {EmailWidget} from "../widgets/email_widget/EmailWidget";
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
+import {DeliveryDayItemSearchChoice} from "./DeliveryDayItemSearchChoice";
 
 interface Props extends RouteComponentProps {
     match: any;
@@ -59,16 +61,15 @@ export default class DeliveryDayComponent extends React.Component<Props, State> 
             .then(() => this.setState({deleting: false}))
     }
 
-    private itemSelected = (item: MenuItem) => {
-        deliveryDayItemService.add(new DeliveryDayItemDTO(this.state.deliveryDay.id, item.id, false, item.price))
+    private itemSelected = (menuItem: MenuItem) => {
+        console.log(menuItem);
+        deliveryDayItemService.add(new DeliveryDayItemDTO(this.state.deliveryDay.id, menuItem.id, false, menuItem.price))
             .then((item: any) => {
                 const deliveryDay: DeliveryDay = this.state.deliveryDay;
                 deliveryDay.day_items.unshift(item);
                 this.setState({deliveryDay});
             })
             .catch( err => window.alert('unable to add menu item'))
-
-
     }
 
     private refreshDay = (id: number): void => {
@@ -77,6 +78,17 @@ export default class DeliveryDayComponent extends React.Component<Props, State> 
                 this.setState({deliveryDay, loading: false})
             })
             .catch( err => window.alert("Unable to load week"))
+    }
+
+    private search = (searchPattern: string, callback: (choices: any[]) => void): void => {
+        menuItemService.pagedSearchResults(1, searchPattern)
+            .then((dto: PagedResultsDTO) => {
+                let choices: any[] = [];
+                dto.results.forEach((menuItem: MenuItem) =>  choices.push({text: menuItem.name, object: menuItem}))
+                callback(choices);
+                }
+            )
+            .catch(() => window.alert('unable to search menu items'))
     }
     
     public render() {

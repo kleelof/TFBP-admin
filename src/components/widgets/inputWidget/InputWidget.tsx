@@ -26,6 +26,7 @@ interface Props {
 
 interface State {
     value: string
+    lastSavedValue: string
 }
 
 //todo: get type='number' to work
@@ -39,18 +40,22 @@ export default class InputWidget extends Component<Props, State> {
         super(props);
 
         this.state = {
-            value: props.initialValue ? props.initialValue : ""
+            value: props.initialValue ? props.initialValue : "",
+            lastSavedValue: ''
         }
 
         this.lastSavedValue = props.initialValue;
     };
 
-    public componentWillReceiveProps = (props: Props) => {
-        if (props.initialValue !== this.props.initialValue) {
-            this.setState({value: props.initialValue});
-            this.lastSavedValue = props.initialValue
+    static getDerivedStateFromProps = (props: Props, state: State): State | null => {
+        if (props.initialValue !== state.lastSavedValue) {
+            return {
+                value: props.initialValue,
+                lastSavedValue: props.initialValue
+            }
         }
-    }
+        return null;
+      }
 
     private handleOnKeyPress = (e: any) => {
         if (e.keyCode === 13) this.sendUpdate();

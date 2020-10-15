@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow, configure} from "enzyme";
+import {shallow, configure, mount} from "enzyme";
 import Adapter from 'enzyme-adapter-react-16';
 
 import InputWidget from './InputWidget';
@@ -60,7 +60,13 @@ describe('InputWidget widget tests', () => {
         expect(spy).toHaveBeenCalledTimes(0);
     });
 
-    describe.skip('defaultUpdateValue testing', () => {
+    it('should clear the input', async () => {
+        component.setProps({initialValue: ''});
+        await(component.update());
+        expect(component.find('input').prop('value')).toBe('');
+    })
+
+    describe('defaultUpdateValue testing', () => {
         beforeEach(() => {
             component = shallow(<InputWidget
                 id={'test_id'}

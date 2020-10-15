@@ -24,6 +24,23 @@
       width: 100px;
     }
   }
+
+  &__ingredient {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid $primary_highlight;
+
+    & .ingredient {
+      &__title {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+
+      &__allergens {
+        font-size: .8em;
+      }
+    }
+  }
 }
 
 .recipe_printout {

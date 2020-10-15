@@ -10,6 +10,7 @@ export default class Recipe extends ModelBase {
     public ingredients!: RecipeIngredient[];
     public servings!: number;
     public notes!: RecipeNote[];
+    public yld!: number;
 
     constructor(
         name: string = '',

@@ -5,7 +5,7 @@ export default class PagedResultsDTO {
     public count!: number;
     public next!: string | null;
     public previous!: string | null;
-    public results!: ModelBase[]
+    public results!: any[]
 
     constructor(
         count: number = 0,

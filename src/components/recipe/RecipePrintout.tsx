@@ -4,7 +4,6 @@ import './recipe.scss';
 import RecipeIngredient from "../../models/RecipeIngredientModel";
 import Ingredient from "../../models/IngredientModel";
 import recipeHelper from '../../helpers/RecipeHelper';
-import Allergen from "../../models/AllergenModel";
 
 interface Props {
     recipe: Recipe,
@@ -33,11 +32,16 @@ export const RecipePrintout = (props: Props): React.ReactElement => {
                             return (
                                 <tr className='recipe_printout__ingredient'>
                                     <td>{ingredient.name}</td>
-                                    <td>{recipeHelper.scaleRecipeIngredient(recipeIngredient, props.recipe.servings, props.count)}</td>
+                                    <td>{recipeHelper.scaleRecipeIngredient(
+                                        recipeIngredient,
+                                        props.recipe.servings,
+                                        props.count,
+                                        props.recipe.yld)}
+                                    </td>
                                     <td>
                                         {
                                             ingredient.allergens.length === 0 ?
-                                                <span>no allergens</span>
+                                                <span>none</span>
                                                 :
                                                 recipeHelper.createStringListOfAllergensFromIngredient(ingredient)
                                         }

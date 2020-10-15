@@ -4,15 +4,18 @@ import Ingredient from "../../models/IngredientModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 import recipeIngredientService from '../../services/RecipeIngredientService';
 import RecipeHelper from "../../helpers/RecipeHelper";
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     recipeIngredient: RecipeIngredient,
     removeIngredient: (id: number) => void,
     servings: number,
-    scale_to: number
+    scale_to: number,
+    yield: number
 }
 
 export const RecipeIngredientPanel = (props: Props): React.ReactElement => {
+    const history = useHistory();
     const [recipeIngredient, setRecipeIngredient] = useState(props.recipeIngredient);
     const [saving, setSaving] = useState(false);
     const [updated, setUpdated] = useState(false);
@@ -40,29 +43,27 @@ export const RecipeIngredientPanel = (props: Props): React.ReactElement => {
 
 
     return (
-        <div className='row recipe_ingredient_panel'>
-            <div className='col-12 recipe_ingredient_panel__name'>
+        <div className='row recipe_edit__ingredient'>
+            <div className='col-12 col-md-4 ingredient__title'>
                 {(props.recipeIngredient.ingredient as Ingredient).name}
-                <hr/>
             </div>
-            <div className='col-12'>
-                {props.scale_to === 0 &&
+
+            {props.scale_to === 0 &&
+                <div className='col-12 col-md-8'>
                     <div className='row'>
-                        <div className='col-4'>
+                        <div className='col-12 col-md-3'>
                             <input
                                 type='number'
                                 placeholder='qty'
-                                className='form-control'
+                                className='form-control col-4 float-left'
                                 value={recipeIngredient.quantity || ''}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                     setRecipeIngredient({...recipeIngredient, quantity: parseFloat(e.target.value)});
                                     setUpdated(true);
                                 }}
                                 />
-                        </div>
-                        <div className='col-4'>
                             <select
-                                className='form-control'
+                                className='form-control col-4 float-left ml-2'
                                 value={recipeIngredient.unit}
                                 onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                                     setRecipeIngredient({...recipeIngredient, unit: parseInt(e.target.value)});
@@ -76,7 +77,11 @@ export const RecipeIngredientPanel = (props: Props): React.ReactElement => {
                                 }
                             </select>
                         </div>
-                        <div className='col-2'>
+                        <div className='col-12 col-md-3 ingredient__allergens'>
+                            <strong>allergens:&nbsp;</strong>
+                            { RecipeHelper.createStringListOfAllergensFromIngredient(props.recipeIngredient.ingredient as Ingredient)}
+                        </div>
+                        <div className='col-12 col-md-6 mt-2 mt-md-0 text-center'>
                             <LoadingIconButton
                                 btnClass={`btn btn-outline-${updated ? 'success' : 'secondary'}`}
                                 label='save'
@@ -84,28 +89,33 @@ export const RecipeIngredientPanel = (props: Props): React.ReactElement => {
                                 busy={saving}
                                 disabled={!updated}
                                 />
-                        </div>
-                        <div className='col-2'>
                             <LoadingIconButton
+                                outerClass='ml-2'
                                 btnClass={`btn btn-outline-danger`}
                                 label='X'
                                 onClick={deleteMe}
                                 busy={false}
                                 disabled={saving}
                                 />
+                            <button
+                                className='btn btn-sm btn-outline-primary ml-2'
+                                onClick={() => history.push({pathname: `/dashboard/ingredient/edit/${(props.recipeIngredient.ingredient as Ingredient).id}`})}
+                                >goto ingredient</button>
                         </div>
                     </div>
-                }
-                {props.scale_to > 0 &&
-                    <div className='row'>
-                        <div className='col-12'>
-                            {
-                                RecipeHelper.scaleRecipeIngredient(recipeIngredient, props.servings, props.scale_to)
-                            }
-                        </div>
-                    </div>
-                }
-            </div>
+                </div>
+            }
+            {props.scale_to > 0 &&
+                <div className='col-12 col-md-6'>
+                    {
+                        RecipeHelper.scaleRecipeIngredient(recipeIngredient, props.servings, props.scale_to, props.yield)
+                    }
+                    <span className='ml-5'>
+                        <strong>allergens:&nbsp;</strong>
+                        { RecipeHelper.createStringListOfAllergensFromIngredient(props.recipeIngredient.ingredient as Ingredient)}
+                    </span>
+                </div>
+            }
         </div>
     )
 }

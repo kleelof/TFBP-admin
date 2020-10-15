@@ -111,5 +111,11 @@ describe('RecipeHelper tests', () => {
             recipeIngredient.unit = 11;
             expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 1000)).toBe('1.00 l');
         })
+
+        it('should apply recipe yield', () => {
+            recipeIngredient.unit = 11;
+            recipeIngredient.yld = 2;
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 1000)).toBe('500.00 ml');
+        })
     })
 })

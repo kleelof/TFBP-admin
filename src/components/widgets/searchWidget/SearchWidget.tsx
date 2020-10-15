@@ -47,7 +47,7 @@ export default class SearchWidget extends React.Component<Props, State> {
         this.props.service.pagedSearchResults(1, text)
             .then((dto: PagedResultsDTO) => {
                 this.setState({dto, showChoices: dto.count > 0});
-                //this.props.itemSelected(text);
+                this.props.itemSelected(text);
             })
             .catch( () => window.alert('unable to search'))
     }

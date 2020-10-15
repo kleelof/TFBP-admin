@@ -15,8 +15,8 @@ class RecipeHelper {
         return list;
     }
 
-    public scaleRecipeIngredient = (ingredient: RecipeIngredient, servings: number, count: number): string => {
-        let rawValue: number =  (ingredient.quantity / servings) * count / ingredient.yld;
+    public scaleRecipeIngredient = (ingredient: RecipeIngredient, servings: number, count: number, yld: number = 1): string => {
+        let rawValue: number =  ((ingredient.quantity / servings) * count / ingredient.yld) / yld;
         let unit: number = ingredient.unit;
 
         if (unit === 0 && rawValue > 15) { // oz > lb
