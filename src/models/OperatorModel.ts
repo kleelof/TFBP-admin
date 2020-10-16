@@ -25,6 +25,14 @@ export default class Operator extends ModelBase {
     public upcoming_delivery_days_notification_time!: number;
     public auto_notify_upcoming_deliveries!: boolean;
     public max_future_delivery_windows_time!: number;
+    public delivery_fee!: number;
+    public free_delivery_minimum!: number;
+    public tax_rate!: number;
+    public tax_tips!: boolean;
+    public tax_delivery_fee!: boolean;
+    public allow_tipping!: boolean;
+    public customer_must_be_present!: boolean;
+    public delivery_minimum!: number;
 
     public user!: User;
 

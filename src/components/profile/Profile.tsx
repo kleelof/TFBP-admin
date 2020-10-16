@@ -8,6 +8,7 @@ import actionsService from '../../services/APIActionService';
 
 export const Profile = (): React.ReactElement => {
     const [operator, setOperator] = useState<Operator>(new Operator());
+    const [savedOperator, setSavedOperator] = useState(new Operator());
     const [errors, setErrors] = useState<string[]>([]);
     const [hasUpdates, setHasUpdates] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -19,20 +20,35 @@ export const Profile = (): React.ReactElement => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [savingPassword, setSavingPassword] = useState(false);
 
-    let savedOperator: Operator;
-
     useEffect(() => {
-        Promise.all([
-            operatorService.getMe(),
-            actionsService.getTimeZones()
-        ])
-            .then((values) => {
-                updateOperator(values[0], true);
-                savedOperator = values[0];
-                setTimeZones(values[1]);
-            })
-            .catch(() => window.alert('unable to load page'))
-    }, [])
+        if (operator.id === -1) {
+            Promise.all([
+                operatorService.getMe(),
+                actionsService.getTimeZones()
+            ])
+                .then((values) => {
+                    updateOperator(values[0]);
+                    setSavedOperator(values[0]);
+                    setTimeZones(values[1]);
+                })
+                .catch(() => window.alert('unable to load page'))
+        } else {
+            checkForUpdates()
+        }
+    }, )
+
+    const checkForUpdates = (): void => {
+        let updated: boolean = false;
+
+        Object.keys(operator).forEach( key => {
+            // @ts-ignore
+            if (operator[key] !== savedOperator[key]) {
+                updated = true;
+            }
+        })
+
+        setHasUpdates(updated);
+    }
 
     const savePassword = (): void => {
         setSavingPassword(true);
@@ -52,7 +68,7 @@ export const Profile = (): React.ReactElement => {
         setSaving(true);
         operatorService.update(operator)
             .then((op: Operator) => {
-                savedOperator = op;
+                setSavedOperator(op);
                 updateOperator(op);
             })
             .catch((err) => window.alert(JSON.stringify(err.response.data)))
@@ -61,7 +77,7 @@ export const Profile = (): React.ReactElement => {
             })
     }
 
-    const updateOperator = (op: Operator, initial: boolean = false): void =>  {
+    const updateOperator = (op: Operator): void =>  {
         let errors: string[] = [];
 
         // each to check fields
@@ -81,7 +97,7 @@ export const Profile = (): React.ReactElement => {
         if (op.auto_notify_upcoming_deliveries && op.upcoming_delivery_notification_time < 1)
             errors.push('upcoming_delivery_notification_time');
 
-        if (!op.auto_notify_upcoming_deliveries && op.storefront_template === '')
+        if (!op.self_hosted && op.storefront_template === '')
             errors.push('storefront_template');
 
         if (op.ordering_cutoff_time < 1)
@@ -93,7 +109,12 @@ export const Profile = (): React.ReactElement => {
         if (op.max_future_delivery_windows_time < 1)
             errors.push('max_future_delivery_windows_time');
 
-        if (!initial) setHasUpdates(errors.length === 0);
+        if (op.tax_rate > .99)
+            errors.push('tax_rate');
+
+        if (op.delivery_minimum < 10)
+            errors.push('delivery_minimum');
+
         setErrors(errors);
         setOperator(op);
     }
@@ -109,6 +130,23 @@ export const Profile = (): React.ReactElement => {
         <div className='row profile justify-content-center'>
             <div className='col-12 col-md-7'>
                 <h3>profile</h3>
+                <hr/>
+            </div>
+            <div className='col-12 col-md-7'>
+                <div className='col-12 text-right'>
+                    <LoadingIconButton
+                        key={Math.random()}
+                        busy={saving}
+                        label={'save updates'}
+                        onClick={saveUpdates}
+                        btnClass={'btn btn-sm btn-success'}
+                        disabledBtnClass={'btn btn-sm btn-outline-secondary'}
+                        outerClass={'float-right'}
+                        disabled={!hasUpdates || errors.length !== 0}
+                    />
+                </div>
+            </div>
+            <div className={'col-12 col-md-7'}>
                 <hr/>
             </div>
             <div className='col-12 col-md-7'>
@@ -147,15 +185,15 @@ export const Profile = (): React.ReactElement => {
                                                    }/>
                                         </div>
                                         <div className='col-12 col-md-6 text-center'>
-                                            <button className={`btn btn-sm btn-outline-${
-                                                updatingPassword ? 'warning' : 'info'
+                                            <button className={`btn btn-sm btn-${
+                                                updatingPassword ? 'warning' : 'outline-info'
                                                 } mt-4`}
                                                     onClick={() => {
                                                         setUpdatingPassword(!updatingPassword);
                                                     }}
                                             >
                                                 {
-                                                    updatingPassword ? 'cancel update' : 'update password'
+                                                    updatingPassword ? 'cancel update password' : 'update password'
                                                 }
                                             </button>
                                         </div>
@@ -172,7 +210,6 @@ export const Profile = (): React.ReactElement => {
                                                                onChange={(e:ChangeEvent<HTMLInputElement>) => setCurrentPassword(e.target.value)}
                                                         />
                                                     </div>
-                                                    <div className='d-none d-md-block col-md-6'></div>
                                                     <div className='col-12 col-md-6 mt-1'>
                                                         new password:
                                                         <input className={`form-control ${passwordErrors.indexOf('new_password') > -1 ? 'profile__error_border' : ''}`}
@@ -190,12 +227,14 @@ export const Profile = (): React.ReactElement => {
                                                         />
                                                     </div>
                                                     <div className='col-12 mt-1 text-center'>
-                                                        <LoadingIconButton label='save password'
-                                                                           btnClass='btn btn-outline-success'
-                                                                           onClick={savePassword}
-                                                                           busy={savingPassword}
-                                                                           disabled={passwordErrors.length > 0}
-                                                                           />
+                                                        <LoadingIconButton
+                                                            label='save password'
+                                                            btnClass='btn btn-sm btn-success'
+                                                            disabledBtnClass='btn btn-sm btn-outline-secondary'
+                                                            onClick={savePassword}
+                                                            busy={savingPassword}
+                                                            disabled={passwordErrors.length > 0}
+                                                            />
                                                     </div>
                                                 </div>
                                             </div>
@@ -234,7 +273,7 @@ export const Profile = (): React.ReactElement => {
                                                 <option value={''}>choose</option>
                                                 {
                                                     timeZones.map((zone: string) =>
-                                                        <option value={zone}>{zone}</option>
+                                                        <option value={zone} key={zone}>{zone}</option>
                                                     )
                                                 }
                                             </select>
@@ -351,85 +390,187 @@ export const Profile = (): React.ReactElement => {
                             <div id="collapseThree" className="collapse" aria-labelledby="headingThree"
                                  data-parent="#myAccordion">
                                 <div className="card-body">
-                                    <div className='row'>
-                                        <div className='col-12'>
-                                            how many <strong>hours</strong> before delivery time should ordering be disabled?
-                                            &nbsp;&nbsp;
-                                            <input type='number'
-                                                   min={1}
-                                                   className={`form-control ${errors.indexOf('ordering_cutoff_time') > -1 ? 'profile__error_border' : ''}`}
-                                                   value={operator.ordering_cutoff_time > 0 ? operator.ordering_cutoff_time : ''}
-                                                   onChange={(e:ChangeEvent<HTMLInputElement>) =>
-                                                       updateOperator({...operator, ordering_cutoff_time: parseInt(e.target.value) || 0})
-                                                   }
-                                            />
-                                        </div>
-                                        <div className='col-12'>
-                                            how many <strong>days</strong> out should delivery windows be shown?
-                                            &nbsp;&nbsp;
-                                            <input type='number'
-                                                   min={1}
-                                                   className={`form-control ${errors.indexOf('max_future_delivery_windows_time') > -1 ? 'profile__error_border' : ''}`}
-                                                   value={operator.max_future_delivery_windows_time > 0 ? operator.max_future_delivery_windows_time : ''}
-                                                   onChange={(e:ChangeEvent<HTMLInputElement>) =>
-                                                       updateOperator({...operator, max_future_delivery_windows_time: parseInt(e.target.value) || 0})
-                                                   }
-                                            />
-                                        </div>
-                                        <div className='col-12 mt-4'>
-                                            <hr/>
-                                        </div>
-                                        <div className='col-12 mt-2'>
-                                            how many <b>days</b> before an upcoming delivery day should the customer be notified?
-                                            &nbsp;&nbsp;
-                                            <input
-                                                type='number'
-                                                min={1}
-                                                className={`form-control ${errors.indexOf('upcoming_delivery_days_notification_time') > -1 ? 'profile__error_border' : ''}`}
-                                                value={operator.upcoming_delivery_days_notification_time > 0 ? operator.upcoming_delivery_days_notification_time : ''}
-                                                onChange={(e:ChangeEvent<HTMLInputElement>) =>
-                                                       updateOperator({...operator, upcoming_delivery_days_notification_time: parseInt(e.target.value) || 0})
-                                                   }
-                                            />
-                                        </div>
-                                        <div className='col-12 mt-2'>
-                                            <input type='checkbox' checked={operator.auto_notify_upcoming_deliveries}
-                                                   onChange={()=> updateOperator({...operator, auto_notify_upcoming_deliveries: !operator.auto_notify_upcoming_deliveries})}
-                                            />
-                                            &nbsp;&nbsp; automatically notify customers of their upcoming delivery
-                                        </div>
-                                        {operator.auto_notify_upcoming_deliveries &&
-                                            <div className='col-12 mt-2'>
-                                                how many <strong>days</strong> before a delivery should the customer be notified?
-                                                &nbsp;&nbsp;
-                                                <input
-                                                    type='number'
-                                                    min={1}
-                                                    className={`form-control ${errors.indexOf('upcoming_delivery_notification_time') > -1 ? 'profile__error_border' : ''}`}
-                                                    value={operator.upcoming_delivery_notification_time > 0 ? operator.upcoming_delivery_notification_time : ''}
-                                                    onChange={(e:ChangeEvent<HTMLInputElement>) =>
-                                                           updateOperator({...operator, upcoming_delivery_notification_time: parseInt(e.target.value) || 0})
-                                                       }
-                                                />
-                                            </div>
-                                        }
-                                    </div>
+                                    <table className='table'>
+                                        <tbody>
+                                            <tr>
+                                                <td colSpan={2}>
+                                                    <h5>customer ordering</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>how many <strong>days</strong> before delivery day should ordering be disabled?</td>
+                                                <td>
+                                                    <input
+                                                        type='number'
+                                                        min={1}
+                                                        className={`form-control ${errors.indexOf('ordering_cutoff_time') > -1 ? 'profile__error_border' : ''}`}
+                                                        value={operator.ordering_cutoff_time > 0 ? operator.ordering_cutoff_time : ''}
+                                                        onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                           updateOperator({...operator, ordering_cutoff_time: parseInt(e.target.value) || 0})
+                                                        }
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>how many <strong>days</strong> out should delivery windows be shown?</td>
+                                                <td>
+                                                    <input type='number'
+                                                           min={1}
+                                                           className={`form-control ${errors.indexOf('max_future_delivery_windows_time') > -1 ? 'profile__error_border' : ''}`}
+                                                           value={operator.max_future_delivery_windows_time > 0 ? operator.max_future_delivery_windows_time : ''}
+                                                           onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                               updateOperator({...operator, max_future_delivery_windows_time: parseInt(e.target.value) || 0})
+                                                           }
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>What is the minimum per delivery?</td>
+                                                <td>
+                                                    <input type='number'
+                                                           min={10}
+                                                           className={`form-control ${errors.indexOf('delivery_minimum') > -1 ? 'profile__error_border' : ''}`}
+                                                           value={operator.delivery_minimum > 0 ? operator.delivery_minimum : ''}
+                                                           onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                               updateOperator({...operator, delivery_minimum: parseFloat(e.target.value) || 0})
+                                                           }
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Customer must be present to receive order?</td>
+                                                <td>
+                                                    <input type='checkbox' checked={operator.customer_must_be_present}
+                                                       onChange={()=> updateOperator({...operator, customer_must_be_present: !operator.customer_must_be_present})}
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}>
+                                                    <h5>notifications</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>how many <b>days</b> before an upcoming delivery day should the customer be notified?</td>
+                                                <td>
+                                                    <input
+                                                        type='number'
+                                                        min={1}
+                                                        className={`form-control ${errors.indexOf('upcoming_delivery_days_notification_time') > -1 ? 'profile__error_border' : ''}`}
+                                                        value={operator.upcoming_delivery_days_notification_time > 0 ? operator.upcoming_delivery_days_notification_time : ''}
+                                                        onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                               updateOperator({...operator, upcoming_delivery_days_notification_time: parseInt(e.target.value) || 0})
+                                                           }
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>automatically notify customers of their upcoming delivery</td>
+                                                <td>
+                                                    <input type='checkbox' checked={operator.auto_notify_upcoming_deliveries}
+                                                       onChange={()=> updateOperator({...operator, auto_notify_upcoming_deliveries: !operator.auto_notify_upcoming_deliveries})}
+                                                    />
+                                                </td>
+                                            </tr>
+                                            {operator.auto_notify_upcoming_deliveries &&
+                                                <tr>
+                                                    <td>how many <strong>days</strong> before a delivery should the customer be notified?</td>
+                                                    <td>
+                                                        <input
+                                                            type='number'
+                                                            min={1}
+                                                            className={`form-control ${errors.indexOf('upcoming_delivery_notification_time') > -1 ? 'profile__error_border' : ''}`}
+                                                            value={operator.upcoming_delivery_notification_time > 0 ? operator.upcoming_delivery_notification_time : ''}
+                                                            onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                                   updateOperator({...operator, upcoming_delivery_notification_time: parseInt(e.target.value) || 0})
+                                                               }
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td colSpan={2}>
+                                                    <h5>fees and tips</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Allow tipping?</td>
+                                                <td>
+                                                    <input type='checkbox' checked={operator.allow_tipping}
+                                                       onChange={()=> updateOperator({...operator, allow_tipping: !operator.allow_tipping})}
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>What fee would  you  like to charge for each delivery?</td>
+                                                    <td>
+                                                        <input
+                                                            type='number'
+                                                            min={1}
+                                                            className={`form-control ${errors.indexOf('delivery_fee') > -1 ? 'profile__error_border' : ''}`}
+                                                            value={operator.delivery_fee}
+                                                            onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                                   updateOperator({...operator, delivery_fee: parseFloat(e.target.value) || 0})
+                                                               }
+                                                        />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td>What is the minimum order required for free delivery?</td>
+                                                    <td>
+                                                        <input
+                                                            type='number'
+                                                            min={1}
+                                                            className={`form-control ${errors.indexOf('free_delivery_minimum') > -1 ? 'profile__error_border' : ''}`}
+                                                            value={operator.free_delivery_minimum}
+                                                            onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                                   updateOperator({...operator, free_delivery_minimum: parseFloat(e.target.value) || 0})
+                                                               }
+                                                        />
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}><h5>tax</h5></td>
+                                            </tr>
+                                            <tr>
+                                                <td>tax rate (enter as a percentage)</td>
+                                                <td>
+                                                    <input
+                                                        type='number'
+                                                        step='0.01'
+                                                        min={0}
+                                                        max='0.99'
+                                                        className={`form-control ${errors.indexOf('tax_rate') > -1 ? 'profile__error_border' : ''}`}
+                                                        value={operator.tax_rate}
+                                                        onChange={(e:ChangeEvent<HTMLInputElement>) =>
+                                                               updateOperator({...operator, tax_rate: parseFloat(e.target.value) || 0})
+                                                           }
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tax tips?</td>
+                                                <td>
+                                                    <input type='checkbox' checked={operator.tax_tips}
+                                                       onChange={()=> updateOperator({...operator, tax_tips: !operator.tax_tips})}
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tax delivery fee?</td>
+                                                <td>
+                                                    <input type='checkbox' checked={operator.tax_delivery_fee}
+                                                       onChange={()=> updateOperator({...operator, tax_delivery_fee: !operator.tax_delivery_fee})}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </fieldset>
-                <div className='col-12 text-right'>
-                    <LoadingIconButton
-                        key={Math.random()}
-                        busy={saving}
-                        label={'save updates'}
-                        onClick={saveUpdates}
-                        btnClass={'btn btn-outline-success'}
-                        outerClass={'mt-2'}
-                        disabled={!hasUpdates || errors.length !== 0}
-                    />
-                </div>
             </div>
         </div>
     )
