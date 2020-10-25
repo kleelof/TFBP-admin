@@ -8,6 +8,7 @@ import SearchRecipesAndIngredientsResultDTO from "../../dto/SearchRecipesAndIngr
 
 interface Props {
     itemSelected: (item: any) => void,
+    disabled?: boolean
 }
 
 interface State {
@@ -51,42 +52,44 @@ export default class RecipeAndIngredientSearcher extends React.Component<Props, 
 
     public render() {
         return(
-            <div
-                className="row search_widget"
-                onBlur={() => this.setState({showChoices: false, currentValue: ''})}
-            >
-                <div className="col-12">
-                    <InputWidget
-                        key={Math.random()}
-                        id='search_widget__InputWidget'
-                        type=""
-                        initialValue={this.state.currentValue}
-                        onUpdate={this.doSearch}
-                        placeholder='name of ingredient or recipe to add'
-                        defaultUpdateValue={''}
-                    />
-                </div>
-                <div className={`col-12 search_widget_results--${this.state.showChoices ? 'show' : 'hide'}`}>
-                    <div className="search_widget_results__content">
-                        {
-                            this.state.results.map((result: SearchRecipesAndIngredientsResultDTO) =>
-                                <div
-                                    key={`search_result_${result.item.id.toString() + result.item.name}`}
-                                    className='row search_widget_default_display'>
+            <fieldset disabled={this.props.disabled}>
+                <div
+                    className="row search_widget"
+                    onBlur={() => this.setState({showChoices: false, currentValue: ''})}
+                >
+                    <div className="col-12">
+                        <InputWidget
+                            key={Math.random()}
+                            id='search_widget__InputWidget'
+                            type=""
+                            initialValue={this.state.currentValue}
+                            onUpdate={this.doSearch}
+                            placeholder='name of ingredient or recipe to add'
+                            defaultUpdateValue={''}
+                        />
+                    </div>
+                    <div className={`col-12 search_widget_results--${this.state.showChoices ? 'show' : 'hide'}`}>
+                        <div className="search_widget_results__content">
+                            {
+                                this.state.results.map((result: SearchRecipesAndIngredientsResultDTO) =>
                                     <div
-                                        className="row search_widget__result"
-                                        onClick={() => this.itemSelected(result)}
-                                    >
-                                        <div className="col-12 result__name">
-                                            {result.item.name}
+                                        key={`search_result_${result.item.id.toString() + result.item.name}`}
+                                        className='row search_widget_default_display'>
+                                        <div
+                                            className="row search_widget__result"
+                                            onClick={() => this.itemSelected(result)}
+                                        >
+                                            <div className="col-12 result__name">
+                                                {result.item.name}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        }
+                                )
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
+            </fieldset>
         )
     }
 }

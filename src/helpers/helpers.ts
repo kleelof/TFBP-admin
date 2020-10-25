@@ -41,12 +41,12 @@ class Helpers {
     */
     public extractCartItemDescription = (cartItem: CartItem): string => {
         let description: string = cartItem.menu_item.name;
-        description += cartItem.protein === null || cartItem.protein === "" || cartItem.menu_item.proteins.split(':').length < 2 ?
-                    "" : 
+        description += cartItem.protein === null || cartItem.protein === "" ?
+                    "" :
                     cartItem.protein === 'vekan' ?
-                    ' vegan' : ` with ${this.proteins[cartItem.protein]}`
+                    ' vegan' : ` with ${cartItem.protein}`
 
-        description += cartItem.menu_item.spicy === true ?
+        description += cartItem.menu_item.spicy ?
         `, ${this.spicy[cartItem.spicy]}` : ""
 
         return description;

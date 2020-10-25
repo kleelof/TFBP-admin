@@ -7,7 +7,6 @@ import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButto
 import MenuItemComponent from "../../models/MenuItemComponentModel";
 import menuItemService from '../../services/MenuItemService';
 import MenuItem from "../../models/MenuItemModel";
-import actionsService from '../../services/APIActionService';
 import SearchRecipesAndIngredientsDTO from "../../dto/SearchRecipesAndIngredientsDTO";
 import RecipeAndIngredientSearcher from "./RecipeAndIngredientSearcher";
 import AttachComponentDTO from "../../dto/AttachComponentDTO";
@@ -26,6 +25,7 @@ export const MenuComponentAdd = (props: Props): React.ReactElement => {
     const [quantity, setQuantity] = useState(0);
     const [unit, setUnit] = useState(0);
     const [saving, setSaving] = useState(false);
+    const [nameOnly, setNameOnly] = useState(false);
 
     const save = (): void => {
         setSaving(true);
@@ -42,87 +42,103 @@ export const MenuComponentAdd = (props: Props): React.ReactElement => {
             .then(() => setSaving(false))
     }
 
-    const search = (id: string, text: string): void => {
-        actionsService.searchRecipesAndIngredients(text)
-            .then((resp: SearchRecipesAndIngredientsDTO[]) => console.log(resp))
-    }
-
     let canSave: boolean =
-        (selectedItem !== null && typeof selectedItem !== 'string') &&
-        (!isAddOn || (isAddOn && addOnName !== ''))
+        ((selectedItem !== null && typeof selectedItem !== 'string') &&
+        (!isAddOn || (isAddOn && addOnName !== ''))) ||
+        isAddOn && nameOnly
 
     return(
         <fieldset disabled={saving}>
             <div className='row menu_component_add'>
-            <div className='col-12'>
-                <h5 className='float-left'>add component</h5>
-                <LoadingIconButton
-                    outerClass='float-right'
-                    btnClass={`btn btn-sm btn-outline-${canSave ? 'success' : 'secondary'}`}
-                    label='save'
-                    disabled={!canSave}
-                    onClick={save}
-                    busy={saving}
-                    />
-            </div>
-            <div className='col-12 mt-2'>
-                <RecipeAndIngredientSearcher itemSelected={(item: SearchRecipesAndIngredientsDTO) => setSelectedItem(item)} />
-            </div>
-            <div className='col-6 col-md-2 mt-2'>
-                <h6>quantity</h6>
-                <input
-                    type='number'
-                    className='form-control'
-                    value={quantity}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseFloat(e.target.value))}
-                    />
-            </div>
-            <div className='col-6 col-md-2 mt-2'>
-                <h6>unit</h6>
-                <select
-                    className='form-control'
-                    value={unit}
-                    onChange={(e: ChangeEvent<HTMLSelectElement>) => setUnit(parseInt(e.target.value))}
-                >
-                    {
-                        INGREDIENT_UNIT.map((unit: string, index: number) =>
-                            <option value={index} key={`opt_${unit}`}>{unit}</option>
-                        )
-                    }
-                </select>
-            </div>
-            <div className='col-12 mt-2'>
-                <div className='checkbox_selector'>
-                    <input
-                        type='checkbox'
-                        checked={isAddOn}
-                        onChange={() => setIsAddOn(!isAddOn)}
+                <div className='col-12'>
+                    <h5 className='float-left'>add component</h5>
+                    <LoadingIconButton
+                        outerClass='float-right'
+                        btnClass={`btn btn-sm btn-outline-${canSave ? 'success' : 'secondary'}`}
+                        label='save'
+                        disabled={!canSave}
+                        onClick={save}
+                        busy={saving}
                         />
-                    <span>is add-on</span>
                 </div>
+                    <div className='col-12 mt-2'>
+                    <RecipeAndIngredientSearcher
+                        itemSelected={(item: SearchRecipesAndIngredientsDTO) => setSelectedItem(item)}
+                        disabled={isAddOn && nameOnly}
+                    />
+                </div>
+                <div className='col-12'>
+                    <fieldset disabled={saving || nameOnly}>
+                            <div className='row'>
+                                <div className='col-6 col-md-2 mt-2'>
+                                    <h6>quantity</h6>
+                                    <input
+                                        type='number'
+                                        className='form-control'
+                                        value={quantity}
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseFloat(e.target.value))}
+                                        />
+                                </div>
+                                <div className='col-6 col-md-2 mt-2'>
+                                    <h6>unit</h6>
+                                    <select
+                                        className='form-control'
+                                        value={unit}
+                                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setUnit(parseInt(e.target.value))}
+                                    >
+                                        {
+                                            INGREDIENT_UNIT.map((unit: string, index: number) =>
+                                                <option value={index} key={`opt_${unit}`}>{unit}</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                    </fieldset>
+                </div>
+                <div className='col-12 mt-2'>
+                    <div className='checkbox_selector'>
+                        <input
+                            type='checkbox'
+                            checked={isAddOn}
+                            onChange={() => setIsAddOn(!isAddOn)}
+                            />
+                        <span>is add-on</span>
+                    </div>
+                </div>
+                {isAddOn &&
+                    <Fragment>
+                        <div className='col-12 mt-2'>
+                            <div className='checkbox_selector'>
+                                <input
+                                    type='checkbox'
+                                    checked={nameOnly}
+                                    onChange={() => setNameOnly(!nameOnly)}
+                                    />
+                                <span>name only</span>
+                            </div>
+                        </div>
+                        <div className='col-6 mt-2'>
+                            <h6>display name</h6>
+                            <input
+                                className='form-control'
+                                value={addOnName}
+                                onChange={(e:ChangeEvent<HTMLInputElement>) => setAddOnName(e.target.value)}
+                                />
+                        </div>
+                        <div className='col-6 mt-2'>
+                            <h6>price</h6>
+                            <input
+                                type='number'
+                                className='form-control'
+                                value={addOnPrice}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => setAddOnPrice(parseFloat(e.target.value))}
+                                />
+                        </div>
+                    </Fragment>
+                }
             </div>
-            {isAddOn &&
-                <Fragment>
-                    <div className='col-6 mt-2'>
-                        <h6>display name</h6>
-                        <input
-                            className='form-control'
-                            value={addOnName}
-                            onChange={(e:ChangeEvent<HTMLInputElement>) => setAddOnName(e.target.value)}
-                            />
-                    </div>
-                    <div className='col-6 mt-2'>
-                        <h6>price</h6>
-                        <input
-                            type='number'
-                            className='form-control'
-                            value={addOnPrice}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setAddOnPrice(parseInt(e.target.value))}
-                            />
-                    </div>
-                </Fragment>
-            }
-        </div>
         </fieldset>
     )
 }

@@ -204,7 +204,7 @@ export const PrepDisplay = (props: PrepDisplayProps): React.ReactElement => {
 
     props.orderItems.forEach((orderItem: OrderItem) => {
         dish = orderItem.cart_item.menu_item.name;
-        protein = (orderItem.cart_item.menu_item.proteins.split(':').length > 1 && orderItem.cart_item.protein !== "") ?
+        protein = (orderItem.cart_item.protein !== "") ?
                     orderItem.cart_item.protein : "";
         spicy_text = (orderItem.cart_item.menu_item.spicy) ? spicy[orderItem.cart_item.spicy] : "";
 

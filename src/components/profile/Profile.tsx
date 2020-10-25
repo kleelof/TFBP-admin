@@ -398,7 +398,7 @@ export const Profile = (): React.ReactElement => {
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>how many <strong>days</strong> before delivery day should ordering be disabled?</td>
+                                                <td>How many <strong>days</strong> before delivery day should ordering be disabled?</td>
                                                 <td>
                                                     <input
                                                         type='number'
@@ -412,7 +412,7 @@ export const Profile = (): React.ReactElement => {
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>how many <strong>days</strong> out should delivery windows be shown?</td>
+                                                <td>How many <strong>days</strong> out should delivery windows be shown?</td>
                                                 <td>
                                                     <input type='number'
                                                            min={1}
@@ -451,7 +451,7 @@ export const Profile = (): React.ReactElement => {
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>how many <b>days</b> before an upcoming delivery day should the customer be notified?</td>
+                                                <td>How many <b>days</b> before an upcoming delivery day should the customer be notified?</td>
                                                 <td>
                                                     <input
                                                         type='number'
@@ -465,7 +465,7 @@ export const Profile = (): React.ReactElement => {
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>automatically notify customers of their upcoming delivery</td>
+                                                <td>Automatically notify customers of their upcoming delivery</td>
                                                 <td>
                                                     <input type='checkbox' checked={operator.auto_notify_upcoming_deliveries}
                                                        onChange={()=> updateOperator({...operator, auto_notify_upcoming_deliveries: !operator.auto_notify_upcoming_deliveries})}
@@ -474,7 +474,7 @@ export const Profile = (): React.ReactElement => {
                                             </tr>
                                             {operator.auto_notify_upcoming_deliveries &&
                                                 <tr>
-                                                    <td>how many <strong>days</strong> before a delivery should the customer be notified?</td>
+                                                    <td>How many <strong>days</strong> before a delivery should the customer be notified?</td>
                                                     <td>
                                                         <input
                                                             type='number'

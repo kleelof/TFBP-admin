@@ -83,7 +83,7 @@ export const RecipeIngredientPanel = (props: Props): React.ReactElement => {
                         </div>
                         <div className='col-12 col-md-6 mt-2 mt-md-0 text-center'>
                             <LoadingIconButton
-                                btnClass={`btn btn-outline-${updated ? 'success' : 'secondary'}`}
+                                btnClass={`btn btn-${updated ? 'success' : 'outline-secondary'}`}
                                 label='save'
                                 onClick={save}
                                 busy={saving}
