@@ -33,8 +33,8 @@ export const MenuComponentAdd = (props: Props): React.ReactElement => {
         menuItemService.attachComponent(
             props.menuItem,
             new AttachComponentDTO(
-                (selectedItem as SearchRecipesAndIngredientsDTO).type,
-                (selectedItem as SearchRecipesAndIngredientsDTO).item.id,
+                selectedItem ? (selectedItem as SearchRecipesAndIngredientsDTO).type : 'name',
+                selectedItem ? (selectedItem as SearchRecipesAndIngredientsDTO).item.id : 0,
                 quantity, unit, isAddOn, addOnName, addOnPrice
                 ))
             .then((menuItemComponent: MenuItemComponent) => props.addComponent(menuItemComponent))

@@ -33,7 +33,9 @@ export const MenuComponentComponent = (props: Props): React.ReactElement => {
                     props.item.ingredient ?
                         <Fragment><strong>ingredient:</strong> {props.item.ingredient.name}</Fragment>
                         :
-                        <Fragment><strong>recipe:</strong> {props.item.recipe.name}</Fragment>
+                        props.item.recipe ?
+                            <Fragment><strong>recipe:</strong> {props.item.recipe.name}</Fragment>
+                            : ""
 
                 }
                 {
@@ -48,19 +50,23 @@ export const MenuComponentComponent = (props: Props): React.ReactElement => {
                     onClick={() => props.deleteComponent(props.item)}
                     >X</button>
 
-                <button
-                    className='btn btn-sm btn-outline-primary float-right mr-2'
-                    onClick={() => history.push(
-                        {pathname: `/dashboard/${props.item.ingredient ? 'ingredient' : 'recipe'}/edit/${props.item.ingredient ? props.item.ingredient.id : props.item.recipe.id}`}
-                        )}
-                    >
-                    {
-                        props.item.ingredient ?
-                            <Fragment>goto ingredient</Fragment>
-                            :
-                            <Fragment>goto recipe</Fragment>
-                    }
-                </button>
+                {(props.item.ingredient != null || props.item.recipe != null) &&
+                    <button
+                        className='btn btn-sm btn-outline-primary float-right mr-2'
+                        onClick={() => history.push(
+                            {pathname: `/dashboard/${props.item.ingredient ? 'ingredient' : 'recipe'}/edit/${props.item.ingredient ? props.item.ingredient.id : props.item.recipe.id}`}
+                            )}
+                        >
+                        {
+                            props.item.ingredient ?
+                                <Fragment>goto ingredient</Fragment>
+                                :
+                                props.item.recipe ?
+                                    <Fragment>goto recipe</Fragment>
+                                    : ""
+                        }
+                    </button>
+                }
             </div>
         </div>
     )
