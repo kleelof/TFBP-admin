@@ -15,6 +15,8 @@ import RouteStop from "../src/models/RouteStopModel";
 import {BuildDeliveryWindow} from "./deliveryMocks";
 import PagedResultsDTO from "../src/dto/PagedResultsDTO";
 import ModelBase from "../src/models/ModelBase";
+import Recipe from "../src/models/RecipeModel";
+import RecipeIngredient from "../src/models/RecipeIngredientModel";
 
 interface BuildCoupon {
     count: number,
@@ -194,6 +196,29 @@ export const BuildMailingList = (params: IBuildMailingListEntry): any => {
                 params.email || `email_${x}@mail.com`,
                 params.code || x.toString(),
                 params.active || true
+            )
+        )
+    }
+
+    return items.length > 1 ? items : items[0];
+}
+
+interface BuildRecipeParams {
+    count: number,
+    ingredients?: RecipeIngredient[]
+}
+export const BuildRecipe = (params: BuildRecipeParams): any => {
+    let items: Recipe[] = [];
+
+    for (let x: number = 1; x <= params.count; x ++) {
+        items.push(
+            new Recipe(
+                `recipe_${x}`,
+                `description_${x}`,
+                `instructions_${x}`,
+                false,
+                params.ingredients || [],
+                1
             )
         )
     }

@@ -3,6 +3,8 @@ import MenuItemComponent from "../../models/MenuItemComponentModel";
 import { useHistory } from 'react-router-dom';
 import {INGREDIENT_UNIT} from "../../models/RecipeIngredientModel";
 import MenuItemAddOn from "../../models/MenuItemAddOnModel";
+import Allergen from "../../models/AllergenModel";
+import recipeHelper from '../../helpers/RecipeHelper';
 
 interface Props {
     item: MenuItemComponent | MenuItemAddOn,
@@ -11,6 +13,8 @@ interface Props {
 
 export const MenuComponentComponent = (props: Props): React.ReactElement => {
     const history = useHistory();
+
+    const allergens: string[] = recipeHelper.extractAllergensFromMenuItemComponent(props.item);
 
     return(
         <div className='row menu_component mt-2'>
@@ -22,7 +26,7 @@ export const MenuComponentComponent = (props: Props): React.ReactElement => {
                         props.item.ingredient ?
                             props.item.ingredient.name
                             :
-                            props.item.recipe.name
+                            props.item.recipe!.name
                 }
             </div>
             <div className='col-12 menu_component__portion'>
@@ -44,6 +48,18 @@ export const MenuComponentComponent = (props: Props): React.ReactElement => {
                         :''
                 }
             </div>
+            {allergens.length > 0 ?
+                <div className='col-12 menu_component__allergens'>
+                    <strong>allergens: </strong>
+                    {
+                        allergens.map((allergen: string, index: number) =>
+                            allergen + ((index < allergens.length - 1) ? ',' : '')
+                        )
+                    }
+                </div>
+                :
+                <div>&nbsp;</div>
+            }
             <div className='col-12 mt-2'>
                 <button
                     className='btn btn-sm btn-outline-danger float-right'
@@ -54,7 +70,7 @@ export const MenuComponentComponent = (props: Props): React.ReactElement => {
                     <button
                         className='btn btn-sm btn-outline-primary float-right mr-2'
                         onClick={() => history.push(
-                            {pathname: `/dashboard/${props.item.ingredient ? 'ingredient' : 'recipe'}/edit/${props.item.ingredient ? props.item.ingredient.id : props.item.recipe.id}`}
+                            {pathname: `/dashboard/${props.item.ingredient ? 'ingredient' : 'recipe'}/edit/${props.item.ingredient ? props.item.ingredient.id : props.item.recipe!.id}`}
                             )}
                         >
                         {

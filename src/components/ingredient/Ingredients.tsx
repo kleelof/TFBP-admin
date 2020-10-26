@@ -32,6 +32,7 @@ export const Ingredients = (): React.ReactElement => {
                     history.push({pathname: `/dashboard/ingredient/edit/${ingredient.id}`});
                 } else {
                     setNewIngredient('');
+                    loadPage(1);
                 }
             })
             .catch(() => window.alert('unable to create ingredient'))

@@ -2,6 +2,9 @@ import RecipeIngredient from "../models/RecipeIngredientModel";
 import {INGREDIENT_UNIT} from '../models/RecipeIngredientModel';
 import Ingredient from "../models/IngredientModel";
 import Allergen from "../models/AllergenModel";
+import MenuItemAddOn from "../models/MenuItemAddOnModel";
+import MenuItemComponentModel from "../models/MenuItemComponentModel";
+import AllergenModel from "../models/AllergenModel";
 
 class RecipeHelper {
 
@@ -13,6 +16,24 @@ class RecipeHelper {
                 list += ', '
         })
         return list;
+    }
+
+    public extractAllergensFromMenuItemComponent = (item: MenuItemAddOn | MenuItemComponentModel): string[] => {
+        let allergens: string[] = [];
+
+        if (item.ingredient) {
+            allergens = item.ingredient.allergens.map((allergen: Allergen) => allergen.name);
+        } else if (item.recipe) {
+            item.recipe.ingredients.forEach((ingredient: RecipeIngredient) =>{
+                (ingredient.ingredient as Ingredient).allergens.forEach((allergen: Allergen) => {
+                    if (allergens.indexOf(allergen.name) < 0)
+                        allergens.push(allergen.name);
+                })
+
+            })
+        }
+
+        return allergens;
     }
 
     public scaleRecipeIngredient = (ingredient: RecipeIngredient, servings: number, count: number, yld: number = 1): string => {

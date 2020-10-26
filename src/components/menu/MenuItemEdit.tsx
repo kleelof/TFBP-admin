@@ -170,14 +170,6 @@ export default class MenuItemEdit extends React.Component<Props, State> {
                         className='btn btn-sm btn-outline-info'
                         onClick={() => this.props.history.goBack()}
                         >back</button>
-                    <LoadingIconButton
-                        outerClass='float-right'
-                        btnClass={`btn btn-outline-${this.state.hasBeenUpdated ? 'success' : 'secondary'}`}
-                        label='save'
-                        onClick={this.save}
-                        busy={this.state.saving}
-                        disabled={!this.state.hasBeenUpdated}
-                        />
                     <hr/>
                 </div>
                 <div className="col-12 menuedititem__inner p-3">
@@ -282,6 +274,16 @@ export default class MenuItemEdit extends React.Component<Props, State> {
 
                                             )
                                         }
+                                </div>
+                                <div className='col-12 text-right'>
+                                    <LoadingIconButton
+                                        outerClass='float-right'
+                                        btnClass={`btn btn-outline-${this.state.hasBeenUpdated ? 'success' : 'secondary'}`}
+                                        label='save'
+                                        onClick={this.save}
+                                        busy={this.state.saving}
+                                        disabled={!this.state.hasBeenUpdated}
+                                        />
                                 </div>
                             </div>
                         </div>

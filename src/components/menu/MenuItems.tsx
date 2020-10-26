@@ -45,6 +45,7 @@ export const MenuItems = (): React.ReactElement => {
                                     'side'
                                     :
                                     'dessert'
+
     return(
         <div className="row menu_items mt-3">
             <div className='col-12 menu__title'>

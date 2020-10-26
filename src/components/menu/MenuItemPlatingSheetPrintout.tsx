@@ -53,13 +53,13 @@ export const MenuItemPlatingSheetPrintout = (props: Props): React.ReactElement =
                             </tr>
                             {
                                 props.menuItem.components.map((component: MenuItemComponent | MenuItemAddOn) =>
-                                    <tr>
+                                    <tr key={`mic_${component.id}`}>
                                         <td>
                                             {
                                                 component.ingredient != null ?
                                                     component.ingredient.name
                                                     :
-                                                    component.recipe.name
+                                                    component.recipe!.name
                                             }
                                         </td>
                                         <td>

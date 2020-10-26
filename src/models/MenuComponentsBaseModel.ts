@@ -5,10 +5,11 @@ import ModelBase from "./ModelBase";
 
 export default class MenuComponentsBaseModel extends ModelBase {
 
-    public recipe!: Recipe;
+    public recipe: Recipe | undefined;
     public menu_item!: MenuItem;
-    public ingredient!: Ingredient;
+    public ingredient: Ingredient | undefined;
 
     public quantity!: number;
     public unit!: number;
+
 }

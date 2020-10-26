@@ -1,12 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import MenuItem, {MenuItemDTO} from '../../models/MenuItemModel'; 
-import menuItemService from '../../services/MenuItemService';
-import LoadingOverlay from '../overlays/LoadingOverlay';
-import { Switch, Route, useParams } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import { MenuItems } from './MenuItems';
 import MenuEdit from './MenuItemEdit';
-import {SubNavigation, NavItem} from '../nav/SubNavigation';
-import { NewMenuItem } from './NewMenuItem'; 
 
 export const Menu = (): React.ReactElement => {
 

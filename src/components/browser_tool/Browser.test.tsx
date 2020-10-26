@@ -20,7 +20,7 @@ let date: Date;
 let retrieveWithCountsSpy: jest.SpyInstance = jest.spyOn(deliveryWindowService, 'listWithCounts');
 
 describe('BrowserDay tests', () => {
-    beforeAll(() => {
+    beforeAll(async() => {
         date = new Date();
         retrieveWithCountsSpy.mockReturnValue([
             {
@@ -34,7 +34,8 @@ describe('BrowserDay tests', () => {
                 window: BuildDeliveryWindow({count: 1})
             }
         ])
-        component = shallow(<BrowserDay date={date} />)
+        component = await mount(<BrowserDay date={date} />);
+        await component.update();
     })
 
     it('should display the correct date', () => {

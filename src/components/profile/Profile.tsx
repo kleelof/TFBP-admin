@@ -133,23 +133,6 @@ export const Profile = (): React.ReactElement => {
                 <hr/>
             </div>
             <div className='col-12 col-md-7'>
-                <div className='col-12 text-right'>
-                    <LoadingIconButton
-                        key={Math.random()}
-                        busy={saving}
-                        label={'save updates'}
-                        onClick={saveUpdates}
-                        btnClass={'btn btn-sm btn-success'}
-                        disabledBtnClass={'btn btn-sm btn-outline-secondary'}
-                        outerClass={'float-right'}
-                        disabled={!hasUpdates || errors.length !== 0}
-                    />
-                </div>
-            </div>
-            <div className={'col-12 col-md-7'}>
-                <hr/>
-            </div>
-            <div className='col-12 col-md-7'>
                 <fieldset disabled={saving}>
                     <div className="accordion" id="myAccordion">
                         <div className="card">
@@ -239,6 +222,18 @@ export const Profile = (): React.ReactElement => {
                                                 </div>
                                             </div>
                                         }
+                                        <div className='col-12'>asfsadf
+                                            <LoadingIconButton
+                                                key={Math.random()}
+                                                busy={saving}
+                                                label={'save updates'}
+                                                onClick={saveUpdates}
+                                                btnClass={'btn btn-sm btn-success'}
+                                                disabledBtnClass={'btn btn-sm btn-outline-secondary'}
+                                                outerClass={'float-right'}
+                                                disabled={!hasUpdates || errors.length !== 0}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -375,6 +370,18 @@ export const Profile = (): React.ReactElement => {
                                             </div>
 
                                         }
+                                        <div className='col-12'>asfsadf
+                                            <LoadingIconButton
+                                                key={Math.random()}
+                                                busy={saving}
+                                                label={'save updates'}
+                                                onClick={saveUpdates}
+                                                btnClass={'btn btn-sm btn-success'}
+                                                disabledBtnClass={'btn btn-sm btn-outline-secondary'}
+                                                outerClass={'float-right'}
+                                                disabled={!hasUpdates || errors.length !== 0}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -566,6 +573,18 @@ export const Profile = (): React.ReactElement => {
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div className='col-12'>asfsadf
+                                        <LoadingIconButton
+                                            key={Math.random()}
+                                            busy={saving}
+                                            label={'save updates'}
+                                            onClick={saveUpdates}
+                                            btnClass={'btn btn-sm btn-success'}
+                                            disabledBtnClass={'btn btn-sm btn-outline-secondary'}
+                                            outerClass={'float-right'}
+                                            disabled={!hasUpdates || errors.length !== 0}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

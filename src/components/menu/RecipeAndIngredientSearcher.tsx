@@ -30,7 +30,7 @@ export default class RecipeAndIngredientSearcher extends React.Component<Props, 
     }
 
     private itemSelected = (item: any): void => {
-        this.setState({showChoices: false, currentValue: item.name});
+        this.setState({showChoices: false, currentValue: item.item.name});
         this.props.itemSelected(item);
     }
 

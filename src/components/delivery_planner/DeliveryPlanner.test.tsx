@@ -33,11 +33,6 @@ describe('DeliveryPlanner tests', () => {
     it('should list all markers', () => {
         expect(component.find(Marker).length).toBe(2);
     })
-
-    it('should respond to optimize', () => {
-        expect(component.find('.route_organizer__optimize_btn').length).toBe(1);
-        act(() => component.find('.route_organizer__optimize_btn').simulate('click'));
-    })
 })
 
 describe ('Marker tests', () => {

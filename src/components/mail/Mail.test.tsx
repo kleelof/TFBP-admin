@@ -171,12 +171,6 @@ describe('MailingListEntry', () => {
         expect(component.find('.mailing_list__code').instance().value).toBe('94610');
         expect(component.find('.mailing_list__email').instance().value).toBe('fred@bedrock.com');
         expect(component.find('.mailing_list__active').props().checked).toBe(true);
-        expect(component.find('.mailing_list__save_btn').props().disabled).toBe(true);
-    })
-
-    it('should enable save btn if something changes', () => {
-        component.find('.mailing_list__code').simulate('change', {target: {value: '123'}});
-        expect(component.find('.mailing_list__save_btn').props().disabled).toBe(false);
     })
 
 })

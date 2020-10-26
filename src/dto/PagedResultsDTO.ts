@@ -12,6 +12,6 @@ export default class PagedResultsDTO {
         results: ModelBase[] = []
     ) {
         this.count = count;
-        this.results = results
+        this.results = results;
     }
 }

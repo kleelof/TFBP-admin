@@ -1,15 +1,11 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useState, Fragment} from 'react';
 import MenuItem from "../../models/MenuItemModel";
 import MenuItemComponent from "../../models/MenuItemComponentModel";
 import {MenuComponentAdd} from "./MenuComponentAdd";
 import {MenuComponentComponent} from "./MenuComponentComponent";
-import menuItemComponentService from '../../services/MenuItemComponentService';
 import menuItemService from '../../services/MenuItemService';
-import PagedResultsDTO from "../../dto/PagedResultsDTO";
-import MenuItemAddOnModel from "../../models/MenuItemAddOnModel";
 import MenuItemAddOn from "../../models/MenuItemAddOnModel";
 import {PrintButton} from "../widgets/print_button/PrintButton";
-import {RecipePrintout} from "../recipe/RecipePrintout";
 import {MenuItemPlatingSheetPrintout} from "./MenuItemPlatingSheetPrintout";
 
 interface Props {
@@ -38,7 +34,7 @@ export const MenuComponents = (props: Props): React.ReactElement => {
 
     const deleteComponent = (item: MenuItemComponent | MenuItemAddOn): void => {
         const isAddon: boolean = 'price' in item;
-        console.log(item)
+
         if (!window.confirm(`are you sure you want to remove this ${isAddon ? 'add-on' : 'component'}?`)) return;
 
         menuItemService.deleteComponent(props.menuItem, item.id, isAddon)
