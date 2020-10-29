@@ -6,7 +6,7 @@ const dev = {
 }
 
 const prod = {
-    API_URL: "https://www.pearako.com",
+    API_URL: "https://www.daisychef.com",
     OPERATOR_TOKEN: '8500f3e1-0282-4d09-a752-6756d188f584',
     RESULTS_PER_PAGE: 25,
     UPLOADS_PATH: '/uploads'

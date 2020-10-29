@@ -119,7 +119,7 @@ class App extends React.Component<Props, State> {
 			<div className='row app_header'>
                 <div className='col-12'>
                     <div className='app_header__title'>
-                        Pearako Operator Dashboard
+                        DaisyChef Operator Dashboard
                     </div>
                     <div className='app_header__menu_toggle' onClick={this.openNav}>
                         <img src={menuIcon} alt='open the menu'/>
