@@ -1,5 +1,5 @@
 /*
-    Mange MenuItems in DelliveryDay
+    Mange MenuItems in DeliveryDay
  */
 import React from 'react';
 
@@ -61,8 +61,9 @@ export default class DeliveryDayComponent extends React.Component<Props, State> 
             .then(() => this.setState({deleting: false}))
     }
 
-    private itemSelected = (menuItem: MenuItem) => {
-        console.log(menuItem);
+    private itemSelected = (menuItem: MenuItem | string) => {
+        if (typeof menuItem === 'string') return;
+
         deliveryDayItemService.add(new DeliveryDayItemDTO(this.state.deliveryDay.id, menuItem.id, false, menuItem.price))
             .then((item: any) => {
                 const deliveryDay: DeliveryDay = this.state.deliveryDay;
