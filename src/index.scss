@@ -33,14 +33,19 @@ input[type=checkbox]
   }
 
   & .app_header {
-    background-color: $primary_fill;
-    color: rgba(255, 255, 255, .8);
+    color: rgba(0, 0, 0, .4);
     font-size: 1.3em;
     font-weight: bold;
+    vertical-align: bottom;
 
     &__title {
       float: left;
+
+      & img {
+        width: 200px;
+      }
     }
+
     &__menu_toggle {
       float: right;
 

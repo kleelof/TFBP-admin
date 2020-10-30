@@ -99,7 +99,7 @@ export default class BrowserTool extends React.Component<Props, State>{
                                 onClick={() => this.changeMonth(1)}
                             >&gt;&gt;</div>
                         </div>
-                        <div className={'col-12'}>
+                        <div className={'col-12 text-center'}>
                             <table className={''}>
                                 <thead>
                                     <tr>
