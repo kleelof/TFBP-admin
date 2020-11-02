@@ -25,6 +25,11 @@ interface State {
     sendingEmail: boolean
 }
 
+interface SpreadSheetColumn {
+    title: string,
+    slug: string
+}
+
 class BrowserWindowTools extends React.Component<Props, State>{
 
     constructor(props: any) {
@@ -43,22 +48,10 @@ class BrowserWindowTools extends React.Component<Props, State>{
             .catch( err => window.alert('unable to load data'))
     }
 
-    private downloadDeliverySpreadsheet = (): void => {console.log('xx')
-        let fileContent: string = "Address line 1\tAddress line 2\tCity\tState\tZip\tName\tEmail Address\tPhone Number\tExternal ID\tOrder Count\tDriver\n";
-        let orderItems: OrderItem[] = [];
-
-        this.state.orders.forEach((order: Order) => {
-            orderItems = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === momentHelper.asDateSlug(this.props.date));
-            if (orderItems.length > 0) {
-                fileContent += `${order.street_address}\t${order.unit}\t${order.city}\tCA\t${order.zip}\t${order.contact_name}\t${order.email}\t${order.phone_number}\t${order.public_id}\t${orderItems.length}\tLee\n`;
-            }
-        })
-
-        const bb = new Blob([fileContent ], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.download = `delivery_route_${momentHelper.asDateSlug(this.props.date)}.tsv`;
-        a.href = window.URL.createObjectURL(bb);
-        a.click();
+    private downloadOrdersSpreadsheet = (): void => {
+        deliveryWindowService.generateOrdersTSV(this.props.dto.window.id, this.props.date)
+            .then((tsv: string) => printHelper.download(`orders_${momentHelper.asDateSlug(this.props.date)}.tsv`, tsv))
+            .catch(() => window.alert('unable to download prep board'))
     }
 
     private downloadPrepBoard = (): void => {
@@ -71,6 +64,8 @@ class BrowserWindowTools extends React.Component<Props, State>{
         deliveryWindowService.generateDeliveryTags(this.props.dto.window.id, this.props.date)
             .then((pdf: any) => printHelper.download('delivery_tags.pdf', pdf))
             .catch(() => window.alert('unable to download prep board'))
+
+        // this.print('delivery_tags');
     }
 
     private emailingComplete = (): void => {
@@ -110,6 +105,8 @@ class BrowserWindowTools extends React.Component<Props, State>{
                                 disabled={this.state.orders.length === 0}>print prep list</button>
                                 <button className={'btn-block btn-outline-success'} onClick={() => this.downloadDeliveryTags()}
                                 disabled={this.state.orders.length === 0}>print delivery tags</button>
+                                <button className={'btn-block btn-outline-success'} onClick={() => this.downloadOrdersSpreadsheet()}
+                                disabled={this.state.orders.length === 0}>download orders spreadsheet</button>
                         </div>
                         <div className={'col-12 mt-2'}>
                             <button className={'btn-block btn-outline-success'}

@@ -19,6 +19,10 @@ class DeliveryWindowService extends Service {
         return this._get(`${this.appName}/${this.view}/${windowId}/generate_delivery_tags_pdf/?target_date=${momentHelper.asDateSlug(date, true)}`);
     }
 
+    public generateOrdersTSV = (windowId: number, date: Date): Promise<any> => {
+        return this._get(`${this.appName}/${this.view}/${windowId}/generate_orders_tsv/?target_date=${momentHelper.asDateSlug(date, true)}`);
+    }
+
     public listWithCounts = (targetDate: string): Promise<DeliveryWindowWithCountsDTO[]> => {
         return this._get(`${this.appName}/${this.view}/list_with_counts/?target_date=${targetDate}`);
     }
