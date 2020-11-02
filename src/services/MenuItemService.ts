@@ -12,7 +12,11 @@ class MenuItemService extends Service {
     }
 
     public deleteComponent = (menuItem: MenuItem, componentId: number, isAddon: boolean = false): Promise<any> => {
-        return this._get(`${this.appName}/${this.view}/${menuItem.id}/delete_component/?component_id=${componentId}&is_add_on=${isAddon.toString()}`)
+        return this._get(`${this.appName}/${this.view}/${menuItem.id}/delete_component/?component_id=${componentId}&is_add_on=${isAddon.toString()}`);
+    }
+
+    public generatePlatingSheet = (menuItem: MenuItem): Promise<any> => {
+        return this._get(`${this.appName}/${this.view}/${menuItem.id}/generate_plating_sheet`);
     }
 }
 

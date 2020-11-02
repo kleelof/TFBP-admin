@@ -88,7 +88,7 @@ export default class BrowserFullDay extends React.Component<Props, State> {
                     </div>
                 </div>
 
-                <div className="col-12 print-sheet">
+                <div className="col-12 print_sheet">
                     {this.state.documentToPrint}
                 </div>
             </div>

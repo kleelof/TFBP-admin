@@ -111,7 +111,7 @@ export default class Export extends React.Component<any, State> {
                     <button className="btn btn-outline-success mt-2" onClick={this.loadData}>Print</button>
                 </div>
                 {(this.state.orderItems.length + this.state.orders.length > 0) &&
-                    <div className="col-12 print-sheet">
+                    <div className="col-12 print_sheet">
                         {
                             this.state.pullType === 'prep' ?
                                 <PrepDisplay orderItems={this.state.orderItems} date={this.state.pullDate} />
@@ -200,7 +200,7 @@ function PrepDisplay(props: any) {
 
     return ( 
         <Fragment>
-            <span className='print-sheet-header'>{props.date} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
+            <span className='print_sheet__header'>{props.date} &nbsp;&nbsp;:&nbsp;&nbsp;{dishCount} items</span>
             <table className='prep-sheet'> 
                 <thead>
                     <tr>

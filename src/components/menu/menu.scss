@@ -169,13 +169,27 @@
 
 .plating_sheet {
     margin-left: 10px;
+    width: 95%;
+
+    &__qa table, th, td {
+        border: 1px solid black;
+    }
+
+    &__qa_header {
+        font-size: 2em;
+        font-weight: bold;
+    }
 
     &__title {
         font-size: 2.0em;
         font-weight: bold;
     }
 
-    & td {
-        font-size: 1.2em;
+    &__portions .table {
+        width: 50%;
+
+        & td {
+            font-size: 1.2em;
+        }
     }
 }

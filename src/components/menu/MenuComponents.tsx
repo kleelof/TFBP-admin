@@ -6,7 +6,7 @@ import {MenuComponentComponent} from "./MenuComponentComponent";
 import menuItemService from '../../services/MenuItemService';
 import MenuItemAddOn from "../../models/MenuItemAddOnModel";
 import {PrintButton} from "../widgets/print_button/PrintButton";
-import {MenuItemPlatingSheetPrintout} from "./MenuItemPlatingSheetPrintout";
+import printHelper from '../../helpers/PrintHelper';
 
 interface Props {
     menuItem: MenuItem
@@ -51,13 +51,9 @@ export const MenuComponents = (props: Props): React.ReactElement => {
     }
 
     function printPlatingSheet(): void {
-        setDocumentToPrint(
-            <MenuItemPlatingSheetPrintout
-                menuItem={props.menuItem}
-            />);
-        setTimeout(function () {
-            window.print();
-        }, 500);
+        menuItemService.generatePlatingSheet(props.menuItem)
+            .then((content: any) => printHelper.download('plating_sheet.pdf', content))
+            .catch(() => window.alert('unable to download plating sheet'))
     }
 
     return (
@@ -113,7 +109,7 @@ export const MenuComponents = (props: Props): React.ReactElement => {
                     </Fragment>
                 }
             </div>
-            <div className="print-sheet">
+            <div className="print_sheet">
                 {documentToPrint}
             </div>
         </Fragment>

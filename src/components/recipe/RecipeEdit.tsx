@@ -329,7 +329,7 @@ export const RecipeEdit = (): React.ReactElement => {
                     }
                 </div>
             </div>
-            <div className="col-12 print-sheet">
+            <div className="col-12 print_sheet">
                 {documentToPrint}
             </div>
         </Fragment>

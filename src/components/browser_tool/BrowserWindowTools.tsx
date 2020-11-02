@@ -2,7 +2,6 @@ import React, {Fragment} from 'react';
 import {DeliveryWindowWithCountsDTO} from "../../models/DeliveryWindowModel";
 import OrderItem from "../../models/OrderItemModel";
 import helpers from "../../helpers/helpers";
-import momentHelper from '../../helpers/MomentHelper';
 import Order from "../../models/OrderModel";
 import deliveryWindowService from '../../services/DeliveryWindowService';
 import LoadingOverlay from "../overlays/LoadingOverlay";
@@ -11,7 +10,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import './browser.scss';
 import moment from "moment";
 import {EmailWidget} from "../widgets/email_widget/EmailWidget";
-import MomentHelper from "../../helpers/MomentHelper";
+import momentHelper from "../../helpers/MomentHelper";
+import printHelper from '../../helpers/PrintHelper';
 
 interface Props extends RouteComponentProps {
     dto: DeliveryWindowWithCountsDTO,
@@ -61,6 +61,18 @@ class BrowserWindowTools extends React.Component<Props, State>{
         a.click();
     }
 
+    private downloadPrepBoard = (): void => {
+        deliveryWindowService.generateProductionBoard(this.props.dto.window.id, this.props.date)
+            .then((pdf: any) => printHelper.download('prepboard.pdf', pdf))
+            .catch(() => window.alert('unable to download prep board'))
+    }
+
+    private downloadDeliveryTags = (): void => {
+        deliveryWindowService.generateDeliveryTags(this.props.dto.window.id, this.props.date)
+            .then((pdf: any) => printHelper.download('delivery_tags.pdf', pdf))
+            .catch(() => window.alert('unable to download prep board'))
+    }
+
     private emailingComplete = (): void => {
         this.setState({sendingEmail: false})
 
@@ -94,9 +106,9 @@ class BrowserWindowTools extends React.Component<Props, State>{
                         <div className={'col-6 mt-2'}>Dishes: {this.props.dto.dish_count}</div>
                         <div className={'col-12'}><hr/></div>
                         <div className={'d-none d-md-block col-md-12 browser_window_tools__controls mt-2'}>
-                                <button className={'btn-block btn-outline-success'} onClick={() => this.print('prep')}
+                                <button className={'btn-block btn-outline-success'} onClick={() => this.downloadPrepBoard()}
                                 disabled={this.state.orders.length === 0}>print prep list</button>
-                                <button className={'btn-block btn-outline-success'} onClick={() => this.print('delivery_tags')}
+                                <button className={'btn-block btn-outline-success'} onClick={() => this.downloadDeliveryTags()}
                                 disabled={this.state.orders.length === 0}>print delivery tags</button>
                         </div>
                         <div className={'col-12 mt-2'}>
@@ -122,7 +134,7 @@ class BrowserWindowTools extends React.Component<Props, State>{
                                 config={{
                                     email_type: 'deliveries_email',
                                     entity_id: this.props.dto.window.id,
-                                    target_date: MomentHelper.asDateSlug(this.props.date, true)
+                                    target_date: momentHelper.asDateSlug(this.props.date, true)
                                 }}
                             />
                         </div>
@@ -147,7 +159,7 @@ export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.Reac
             {
                 props.orders.map((order: Order) => {
                     const orderItems: OrderItem[] = order.items.filter((orderItem: OrderItem) => orderItem.cart_item.delivery_date === target_date)
-                    console.log(order)
+
                     return (
                         <div className='quarter_print_page' key={`order_${order.id}`}>
                             <span className="contact-info">{order.contact_name}</span>
@@ -158,7 +170,7 @@ export const DeliveryTagsDisplay = (props: DeliveryTagsDisplayProps): React.Reac
                             <div className="delivery-tag-items">
                                 {
                                     orderItems.map((orderItem: OrderItem) => {
-                                        console.log(orderItem)
+
                                         return(
                                             <div className="delivery-tag-item" key={`oi_${orderItem.id}`}>
                                                 {orderItem.cart_item.quantity.toString() + " " + helpers.extractCartItemDescription(orderItem.cart_item)}

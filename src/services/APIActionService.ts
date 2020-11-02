@@ -1,7 +1,6 @@
 import Service from './Service';
 import FunctionsResponsesDTO from '../dto/FunctionsResponsesDTO';
 import Order from "../models/OrderModel";
-import MassMailResponseDTO from "../dto/MassMailResponseDTO";
 import SearchRecipesAndIngredientsDTO from "../dto/SearchRecipesAndIngredientsDTO";
 
 class APIActionService extends Service {

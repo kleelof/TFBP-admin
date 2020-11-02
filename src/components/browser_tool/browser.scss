@@ -104,10 +104,6 @@
 
 }
 
-.print-sheet {
-    visibility: hidden;
-}
-
 .delivery_tags {
 
   & .contact-info {
@@ -169,27 +165,6 @@
   }
 }
 
-@media print {
-    body * {
-        visibility: hidden;
-    }
-
-    .print-sheet, .print-sheet * {
-        visibility: visible;
-    }
-
-    .print-sheet {
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-
-    .quarter-page {
-        page-break-after: always;
-    }
-
-
-}
 
 
 

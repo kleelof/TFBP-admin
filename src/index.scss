@@ -98,6 +98,35 @@ input[type=checkbox]
     }
   }
 
+/* printing */
+.print_sheet {
+    visibility: hidden;
+}
+
+@media print {
+  body * {
+        visibility: hidden;
+    }
+
+    .print_sheet, .print_sheet * {
+        visibility: visible;
+        width: 100%;
+    }
+
+    .print_sheet {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .quarter_page {
+        page-break-after: always;
+    }
+
+    .print_sheet__break {
+      page-break-after: always;
+    }
+}
 
 /* The side navigation menu */
 .sidenav {
