@@ -36,8 +36,8 @@ class RecipeHelper {
         return allergens;
     }
 
-    public scaleRecipeIngredient = (ingredient: RecipeIngredient, servings: number, count: number, yld: number = 1): string => {
-        let rawValue: number =  ((ingredient.quantity / servings) * count / ingredient.yld) / yld;
+    public scaleRecipeIngredient = (ingredient: RecipeIngredient, servings: number, scaleTo: number, yld: number = 1): string => {
+        let rawValue: number =  ((ingredient.quantity / servings) * scaleTo / ingredient.yld) / yld;
         let unit: number = ingredient.unit;
 
         if (unit === 0 && rawValue > 15) { // oz > lb
@@ -55,8 +55,8 @@ class RecipeHelper {
             unit = 6;
         }
 
-        if (unit === 5 && rawValue > 2) {// tbl > fl_oz
-            rawValue /= 3;
+        if (unit === 5 && rawValue > 1) {// tbl > fl_oz
+            rawValue /= 2;
             unit = 6;
         }
 

@@ -83,14 +83,13 @@ describe('RecipeHelper tests', () => {
 
         it('should tbl > fl_oz', () => {
             recipeIngredient.unit = 5;
-            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 3)).toBe('1.00 fl oz');
+            expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 2)).toBe('1.00 fl oz');
         })
 
         it('should fl_oz > c', () => {
             recipeIngredient.unit = 6;
             expect(recipeHelper.scaleRecipeIngredient(recipeIngredient, 1, 8)).toBe('1.00 cup');
         })
-
 
         it('should c > pint', () => {
             recipeIngredient.unit = 7;

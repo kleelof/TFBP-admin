@@ -6,6 +6,8 @@ import {config} from '../../config';
 import './menu.scss';
 import {NewMenuItem} from "./NewMenuItem";
 import PagedResultsDTO from "../../dto/PagedResultsDTO";
+import ingredientService from "../../services/IngredientService";
+import {PageSelector} from "../widgets/page_selector/PageSelector";
 
 export const MenuItemCategories: any = {
     en: 'Entrees',
@@ -21,19 +23,24 @@ export enum ItemsModes {
 
 export const MenuItems = (): React.ReactElement => {
     const params: any = useParams();
-    const [DTO, setDTO] = useState(new PagedResultsDTO());
+    const [dto, setDTO] = useState(new PagedResultsDTO());
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
+        loadPage(1);
+    }, [params.category])
+
+    const loadPage = (page: number, searchPattern?: string): void => {
+        setCurrentPage(page);
+
         menuItemService.search<PagedResultsDTO>(params.category, 'category')
             .then((dto: PagedResultsDTO) => {
                 setDTO(dto);
             })
             .catch( err => {window.alert('Unable To Load Menu Items')})
-        return () => {
-        }
-    }, [params.category])
+    }
 
-    const sortedItems: MenuItem[] = (DTO.results as any).sort((a: MenuItem, b: MenuItem) => a.name > b.name ? 1 : -1);
+    const sortedItems: MenuItem[] = (dto.results as any).sort((a: MenuItem, b: MenuItem) => a.name > b.name ? 1 : -1);
 
     const menuType: string = params.category === 'en' ?
                             'entree'
@@ -58,6 +65,13 @@ export const MenuItems = (): React.ReactElement => {
                 <NewMenuItem key={Math.random().toString()} />
             </div>
             <div className='d-none d-md-block col-md-8'></div>
+            <div className='col-12 text-right'>
+                <PageSelector
+                    numItems={dto.count}
+                    currentPage={currentPage}
+                    gotoPage={loadPage}
+                    />
+            </div>
             <div className='col-12'>
                 <hr/>
             </div>

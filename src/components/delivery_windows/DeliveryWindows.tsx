@@ -6,7 +6,6 @@ import './delivery_windows.scss';
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import { DeliveryWindowsWindow } from './DeliveryWindowsWindow';
 
-import { pythonDays } from '../../constants';
 import { useHistory, Link } from 'react-router-dom';
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 
