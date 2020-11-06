@@ -7,13 +7,11 @@ export const INGREDIENT_UNIT: string[] = [
     'lb',
     'g',
     'kg', // 3
-    'tsp',
-    'tbl',
     'fl oz',
-    'cup', // 7
+    'cup', // 5
     'pint',
     'qt',
-    'gal', //10
+    'gal', //9
     'ml',
     'l',
     'ea'
