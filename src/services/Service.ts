@@ -110,8 +110,8 @@ export default class Service {
         return this._patch<T>(`${this.appName}/${this.view}/${id}/`, formData, {headers: {'Content-Type': 'multipart/form-data'}});
     }
 
-    public search<T>(search: string, searchColumn: string = ''): Promise<T> {
-        return this._get(`${this.appName}/${this.view}/${this.buildSearchQuery(search, searchColumn)}`);
+    public search<T>(search: string, searchColumn: string = '', page:number = 1): Promise<T> {
+        return this._get(`${this.appName}/${this.view}/${this.buildSearchQuery(search, searchColumn, page)}`);
     }
 
     public pagedSearchResults = (pageNumber: number = 1, search: string = '', searchColumn: string = ''): Promise<PagedResultsDTO> => {

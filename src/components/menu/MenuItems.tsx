@@ -33,7 +33,7 @@ export const MenuItems = (): React.ReactElement => {
     const loadPage = (page: number, searchPattern?: string): void => {
         setCurrentPage(page);
 
-        menuItemService.search<PagedResultsDTO>(params.category, 'category')
+        menuItemService.search<PagedResultsDTO>(params.category, 'category', page)
             .then((dto: PagedResultsDTO) => {
                 setDTO(dto);
             })
