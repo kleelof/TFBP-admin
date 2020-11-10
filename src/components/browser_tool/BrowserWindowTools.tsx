@@ -48,6 +48,15 @@ class BrowserWindowTools extends React.Component<Props, State>{
             .catch( err => window.alert('unable to load data'))
     }
 
+
+    private downloadDeliveryTags = (): void => {
+        deliveryWindowService.generateDeliveryTags(this.props.dto.window.id, this.props.date)
+            .then((pdf: any) => printHelper.download('delivery_tags.pdf', pdf))
+            .catch(() => window.alert('unable to download prep board'))
+
+        // this.print('delivery_tags');
+    }
+
     private downloadOrdersSpreadsheet = (): void => {
         deliveryWindowService.generateOrdersTSV(this.props.dto.window.id, this.props.date)
             .then((tsv: string) => printHelper.download(`orders_${momentHelper.asDateSlug(this.props.date)}.tsv`, tsv))
@@ -60,12 +69,16 @@ class BrowserWindowTools extends React.Component<Props, State>{
             .catch(() => window.alert('unable to download prep board'))
     }
 
-    private downloadDeliveryTags = (): void => {
-        deliveryWindowService.generateDeliveryTags(this.props.dto.window.id, this.props.date)
-            .then((pdf: any) => printHelper.download('delivery_tags.pdf', pdf))
-            .catch(() => window.alert('unable to download prep board'))
+    private downloadShoppingList = (): void => {
+        deliveryWindowService.generateShoppingList(this.props.dto.window.id, this.props.date)
+            .then((pdf: any) => printHelper.download('shopping_list.pdf', pdf))
+            .catch(() => window.alert('unable to download shopping list'))
+    }
 
-        // this.print('delivery_tags');
+    private downloadOrderingSheet = (): void => {
+        deliveryWindowService.generateOrderingSpreadsheet(this.props.dto.window.id, this.props.date)
+            .then((pdf: any) => printHelper.download(`ordering_sheet_${momentHelper.asDateSlug(this.props.date)}.tsv`, pdf))
+            .catch(() => window.alert('unable to download ordering sheet'))
     }
 
     private emailingComplete = (): void => {
@@ -101,22 +114,26 @@ class BrowserWindowTools extends React.Component<Props, State>{
                         <div className={'col-6 mt-2'}>Dishes: {this.props.dto.dish_count}</div>
                         <div className={'col-12'}><hr/></div>
                         <div className={'d-none d-md-block col-md-12 browser_window_tools__controls mt-2'}>
-                                <button className={'btn-block btn-outline-success'} onClick={() => this.downloadPrepBoard()}
+                                <button className={'btn btn-sm btn-outline-success'} onClick={() => this.downloadPrepBoard()}
                                 disabled={this.state.orders.length === 0}>print prep list</button>
-                                <button className={'btn-block btn-outline-success'} onClick={() => this.downloadDeliveryTags()}
+                                <button className={'btn btn-sm btn-outline-success ml-2'} onClick={() => this.downloadDeliveryTags()}
                                 disabled={this.state.orders.length === 0}>print delivery tags</button>
-                                <button className={'btn-block btn-outline-success'} onClick={() => this.downloadOrdersSpreadsheet()}
+                        </div>
+                        <div className='col-12 mt-2'>
+                            <button className={'btn-btn btn-sm btn-outline-success'} onClick={() => this.downloadOrdersSpreadsheet()}
                                 disabled={this.state.orders.length === 0}>download orders spreadsheet</button>
+                            <button className={'btn-btn btn-sm btn-outline-success ml-2'} onClick={() => this.downloadOrderingSheet()}
+                                disabled={this.state.orders.length === 0}>download Ordering Sheet</button>
                         </div>
                         <div className={'col-12 mt-2'}>
-                            <button className={'btn-block btn-outline-success'}
+                            <button className={'btn btn-sm btn-outline-success'}
                                     onClick={() => this.props.history.push({
                                         pathname:`/dashboard/delivery_planner/${this.props.dto.window.id}/${moment(this.props.date).utc().format('YYYY-MM-DD')}`})}
                                     disabled={this.state.orders.length === 0}>
                                 route planner</button>
 
                             <button
-                                className={'btn-block btn-info'}
+                                className={'btn btn-sm btn-info'}
                                 onClick={() => this.setState({sendingEmail: true})}
                                 disabled={this.state.orders.length === 0}>
                                 send mail</button>

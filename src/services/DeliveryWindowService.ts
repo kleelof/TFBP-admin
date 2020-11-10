@@ -23,6 +23,14 @@ class DeliveryWindowService extends Service {
         return this._get(`${this.appName}/${this.view}/${windowId}/generate_orders_tsv/?target_date=${momentHelper.asDateSlug(date, true)}`);
     }
 
+    public generateShoppingList = (windowId: number, date: Date): Promise<any> => {
+        return this._get(`${this.appName}/${this.view}/${windowId}/generate_shopping_list_pdf/?target_date=${momentHelper.asDateSlug(date, true)}`);
+    }
+
+    public generateOrderingSpreadsheet = (windowId: number, date: Date): Promise<any> => {
+        return this._get(`${this.appName}/${this.view}/${windowId}/generate_ordering_list_tsv/?target_date=${momentHelper.asDateSlug(date, true)}`);
+    }
+
     public listWithCounts = (targetDate: string): Promise<DeliveryWindowWithCountsDTO[]> => {
         return this._get(`${this.appName}/${this.view}/list_with_counts/?target_date=${targetDate}`);
     }
