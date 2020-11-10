@@ -122,8 +122,12 @@ class BrowserWindowTools extends React.Component<Props, State>{
                         <div className='col-12 mt-2'>
                             <button className={'btn-btn btn-sm btn-outline-success'} onClick={() => this.downloadOrdersSpreadsheet()}
                                 disabled={this.state.orders.length === 0}>download orders spreadsheet</button>
+                        </div>
+                        <div className='col-12 mt-2'>
+                            <button className={'btn-btn btn-sm btn-outline-success'} onClick={() => this.downloadShoppingList()}
+                                disabled={this.state.orders.length === 0}>download shopping list</button>
                             <button className={'btn-btn btn-sm btn-outline-success ml-2'} onClick={() => this.downloadOrderingSheet()}
-                                disabled={this.state.orders.length === 0}>download Ordering Sheet</button>
+                                disabled={this.state.orders.length === 0}>download ordering sheet</button>
                         </div>
                         <div className={'col-12 mt-2'}>
                             <button className={'btn btn-sm btn-outline-success'}
@@ -131,7 +135,6 @@ class BrowserWindowTools extends React.Component<Props, State>{
                                         pathname:`/dashboard/delivery_planner/${this.props.dto.window.id}/${moment(this.props.date).utc().format('YYYY-MM-DD')}`})}
                                     disabled={this.state.orders.length === 0}>
                                 route planner</button>
-
                         </div>
                         <div className='col-12 mt-2'>
                             <button
