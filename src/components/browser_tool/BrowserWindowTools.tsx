@@ -132,6 +132,8 @@ class BrowserWindowTools extends React.Component<Props, State>{
                                     disabled={this.state.orders.length === 0}>
                                 route planner</button>
 
+                        </div>
+                        <div className='col-12 mt-2'>
                             <button
                                 className={'btn btn-sm btn-info'}
                                 onClick={() => this.setState({sendingEmail: true})}
