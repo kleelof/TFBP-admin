@@ -47,6 +47,7 @@ import operatorService from './services/OperatorService';
 import OperatorSettingsDTO from "./dto/OperatorSettingsDTO";
 import {dispatchUpdateOperatorSettings, OperatorSettings, OperatorState} from "./store/operatorReducer";
 import {RestaurantMenuManager} from "./components/restaurant_menu_manager/RestaurantMenuManager";
+import {RestaurantDelivery} from "./components/restaurant_delivery/RestaurantDelivery";
 
 interface LinkStateProps {
     auth: AuthState,
@@ -171,6 +172,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path="/dashboard/orders" component={Orders} />
                         <PrivateRoute path='/dashboard/profile' component={Profile} />
                         <PrivateRoute path='/dashboard/rest/menu' component={RestaurantMenuManager} />
+                        <PrivateRoute path='/dashboard/rest/delivery' component={RestaurantDelivery} />
                         <PrivateRoute path='/dashboard/recipe/edit/:id' component={RecipeEdit} />
                         <PrivateRoute path='/dashboard/recipe/notes/:id' component={RecipeNotes} />
                         <PrivateRoute path='/dashboard/recipe' component={Recipes} />

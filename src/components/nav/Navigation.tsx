@@ -4,6 +4,7 @@ import { Redirect, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {actions, AppState} from '../../store/store';
 import './navigation.scss';
+import {OPERATOR_TYPES} from "../../models/OperatorModel";
 
 interface Props {
     closeNav: () => void
@@ -14,7 +15,7 @@ export const Navigation = (props: Props): React.ReactElement => {
     const [showDropdown, setShowDropdown] = useState(');')
     const dispatch = useDispatch();
     const history = useHistory();
-    const opSettings = useSelector((state: AppState) => state.operatorReducer);
+    const isRestaurant = useSelector((state: AppState) => state.operatorReducer).settings?.type === OPERATOR_TYPES.restaurant;
 
     const navigateToPage = (pathname: string): void => {
         props.closeNav();
@@ -38,7 +39,7 @@ export const Navigation = (props: Props): React.ReactElement => {
                     profile
                 </li>
                 {
-                    opSettings.settings?.type === 0 ?
+                    !isRestaurant ?
                         <li onClick={() => setShowDropdown('menu')}>
                             menu
                             <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'menu' ? 'open' : 'close'}`}>
@@ -61,20 +62,27 @@ export const Navigation = (props: Props): React.ReactElement => {
                             menu
                         </li>
                 }
-                <li onClick={() => setShowDropdown('delivery')}>
-                    delivery
-                    <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'delivery' ? 'open' : 'close'}`}>
-                        <li onClick={() => navigateToPage("/dashboard/deliveries")}>
-                            menus
+                {
+                    isRestaurant ?
+                        <li onClick={() => navigateToPage("/dashboard/rest/delivery")}>
+                            activity windows
                         </li>
-                        <li onClick={() => navigateToPage("/dashboard/delivery_window")}>
-                            windows
+                        :
+                        <li onClick={() => setShowDropdown('delivery')}>
+                            delivery
+                            <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'delivery' ? 'open' : 'close'}`}>
+                                <li onClick={() => navigateToPage("/dashboard/deliveries")}>
+                                    menus
+                                </li>
+                                <li onClick={() => navigateToPage("/dashboard/delivery_window")}>
+                                    windows
+                                </li>
+                                <li onClick={() => navigateToPage("/dashboard/zone")}>
+                                    zones
+                                </li>
+                            </ul>
                         </li>
-                        <li onClick={() => navigateToPage("/dashboard/zone")}>
-                            zones
-                        </li>
-                    </ul>
-                </li>
+                }
                 <li onClick={() => setShowDropdown('recipe')}>
                     recipes
                     <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'recipe' ? 'open' : 'close'}`}>

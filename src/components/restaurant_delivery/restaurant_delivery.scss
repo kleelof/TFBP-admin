@@ -1,0 +1,12 @@
+.restaurant_delivery {
+    &__day {
+      & .day_name {
+        font-weight: bold;
+        font-size: 1.5em;
+      }
+    }
+
+  &__delivery_window {
+
+  }
+}
