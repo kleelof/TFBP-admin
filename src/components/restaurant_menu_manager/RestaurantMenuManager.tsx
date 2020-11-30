@@ -61,44 +61,48 @@ export const RestaurantMenuManager = (): React.ReactElement => {
 
     return (
         <div className='row rest_menu_manager justify-content-center'>
-            <div className='col-12'>
-                <h3>menu manager</h3>
-                <hr/>
-            </div>
-            <div className='col-9 col-md-6'>
-                <input
-                    className='form-control'
-                    placeholder='new category name'
-                    value={newCategory}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewCategory(e.target.value)}
-                    />
-            </div>
-            <div className='col-2'>
-                <LoadingIconButton
-                    label='+'
-                    onClick={addCategory}
-                    busy={addingCategory}
-                    btnClass='btn btn-sm btn-outline-success'
-                    disabled={newCategory.length === 0}
-                    />
-            </div>
             <div className='col-12 col-md-7'>
-                {
-                    categories.map((category: MenuCategory) =>
-                        <RestaurantMenuCategory
-                            category={category}
-                            move={moveCategory}
-                            canMoveUp={category.index > 1}
-                            canMoveDown={category.index < categories.length}
-                            key={`category_${category.id}`}
-                            isOpen={category.id === openCategory?.id}
-                            categorySelected={(category: MenuCategory | null) => {
-                                console.log(category)
-                                setOpenCategory(category)
-                            }}
-                        />
-                    )
-                }
+                <div className='row'>
+                    <div className='col-12'>
+                        <h3>menu manager</h3>
+                        <hr/>
+                    </div>
+                    <div className='col-9'>
+                        <input
+                            className='form-control'
+                            placeholder='new category name'
+                            value={newCategory}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewCategory(e.target.value)}
+                            />
+                    </div>
+                    <div className='col-3'>
+                        <LoadingIconButton
+                            label='+'
+                            onClick={addCategory}
+                            busy={addingCategory}
+                            btnClass='btn btn-sm btn-outline-success'
+                            disabled={newCategory.length === 0}
+                            />
+                    </div>
+                    <div className='col-12 mt-2'>
+                        {
+                            categories.map((category: MenuCategory) =>
+                                <RestaurantMenuCategory
+                                    category={category}
+                                    move={moveCategory}
+                                    canMoveUp={category.index > 1}
+                                    canMoveDown={category.index < categories.length}
+                                    key={`category_${category.id}`}
+                                    isOpen={category.id === openCategory?.id}
+                                    categorySelected={(category: MenuCategory | null) => {
+                                        console.log(category)
+                                        setOpenCategory(category)
+                                    }}
+                                />
+                            )
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     )

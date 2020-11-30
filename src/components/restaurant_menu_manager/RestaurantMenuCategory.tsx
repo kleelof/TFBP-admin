@@ -1,12 +1,14 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, Fragment, ChangeEvent} from 'react';
 import {MenuCategory} from "../../models/MenuCategoryModel";
 
 import './rest_menu_manager.scss';
 import MenuItem from "../../models/MenuItemModel";
 import {RestaurantMenuItem} from "./RestaurantMenuItem";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
-import menuItemService from '../../services/MenuItemService';
+import menuCategoryItemService from '../../services/MenuCategoryItemService';
 import { useHistory } from 'react-router-dom';
+import MenuCategoryItem from "../../models/MenuCategoryItemModel";
+import menuCategoryService from '../../services/MenuCategoryService';
 
 interface Props {
     category: MenuCategory,
@@ -26,23 +28,44 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
 
     const createMenuItem = (): void => {
         setCreatingMenuItem(true)
-        menuItemService.add<MenuItem>({name: newMenuItemName, menu_category: props.category.id} as MenuItem)
-            .then((menuItem: MenuItem) => {
-                history.push({pathname: `/dashboard/menu/edit/${menuItem.id}/`})
-                //setCategory({...category, menu_items: [...category.menu_items, menuItem]})
+        menuCategoryItemService.add<MenuCategoryItem>(new MenuCategoryItem(props.category.id, {name: newMenuItemName} as MenuItem))
+            .then((categoryItem: MenuCategoryItem) => {
+                history.push({pathname: `/dashboard/menu/edit/${categoryItem.menu_item.id}/`})
             })
             .catch( err => window.alert('unable to add menu item'))
     }
 
+    const deleteMenuItem = (item: MenuCategoryItem): void => {
+        menuCategoryItemService.delete(item.id)
+            .then(() => setCategory({...category, items: category.items.filter((i: MenuCategoryItem) => i.id !== item.id)}))
+            .catch( err => window.alert('unable to delete menu item'))
+    }
+
+    const updateCategory = (): void => {
+        menuCategoryService.update<MenuCategory>(category)
+            .then((cat: MenuCategory) => setCategory(cat))
+            .catch( err => window.alert('unable to update category name'))
+    }
+
+    const categoryItemUpdated = (menuItem: MenuCategoryItem): void => {
+        setCategory({...category, items: category.items.map((item: MenuCategoryItem) => item.id === menuItem.id ? menuItem : item)})
+    }
+
+    let hasSoldOut: boolean = category.items.filter((item: MenuCategoryItem) => item.sold_out).length > 0;
 
     return (
         <div className='row menu_category'>
             <div className='col-12 menu_category__inner'>
                 <div className='row'>
-                    <div className='col-12 col-md-8 menu_category__name'>
-                        {props.category.name}
+                    <div className='col-8 col-md-8 menu_category__name'>
+                        <input
+                            className='form-control'
+                            value={category.name}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setCategory({...category, name: e.target.value})}
+                            onBlur={updateCategory}
+                            />
                     </div>
-                    <div className='col-12 col-md-4 menu_category__controls text-right'>
+                    <div className='col-4 col-md-4 menu_category__controls text-right'>
                         <button
                             className={`btn btn-sm btn-outline-${props.canMoveUp ? 'primary' : 'secondary'}`}
                             disabled={!props.canMoveUp}
@@ -61,12 +84,15 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
                                 props.isOpen ? '-' : '+'
                             }
                         </button>
+                        {hasSoldOut &&
+                            <div className='menu_category__has_sold_out'>has sold out item</div>
+                        }
                     </div>
                 </div>
             </div>
             {props.isOpen &&
                 <Fragment>
-                    <div className='col-9 col-md-6 mt-1'>
+                    <div className='col-7 col-md-6 mt-1'>
                         <input
                             className='form-control'
                             placeholder='new menu item name'
@@ -74,7 +100,7 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMenuItemName(e.target.value)}
                             />
                     </div>
-                    <div className='col-3 col-md-6'>
+                    <div className='col-3 col-md-3'>
                         <LoadingIconButton
                             btnClass='btn btn-sm btn-outline-success'
                             outerClass='mt-1'
@@ -84,10 +110,12 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
                         />
                     </div>
                     {
-                        category.menu_items.map((menuItem: MenuItem) =>
+                        category.items.map((item: MenuCategoryItem) =>
                             <div className='col-12 col-md-6'>
                                 <RestaurantMenuItem
-                                    menuItem={menuItem}
+                                    categoryItem={item}
+                                    deleteMenuItem={deleteMenuItem}
+                                    categoryItemUpdated={categoryItemUpdated}
                                 />
                             </div>
                         )

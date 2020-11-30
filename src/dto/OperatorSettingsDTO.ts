@@ -1,4 +1,5 @@
 
+
 export default class OperatorSettingsDTO {
     public id!: number;
     public delivery_fee!: number;

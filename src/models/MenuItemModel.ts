@@ -3,6 +3,13 @@ import MenuItemComponent from "./MenuItemComponentModel";
 import MenuItemAddOnModel from "./MenuItemAddOnModel";
 import {MenuCategory} from "./MenuCategoryModel";
 
+export const SPICINESS_CHOICES = {
+    notSpicy: 0,
+    spicy: 1,
+    notSpicyToSpicy: 2,
+    mildToSpicy: 3
+}
+
 export default class MenuItem {
 
     public id!: number;
@@ -19,7 +26,6 @@ export default class MenuItem {
     public add_ons!: MenuItemAddOnModel[];
     public spiciness!: number;
     public note!: string;
-    public menu_category!: MenuCategory | number
 
 
     constructor(

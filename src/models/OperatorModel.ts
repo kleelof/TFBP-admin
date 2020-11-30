@@ -1,6 +1,11 @@
 import ModelBase from "./ModelBase";
 import User from "./User";
 
+export const OPERATOR_TYPES = {
+    default: 0,
+    restaurant: 1
+}
+
 export default class Operator extends ModelBase {
     public token!: string;
     public is_active!: boolean;
