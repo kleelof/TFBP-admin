@@ -1,0 +1,30 @@
+
+.menu_category {
+
+  padding: 10px 0;
+  margin-bottom: 10px;
+
+  &__controls {
+    margin-top: 5px;
+  }
+
+  &__inner {
+    border-top: 2px solid rgba(0, 0, 0, .3);
+    border-bottom: 2px solid rgba(0, 0, 0, .3);
+  }
+
+  &__name {
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+}
+
+.restaurant_menu_item {
+  border: 1px solid rgba(0, 0, 0, .3);
+  padding: 5px 0;
+  margin: 5px 0;
+
+  &__description {
+    font-size: .8em;
+  }
+}

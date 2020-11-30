@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { bindActionCreators } from 'redux';
@@ -43,13 +43,19 @@ import {IngredientEdit} from "./components/ingredient/IngredientEdit";
 import {RecipeEdit} from "./components/recipe/RecipeEdit";
 import {RecipeNotes} from "./components/recipe/RecipeNotes";
 import logo from './assets/daisy_logo.png';
+import operatorService from './services/OperatorService';
+import OperatorSettingsDTO from "./dto/OperatorSettingsDTO";
+import {dispatchUpdateOperatorSettings, OperatorSettings, OperatorState} from "./store/operatorReducer";
+import {RestaurantMenuManager} from "./components/restaurant_menu_manager/RestaurantMenuManager";
 
 interface LinkStateProps {
-  auth: AuthState
+    auth: AuthState,
+    operator: OperatorState
 }
 
 interface LinkDispatchProps {
-  login: (user: User, operator_token: string) => void
+    login: (user: User, operator_token: string) => void,
+    updateOperatorSettings: (settings: OperatorSettings) => void
 }
 
 type Props = LinkStateProps & LinkDispatchProps;
@@ -82,8 +88,8 @@ class App extends React.Component<Props, State> {
     if(refresh_token !== null) {
         authService.validateToken(refresh_token)
               .then((user: User) => {
-                this.setState({connecting: false, loggedIn: true});
                 this.props.login(user, "");
+                this.getSettings();
               })
               .catch((err: any) => {
                 this.setState({connecting: false, loggedIn: false});
@@ -91,6 +97,17 @@ class App extends React.Component<Props, State> {
     } else {
         this.setState({connecting: false, loggedIn: false});
     }
+  }
+
+  public getSettings = (): void => {
+     operatorService.get_settings()
+         .then((settings: OperatorSettingsDTO) => {
+             this.props.updateOperatorSettings({
+                 type: settings.type
+             });
+             this.setState({connecting: false, loggedIn: true});
+         })
+         .catch( err => this.setState({connecting: false, loggedIn: false}))
   }
 
   public render() {
@@ -153,6 +170,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
                         <PrivateRoute path="/dashboard/orders" component={Orders} />
                         <PrivateRoute path='/dashboard/profile' component={Profile} />
+                        <PrivateRoute path='/dashboard/rest/menu' component={RestaurantMenuManager} />
                         <PrivateRoute path='/dashboard/recipe/edit/:id' component={RecipeEdit} />
                         <PrivateRoute path='/dashboard/recipe/notes/:id' component={RecipeNotes} />
                         <PrivateRoute path='/dashboard/recipe' component={Recipes} />
@@ -169,9 +187,13 @@ class App extends React.Component<Props, State> {
 }
 
 
-const mapStateToProps = (state: AppState): LinkStateProps => ({auth: state.authReducer});
+const mapStateToProps = (state: AppState): LinkStateProps => ({
+    auth: state.authReducer,
+    operator: state.operatorReducer
+});
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
-  login: bindActionCreators(dispatchLogin, dispatch)
+    login: bindActionCreators(dispatchLogin, dispatch),
+    updateOperatorSettings: bindActionCreators(dispatchUpdateOperatorSettings, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

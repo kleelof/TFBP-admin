@@ -7,7 +7,6 @@ import {BuildRoute, BuildRouteStop} from "../../../__mocks__/mockFactories";
 import { MemoryRouter, Route } from 'react-router-dom';
 import RouteOrganizer from "./RouteOrganizer";
 import {RouteOrganizerEntry} from "./RouteOrganizerEntry";
-import {act} from "react-dom/test-utils";
 
 configure({adapter: new Adapter()});
 

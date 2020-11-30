@@ -3,15 +3,17 @@ import thunk, { ThunkMiddleware } from "redux-thunk";
 
 import { AuthActionTypes } from './auth/authActions';
 import { authReducer } from './auth/authReducer';
+import { OperatorActionTypes, operatorReducer } from "./operatorReducer";
 
 export enum actions {
     LOGIN,
-    LOGOUT
+    LOGOUT,
+    OPERATOR_SETTINGS
 };
 
-export type AppActions = AuthActionTypes;
+export type AppActions = AuthActionTypes | OperatorActionTypes;
 
-export const rootReducer = combineReducers({authReducer});
+export const rootReducer = combineReducers({authReducer, operatorReducer});
 
 export type AppState = ReturnType<typeof rootReducer>; 
 

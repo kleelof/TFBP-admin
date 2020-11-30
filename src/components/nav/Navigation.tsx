@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState, actions } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import {actions, AppState} from '../../store/store';
 import './navigation.scss';
 
 interface Props {
@@ -10,10 +10,11 @@ interface Props {
 }
 
 export const Navigation = (props: Props): React.ReactElement => {
-    const [doLogin, setDoLogin] = useState(false);
+    const [doLogin] = useState(false);
     const [showDropdown, setShowDropdown] = useState(');')
     const dispatch = useDispatch();
     const history = useHistory();
+    const opSettings = useSelector((state: AppState) => state.operatorReducer);
 
     const navigateToPage = (pathname: string): void => {
         props.closeNav();
@@ -36,23 +37,30 @@ export const Navigation = (props: Props): React.ReactElement => {
                 <li onClick={() => navigateToPage("/dashboard/profile")}>
                     profile
                 </li>
-                <li onClick={() => setShowDropdown('menu')}>
-                    menu
-                    <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'menu' ? 'open' : 'close'}`}>
-                        <li onClick={() => navigateToPage("/dashboard/menu/en")}>
-                            entrees
+                {
+                    opSettings.settings?.type === 0 ?
+                        <li onClick={() => setShowDropdown('menu')}>
+                            menu
+                            <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'menu' ? 'open' : 'close'}`}>
+                                <li onClick={() => navigateToPage("/dashboard/menu/en")}>
+                                    entrees
+                                </li>
+                                <li onClick={() => navigateToPage("/dashboard/menu/ap")}>
+                                    appetizers
+                                </li>
+                                <li onClick={() => navigateToPage("/dashboard/menu/si")}>
+                                    sides
+                                </li>
+                                <li onClick={() => navigateToPage("/dashboard/menu/de")}>
+                                    desserts
+                                </li>
+                            </ul>
                         </li>
-                        <li onClick={() => navigateToPage("/dashboard/menu/ap")}>
-                            appetizers
+                        :
+                        <li onClick={() => navigateToPage("/dashboard/rest/menu")}>
+                            menu
                         </li>
-                        <li onClick={() => navigateToPage("/dashboard/menu/si")}>
-                            sides
-                        </li>
-                        <li onClick={() => navigateToPage("/dashboard/menu/de")}>
-                            desserts
-                        </li>
-                    </ul>
-                </li>
+                }
                 <li onClick={() => setShowDropdown('delivery')}>
                     delivery
                     <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'delivery' ? 'open' : 'close'}`}>

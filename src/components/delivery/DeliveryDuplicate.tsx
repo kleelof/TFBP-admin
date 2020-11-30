@@ -2,7 +2,6 @@ import React from 'react';
 
 import deliveryDayService from '../../services/DeliveryDayService';
 import DeliveryDay from '../../models/DeliveryDayModel';
-import helpers from '../../helpers/helpers';
 import momentHelper from '../../helpers/MomentHelper';
 import LoadingOverlay from '../overlays/LoadingOverlay';
 import DeliveryDayItem from '../../models/DeliveryDayItemModel';
