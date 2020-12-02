@@ -1,3 +1,5 @@
+@import './scss_variables';
+
 .App {
   text-align: center;
 }
@@ -34,5 +36,35 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+
+.app_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+
+  &__inner {
+    width: 100%;
+    height: 100%;
+    padding-top: 10%;
+    border-width: 2px;
+    border-style: solid;
+    overflow-y: auto;
+    background-color: white;
+  }
+
+  @media(min-width: $media_breakpoint) {
+    &__inner {
+      width: 65%;
+      margin: 1.5rem auto;
+      padding: 20px 0;
+      height: auto;
+
+    }
   }
 }

@@ -11,7 +11,7 @@ import { dispatchLogin } from './store/auth/authActions';
 import authService from './services/AuthService';
 import User from './models/User';
 
-import './App.css';
+import './App.scss';
 
 import menuIcon from './assets/menu_icon.png';
 
@@ -48,15 +48,22 @@ import OperatorSettingsDTO from "./dto/OperatorSettingsDTO";
 import {dispatchUpdateOperatorSettings, OperatorSettings, OperatorState} from "./store/operatorReducer";
 import {RestaurantMenuManager} from "./components/restaurant_menu_manager/RestaurantMenuManager";
 import {RestaurantDelivery} from "./components/restaurant_delivery/RestaurantDelivery";
+import {OPERATOR_TYPES} from "./models/OperatorModel";
+import {RestaurantDashboard} from "./components/restaurant_dashboard/RestaurantDashboard";
+import {dispatchAddOverlay, HelpersState} from "./store/helpersReducer";
+import {CreateOrder} from "./components/create_order/CreateOrder";
+import {RestaurantMenuEdit} from "./components/restaurant_menu_manager/RestaurantMenuEdit";
 
 interface LinkStateProps {
     auth: AuthState,
-    operator: OperatorState
+    operator: OperatorState,
+    helpers: HelpersState
 }
 
 interface LinkDispatchProps {
     login: (user: User, operator_token: string) => void,
-    updateOperatorSettings: (settings: OperatorSettings) => void
+    updateOperatorSettings: (settings: OperatorSettings) => void,
+    setOverlay: (component: any) => void
 }
 
 type Props = LinkStateProps & LinkDispatchProps;
@@ -153,6 +160,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/browser' component={BrowserTool} />
                         <PrivateRoute path="/dashboard/coupon/add" component={CouponAdd}/>
                         <PrivateRoute path="/dashboard/coupons" component={Coupons} />
+                        <PrivateRoute path='/dashboard/create_order/:type/:zip' component={CreateOrder}/>
                         <PrivateRoute path="/dashboard/deliveries" component={Deliveries} />
                         <PrivateRoute path="/dashboard/delivery/edit/:id" component={DeliveryDay} />
                         <PrivateRoute path="/dashboard/delivery/duplicate/:id" component={DeliveryDuplicate} />
@@ -171,18 +179,38 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/order/mail/:id' component={OrderEmail} />
                         <PrivateRoute path="/dashboard/orders" component={Orders} />
                         <PrivateRoute path='/dashboard/profile' component={Profile} />
+                        <PrivateRoute path='/dashboard/rest/menu/edit/:id' component={RestaurantMenuEdit} />
                         <PrivateRoute path='/dashboard/rest/menu' component={RestaurantMenuManager} />
                         <PrivateRoute path='/dashboard/rest/delivery' component={RestaurantDelivery} />
                         <PrivateRoute path='/dashboard/recipe/edit/:id' component={RecipeEdit} />
                         <PrivateRoute path='/dashboard/recipe/notes/:id' component={RecipeNotes} />
                         <PrivateRoute path='/dashboard/recipe' component={Recipes} />
                         <PrivateRoute path='/dashboard/zone' component={Zones} />
-                        <PrivateRoute path='/dashboard/' component={BrowserTool} />
+                        <PrivateRoute path='/dashboard/' component={this.props.operator.settings?.type === OPERATOR_TYPES.default ? BrowserTool : RestaurantDashboard} />
                         <PrivateRoute path='' component={BrowserTool} />
                         <Route path="/dashboard/login" component={Login} />
 					</Switch>
 				</div>
 			</div>
+            {this.props.helpers.overlayComponent != null &&
+                  <div
+                      className='app_overlay theme__overlay_background'
+                      onClick={() => this.props.setOverlay(null)}
+                  >
+                      <div
+                          className='app_overlay__inner theme__background theme__border_color'
+                          onClick={(e: React.MouseEvent) => {e.stopPropagation()}}
+                      >
+                          <div className='container'>
+                              <div className='row'>
+                                  <div className='col-12'>
+                                    {this.props.helpers.overlayComponent}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              }
 		</div>
     );
   }
@@ -191,11 +219,13 @@ class App extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({
     auth: state.authReducer,
-    operator: state.operatorReducer
+    operator: state.operatorReducer,
+    helpers: state.helpersReducer
 });
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
     login: bindActionCreators(dispatchLogin, dispatch),
-    updateOperatorSettings: bindActionCreators(dispatchUpdateOperatorSettings, dispatch)
+    updateOperatorSettings: bindActionCreators(dispatchUpdateOperatorSettings, dispatch),
+    setOverlay: bindActionCreators(dispatchAddOverlay, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

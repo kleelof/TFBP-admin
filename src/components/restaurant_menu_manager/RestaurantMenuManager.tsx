@@ -1,106 +1,120 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
+import deliveryDayService from '../../services/DeliveryDayService';
+import PagedResultsDTO from "../../dto/PagedResultsDTO";
+import DeliveryDay from "../../models/DeliveryDayModel";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
-import menuCategoryService from '../../services/MenuCategoryService';
-import {MenuCategory} from "../../models/MenuCategoryModel";
-import {RestaurantMenuCategory} from "./RestaurantMenuCategory";
+import {PageSelector} from "../widgets/page_selector/PageSelector";
+import { useHistory } from 'react-router-dom';
+import {DeliveryDays} from "../delivery/DeliveryDays";
 
 export const RestaurantMenuManager = (): React.ReactElement => {
-    let timer: any;
 
-    const [newCategory, setNewCategory] = useState('');
-    const [addingCategory, setAddingCategory] = useState(false);
-    const [categories, setCategories] = useState<MenuCategory[]>([]);
-    const [openCategory, setOpenCategory] = useState<MenuCategory | null>(null);
+    const history = useHistory();
+    const [currentPage, setCurrentPage] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [deliveryDays, setDeliveryDays] = useState<DeliveryDay[]>([]);
+    const [paginationCount, setPaginationCount] = useState(0);
+    const [startDate, updateStartDate] = useState('');
+    const [endDate, updateEndDate] = useState('');
+    const [creatingDeliveryDay, setCreatingDeliveryDay] = useState(false);
+    const [isPerpetual, setIsPerpetual] = useState(false);
+
+
 
     React.useEffect(() => {
-        menuCategoryService.get<MenuCategory[]>()
-            .then((categories: MenuCategory[]) => {
-                setCategories(categories.sort((a: MenuCategory, b:MenuCategory) =>
-                        a.index < b.index ? -1 : a.index > b.index ? 1 : 0
-                    ));
-            })
+        changePages(1);
     }, [])
 
-    const addCategory = (): void => {
-        setAddingCategory(true);
-        menuCategoryService.add<MenuCategory>(new MenuCategory(newCategory))
-            .then((category: MenuCategory) => {
-                setCategories([...categories, category]);
-                setAddingCategory(false);
-                setNewCategory('');
+    const changePages = (pageNumber: number): void => {
+        setCurrentPage(pageNumber);
+        setLoading(true);
+
+        deliveryDayService.pagedSearchResults(pageNumber)
+            .then((dto: PagedResultsDTO) => {
+                setDeliveryDays(dto.results as DeliveryDay[])
+                setLoading(false);
+                setPaginationCount(dto.count);
+                }
+            )
+            .catch( err => console.log(err))
+    }
+
+    const createDeliveryDay = (): void => {
+        if (startDate > endDate) {
+            window.alert('End date must be after start date');
+            return;
+        }
+
+        setCreatingDeliveryDay(true);
+        deliveryDayService.add<DeliveryDay>(new DeliveryDay(startDate, -1, endDate))
+            .then((deliveryDay: DeliveryDay) => history.push(`rest/menu/edit/${deliveryDay.id}`))
+            .catch( err => {
+                window.alert("Unable to create week");
+                setCreatingDeliveryDay(false);
             })
-            .catch( err => window.alert('unable to create category'))
-    }
-
-    const moveCategory = (direction: number, category: MenuCategory): void => {
-        let cats: MenuCategory[] = categories.filter((cat: MenuCategory) => cat.id !== category.id);
-        cats.splice(category.index + direction - 1, 0, category);
-        // cats.forEach((cat: MenuCategory, index: number) => cat.index = index + 1)
-        setCategories(cats);
-        console.log(cats);
-        resetTimer()
-    }
-
-    const resetTimer = (): void => {
-        clearTimeout(timer);
-        timer = setTimeout(submitUpdatedIndexes, 5000)
-    };
-
-    const submitUpdatedIndexes = (): void => {
-        clearInterval(timer);
-        console.log(categories);
-        let cats: MenuCategory[] = categories.map((cat: MenuCategory, index: number) => {
-            console.log(cat);
-            cat.index = index;
-            return cat;
-        })
-        menuCategoryService.updateIndexes(cats.map((cat: MenuCategory) => cat.id))
-        console.log(cats);
-        setCategories(cats);
     }
 
     return (
-        <div className='row rest_menu_manager justify-content-center'>
+        <div className='row restaurant_menu_manager justify-content-center'>
             <div className='col-12 col-md-7'>
                 <div className='row'>
                     <div className='col-12'>
                         <h3>menu manager</h3>
                         <hr/>
                     </div>
-                    <div className='col-9'>
+                    <div className="col-12">
+                        <h5>create delivery menu</h5>
                         <input
-                            className='form-control'
-                            placeholder='new category name'
-                            value={newCategory}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewCategory(e.target.value)}
-                            />
-                    </div>
-                    <div className='col-3'>
+                            type="date"
+                            id="startDate"
+                            value={startDate}
+                            disabled={creatingDeliveryDay}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => updateStartDate(e.target.value)} />
+
+                        <input
+                            className={'ml-2'}
+                            type="date"
+                            id="endDate"
+                            value={endDate}
+                            disabled={creatingDeliveryDay}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => updateEndDate(e.target.value)} />
+
                         <LoadingIconButton
-                            label='+'
-                            onClick={addCategory}
-                            busy={addingCategory}
-                            btnClass='btn btn-sm btn-outline-success'
-                            disabled={newCategory.length === 0}
+                            label='create'
+                            busy={creatingDeliveryDay}
+                            btnClass="btn btn-sm btn-outline-success"
+                            outerClass='ml-2 mt-2 mt-m-0'
+                            onClick={createDeliveryDay}
+                            disabled={creatingDeliveryDay}
                             />
+                        <PageSelector numItems={paginationCount} currentPage={currentPage} gotoPage={changePages} />
+                        <hr/>
                     </div>
-                    <div className='col-12 mt-2'>
-                        {
-                            categories.map((category: MenuCategory) =>
-                                <RestaurantMenuCategory
-                                    category={category}
-                                    move={moveCategory}
-                                    canMoveUp={category.index > 1}
-                                    canMoveDown={category.index < categories.length}
-                                    key={`category_${category.id}`}
-                                    isOpen={category.id === openCategory?.id}
-                                    categorySelected={(category: MenuCategory | null) => {
-                                        console.log(category)
-                                        setOpenCategory(category)
-                                    }}
-                                />
-                            )
-                        }
+                    <div className='col-12'>
+                        <table className='table'>
+                            <thead>
+                                <th>menu name</th>
+                                <th></th>
+                                <th>active</th>
+                            </thead>
+                            <tbody>
+                                {
+                                    deliveryDays.map((deliveryDay: DeliveryDay) =>
+                                        <tr key={`delday_${deliveryDay.id}`}>
+                                            <td>{deliveryDay.name}</td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                {
+                                                    deliveryDay.is_active ? 'yes' : 'no'
+                                                }
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

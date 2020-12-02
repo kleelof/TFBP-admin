@@ -1,6 +1,12 @@
 import ModelBase from "./ModelBase";
-import CartItem from "./CartItemModel";
 import OrderItem from "./OrderItemModel";
+
+export const ORDER_TYPES = {
+    standard: 0,
+    pickUp: 1,
+    jit_delivery: 2,
+    future_delivery: 3
+}
 
 export default class Order extends ModelBase {
 
@@ -18,7 +24,8 @@ export default class Order extends ModelBase {
     public uuid!: string;
     public public_id!: string;
     public nonce!: string;
-    public tip!:number;
+    public tip!: number;
+    public order_type!: number;
 
     constructor(
         id: number = -1,

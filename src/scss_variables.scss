@@ -1,5 +1,3 @@
-
-// highlight colors; match Bootstrap button colors and names
 $success_highlight: rgba(40, 167, 69, .3);
 $danger_highlight: rgba(220, 53, 69, .3);
 $info_highlight: rgba(0, 163, 181, .3);
@@ -15,3 +13,25 @@ $warning_fill: rgb(253, 189, 63);
 $primary_fill: rgb(0, 127, 246);
 
 $media_breakpoint: 576px;
+
+
+/* theme related variables */
+
+$light_main_text: rgb(0, 0, 0);
+$light_secondary_text_color: rgba(0, 0, 0, .8);
+$light_fill_full: rgb(0, 0, 0);
+$light_background: rgb(255, 255, 255);
+$light_background_highlight: $secondary_highlight;
+$light_dropshadow_color: $info_fill;
+$light-overlay-background: rgba(0, 0, 0, .1);
+
+$dark_main_text: rgba(255, 255, 255, .8);
+$dark_secondary_text_color: rgba(255, 255, 255, .6);
+$dark_fill_full: rgba(255, 255, 255, .8);
+$dark_background: rgb(0, 0, 0);
+$dark_dropshadow_color: rgb(121, 176, 198);
+$dark-overlay-background: rgba(0, 0, 0, .5);
+
+// scrollbar
+$theme_scrollbar_size: 15px;
+$theme_scrollbar_border_size: 3px;

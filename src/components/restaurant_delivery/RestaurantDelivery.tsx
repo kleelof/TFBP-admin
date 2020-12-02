@@ -6,7 +6,7 @@ import deliveryWindowService from '../../services/DeliveryWindowService';
 import { useHistory } from 'react-router-dom';
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import moment from "moment";
-import { Fragment } from 'react';
+import { pythonDays} from "../../constants";
 
 export const RestaurantDelivery = (): React.ReactElement => {
 
@@ -15,7 +15,6 @@ export const RestaurantDelivery = (): React.ReactElement => {
     const [creatingWindow, setCreatingWindow] = useState(false);
     const [deliveryWindows, setDeliveryWindows] = useState<DeliveryWindow[][]>([])
 
-    const days: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const windowTypes: string[] = ['', 'pick-up', 'deliver ASAP', 'future delivery'];
 
     React.useEffect(() => {
@@ -61,7 +60,7 @@ export const RestaurantDelivery = (): React.ReactElement => {
                         <hr/>
                     </div>
                     {
-                        days.map((day: string, index: number) =>
+                        pythonDays.map((day: string, index: number) =>
                             <div className='col-12' key={day}>
                                 <div className='row restaurant_delivery__day justify-content-center'>
                                     <div className='col-6 day_name'>

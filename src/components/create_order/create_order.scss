@@ -1,0 +1,17 @@
+
+.route_order {
+  position: relative;
+  min-height: 300px;
+
+  &__close {
+        position: absolute;
+        top: -20px;
+        right: 10px;
+        font-size: 1.7em;
+        font-weight: bold;
+    }
+
+    &__close:hover {
+        cursor: pointer;
+    }
+}

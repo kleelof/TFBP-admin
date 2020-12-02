@@ -32,7 +32,7 @@ export const Navigation = (props: Props): React.ReactElement => {
     return (
         <div className="navigation">
             <ul className="">
-                <li onClick={() => navigateToPage("/dashboard/browser")}>
+                <li onClick={() => navigateToPage("/dashboard/")}>
                     dashboard
                 </li>
                 <li onClick={() => navigateToPage("/dashboard/profile")}>

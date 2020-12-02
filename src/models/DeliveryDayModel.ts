@@ -7,7 +7,9 @@ export default class DeliveryDay extends ModelBase {
     public date!: string;
     public end_date!: string;
     public day_items!: DeliveryDayItem[];
-    //public delivery_windows!: DeliveryWindow[];
+    public is_perpetual!: Boolean;
+    public is_active!: Boolean;
+    public name!: string;
 
     constructor(date?: string, id?: number, end_date?: string, day_items?: DeliveryDayItem[]) {
         super();
