@@ -1,39 +1,50 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState, Fragment} from 'react';
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
 import menuCategoryService from '../../services/MenuCategoryService';
 import {MenuCategory} from "../../models/MenuCategoryModel";
 import {RestaurantMenuCategory} from "./RestaurantMenuCategory";
+import { useParams } from 'react-router-dom';
+import deliveryDayService from '../../services/DeliveryDayService';
+import DeliveryDay from "../../models/DeliveryDayModel";
+import SearchWidget from "../widgets/searchWidget/SearchWidget";
+import DeliveryDayMenuCategory from "../../models/DeliveryDayMenuCategory";
 
 export const RestaurantMenuEdit = (): React.ReactElement => {
     let timer: any;
 
-    const [newCategory, setNewCategory] = useState('');
+    const params: any = useParams();
+    const [newCategory, setNewCategory] = useState<MenuCategory | string | undefined>(undefined);
     const [addingCategory, setAddingCategory] = useState(false);
-    const [categories, setCategories] = useState<MenuCategory[]>([]);
-    const [openCategory, setOpenCategory] = useState<MenuCategory | null>(null);
+    const [categories, setCategories] = useState<DeliveryDayMenuCategory[]>([]);
+    const [openCategory, setOpenCategory] = useState<DeliveryDayMenuCategory | null>(null);
+    const [deliveryDay, updateDeliveryDay] = useState(new DeliveryDay());
+    const [savingDeliveryDay, setSavingDeliveryDay] = useState(false);
 
     React.useEffect(() => {
-        menuCategoryService.get<MenuCategory[]>()
-            .then((categories: MenuCategory[]) => {
-                setCategories(categories.sort((a: MenuCategory, b:MenuCategory) =>
-                        a.index < b.index ? -1 : a.index > b.index ? 1 : 0
-                    ));
+        deliveryDayService.get<DeliveryDay>(params.id)
+            .then((deliveryDay: DeliveryDay) => {
+                updateDeliveryDay(deliveryDay);
+                setCategories(deliveryDay.categories)
             })
     }, [])
 
     const addCategory = (): void => {
         setAddingCategory(true);
-        menuCategoryService.add<MenuCategory>(new MenuCategory(newCategory))
-            .then((category: MenuCategory) => {
+        deliveryDayService.attachCategory(deliveryDay, newCategory as any)
+            .then((category: DeliveryDayMenuCategory) => {
                 setCategories([...categories, category]);
                 setAddingCategory(false);
-                setNewCategory('');
+                setNewCategory(new MenuCategory());
             })
             .catch( err => window.alert('unable to create category'))
     }
 
-    const moveCategory = (direction: number, category: MenuCategory): void => {
-        let cats: MenuCategory[] = categories.filter((cat: MenuCategory) => cat.id !== category.id);
+    const categorySelected = (category: MenuCategory | string): void => {
+        setNewCategory(category);
+    }
+
+    const moveCategory = (direction: number, category: DeliveryDayMenuCategory): void => {
+        let cats: DeliveryDayMenuCategory[] = categories.filter((cat: DeliveryDayMenuCategory) => cat.id !== category.id);
         cats.splice(category.index + direction - 1, 0, category);
         // cats.forEach((cat: MenuCategory, index: number) => cat.index = index + 1)
         setCategories(cats);
@@ -49,14 +60,34 @@ export const RestaurantMenuEdit = (): React.ReactElement => {
     const submitUpdatedIndexes = (): void => {
         clearInterval(timer);
         console.log(categories);
-        let cats: MenuCategory[] = categories.map((cat: MenuCategory, index: number) => {
+        let cats: DeliveryDayMenuCategory[] = categories.map((cat: DeliveryDayMenuCategory, index: number) => {
             console.log(cat);
             cat.index = index;
             return cat;
         })
-        menuCategoryService.updateIndexes(cats.map((cat: MenuCategory) => cat.id))
-        console.log(cats);
+        menuCategoryService.updateIndexes(cats.map((cat: DeliveryDayMenuCategory) => cat.id))
         setCategories(cats);
+    }
+
+    const saveDeliveryDay = (): void => {
+        if (deliveryDay.date > deliveryDay.end_date ||
+            (!deliveryDay.is_perpetual &&
+                (deliveryDay.date === '' || deliveryDay.end_date === ''))) {
+            window.alert('invalid dates');
+            return;
+        }
+
+        if (deliveryDay.name === '') {
+            window.alert('enter a name for this menu');
+            return;
+        }
+
+        setSavingDeliveryDay(true);
+        deliveryDayService.update<DeliveryDay>(deliveryDay)
+            .then((delDay: DeliveryDay) => {
+                updateDeliveryDay(delDay);
+                setSavingDeliveryDay(false);
+            })
     }
 
     return (
@@ -64,15 +95,81 @@ export const RestaurantMenuEdit = (): React.ReactElement => {
             <div className='col-12 col-md-7'>
                 <div className='row'>
                     <div className='col-12'>
-                        <h3>menu manager</h3>
+                        <h3>edit menu</h3>
                         <hr/>
                     </div>
+                    <div className='col-12'>
+                        <div className='row'>
+                            <div className='col-12 mb-2'>
+                                <input
+                                    className='form-control'
+                                    placeholder='menu name'
+                                    value={deliveryDay.name}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        updateDeliveryDay({...deliveryDay, name: e.target.value})
+                                    }
+                                    />
+                            </div>
+                            <div className='col-6 col-md-3'>
+                                <div className="checkbox_selector">
+                                    <input
+                                        type='checkbox'
+                                        checked={deliveryDay.is_perpetual}
+                                        onClick={() => updateDeliveryDay({...deliveryDay, is_perpetual: !deliveryDay.is_perpetual})}
+                                        />
+                                    <span>perpetual</span>
+                                </div>
+                            </div>
+                            <div className='col-6 col-md-9 text-right'>
+                                <LoadingIconButton
+                                    label='save'
+                                    busy={savingDeliveryDay}
+                                    btnClass="btn btn-sm btn-outline-success"
+                                    outerClass='ml-2 mt-2 mt-m-0'
+                                    onClick={saveDeliveryDay}
+                                    disabled={savingDeliveryDay}
+                                    />
+                            </div>
+                            {!deliveryDay.is_perpetual &&
+                                <Fragment>
+                                    <div className='col-12 col-md-6'>
+                                        <small>start date:</small>
+                                        <br/>
+                                        <input
+                                            type="date"
+                                            id="startDate"
+                                            value={deliveryDay.date}
+                                            disabled={savingDeliveryDay || deliveryDay.is_perpetual}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                                updateDeliveryDay({...deliveryDay, date: e.target.value})
+                                            } />
+                                    </div>
+                                    <div className='col-12 col-md-6'>
+                                        <small>end date:</small>
+                                        <br/>
+                                        <input
+                                            className={'ml-2'}
+                                            type="date"
+                                            id="endDate"
+                                            value={deliveryDay.end_date}
+                                            disabled={savingDeliveryDay || deliveryDay.is_perpetual}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                                updateDeliveryDay({...deliveryDay, end_date: e.target.value})
+                                            } />
+                                    </div>
+                                </Fragment>
+                            }
+                        </div>
+                        <hr/>
+                    </div>
+                    <div className='col-12'>
+                        <h6>categories</h6>
+                    </div>
                     <div className='col-9'>
-                        <input
-                            className='form-control'
-                            placeholder='new category name'
-                            value={newCategory}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewCategory(e.target.value)}
+                        <SearchWidget
+                            placeholder='add category name'
+                            service={menuCategoryService}
+                            itemSelected={categorySelected}
                             />
                     </div>
                     <div className='col-3'>
@@ -81,23 +178,21 @@ export const RestaurantMenuEdit = (): React.ReactElement => {
                             onClick={addCategory}
                             busy={addingCategory}
                             btnClass='btn btn-sm btn-outline-success'
-                            disabled={newCategory.length === 0}
+                            disabled={newCategory === undefined}
                             />
                     </div>
                     <div className='col-12 mt-2'>
                         {
-                            categories.map((category: MenuCategory) =>
+                            categories.map((category: DeliveryDayMenuCategory) =>
                                 <RestaurantMenuCategory
+                                    deliveryDay={deliveryDay}
                                     category={category}
                                     move={moveCategory}
                                     canMoveUp={category.index > 1}
                                     canMoveDown={category.index < categories.length}
                                     key={`category_${category.id}`}
                                     isOpen={category.id === openCategory?.id}
-                                    categorySelected={(category: MenuCategory | null) => {
-                                        console.log(category)
-                                        setOpenCategory(category)
-                                    }}
+                                    categorySelected={(category: DeliveryDayMenuCategory | null) => setOpenCategory(category)}
                                 />
                             )
                         }

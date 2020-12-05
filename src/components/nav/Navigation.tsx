@@ -58,8 +58,16 @@ export const Navigation = (props: Props): React.ReactElement => {
                             </ul>
                         </li>
                         :
-                        <li onClick={() => navigateToPage("/dashboard/rest/menu")}>
+                        <li onClick={() => setShowDropdown('menu')}>
                             menu
+                            <ul className={`sidenav__dropdown sidenav__dropdown--${showDropdown === 'menu' ? 'open' : 'close'}`}>
+                                <li onClick={() => navigateToPage("/dashboard/rest/menu")}>
+                                    menus
+                                </li>
+                                <li onClick={() => navigateToPage("/dashboard/rest/menu_items")}>
+                                    menu items
+                                </li>
+                            </ul>
                         </li>
                 }
                 {

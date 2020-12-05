@@ -53,6 +53,7 @@ import {RestaurantDashboard} from "./components/restaurant_dashboard/RestaurantD
 import {dispatchAddOverlay, HelpersState} from "./store/helpersReducer";
 import {CreateOrder} from "./components/create_order/CreateOrder";
 import {RestaurantMenuEdit} from "./components/restaurant_menu_manager/RestaurantMenuEdit";
+import {RestaurantMenuItems} from "./components/restaurant_menu_manager/RestaurantMenuItems";
 
 interface LinkStateProps {
     auth: AuthState,
@@ -181,6 +182,7 @@ class App extends React.Component<Props, State> {
                         <PrivateRoute path='/dashboard/profile' component={Profile} />
                         <PrivateRoute path='/dashboard/rest/menu/edit/:id' component={RestaurantMenuEdit} />
                         <PrivateRoute path='/dashboard/rest/menu' component={RestaurantMenuManager} />
+                        <PrivateRoute path='/dashboard/rest/menu_items' component={RestaurantMenuItems} />
                         <PrivateRoute path='/dashboard/rest/delivery' component={RestaurantDelivery} />
                         <PrivateRoute path='/dashboard/recipe/edit/:id' component={RecipeEdit} />
                         <PrivateRoute path='/dashboard/recipe/notes/:id' component={RecipeNotes} />

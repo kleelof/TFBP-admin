@@ -197,9 +197,9 @@ class MenuItemEdit extends React.Component<Props & LinkStateProps, State> {
                         >back</button>
                     <hr/>
                 </div>
-                    <div className={`col-12 menuedititem__inner col-md-${isRestaurant ? '6' : '12'}`}>
+                    <div className={`col-12`}>
                         <div className="row">
-                            <div className={`col-12 col-md-${isRestaurant ? '12' : '6'}`}>
+                            <div className={`col-12 col-md-6`}>
                                 <div className="row">
                                     <div className="col-12">
                                         <h5>name</h5>
@@ -236,7 +236,7 @@ class MenuItemEdit extends React.Component<Props & LinkStateProps, State> {
                                             disabled={disabled}
                                             />
                                     </div>
-                                    {!isRestaurant &&
+                                    {true &&
                                         <Fragment>
                                             <div className="col-6 mt-2">
                                                 <h5>category</h5>
@@ -342,15 +342,8 @@ class MenuItemEdit extends React.Component<Props & LinkStateProps, State> {
                             <div className={'col-12 d-block d-md-none'}>
                                 <hr/>
                             </div>
-                            <div className={`col-12 col-md-${isRestaurant ? '12' : '6'} mt-2 mb-2 mt-md-0`}>
-                                {
-                                    isRestaurant ?
-                                        <RestaurantMenuItemAddOns
-                                            menuItem={this.state.menuItem}
-                                        />
-                                        :
-                                        <MenuComponents menuItem={this.state.menuItem} />
-                                }
+                            <div className={`col-12 col-md-6 mt-2 mb-2 mt-md-0`}>
+                                <MenuComponents menuItem={this.state.menuItem} />
                             </div>
                         </div>
                     </div>

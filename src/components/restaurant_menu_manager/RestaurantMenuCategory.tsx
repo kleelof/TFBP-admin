@@ -1,69 +1,106 @@
 import React, {useState, Fragment, ChangeEvent} from 'react';
-import {MenuCategory} from "../../models/MenuCategoryModel";
 
 import './rest_menu_manager.scss';
 import MenuItem from "../../models/MenuItemModel";
 import {RestaurantMenuItem} from "./RestaurantMenuItem";
 import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButton";
-import menuCategoryItemService from '../../services/MenuCategoryItemService';
+import deliveryDayItemService from '../../services/DeliveryDayItemService';
 import { useHistory } from 'react-router-dom';
-import MenuCategoryItem from "../../models/MenuCategoryItemModel";
-import menuCategoryService from '../../services/MenuCategoryService';
+import menuItemService from '../../services/MenuItemService';
+import DeliveryDayMenuCategory from "../../models/DeliveryDayMenuCategory";
+import deliveryDayService from '../../services/DeliveryDayItemService';
+import DeliveryDayItem, {DeliveryDayItemDTO} from "../../models/DeliveryDayItemModel";
+import SearchWidget from "../widgets/searchWidget/SearchWidget";
+import DeliveryDay from "../../models/DeliveryDayModel";
 
 interface Props {
-    category: MenuCategory,
-    move: (direction: number, category: MenuCategory) => void,
+    deliveryDay: DeliveryDay,
+    category: DeliveryDayMenuCategory,
+    move: (direction: number, category: DeliveryDayMenuCategory) => void,
     canMoveUp: boolean,
     canMoveDown: boolean,
     isOpen: boolean,
-    categorySelected: (category: MenuCategory | null) => void;
+    categorySelected: (category: DeliveryDayMenuCategory | null) => void;
 }
 
 export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
 
     const history = useHistory();
-    const [newMenuItemName, setNewMenuItemName] = useState('');
     const [creatingMenuItem, setCreatingMenuItem] = useState(false);
-    const [category, setCategory] = useState<MenuCategory>(props.category);
+    const [category, setCategory] = useState<DeliveryDayMenuCategory>(props.category);
+    const [menuItem, setMenuItem] = useState<MenuItem | string>('');
 
     const createMenuItem = (): void => {
-        setCreatingMenuItem(true)
-        menuCategoryItemService.add<MenuCategoryItem>(new MenuCategoryItem(props.category.id, {name: newMenuItemName} as MenuItem))
-            .then((categoryItem: MenuCategoryItem) => {
-                history.push({pathname: `/dashboard/menu/edit/${categoryItem.menu_item.id}/`})
+        setCreatingMenuItem(true);
+
+        if (typeof menuItem === 'string') {
+            menuItemService.add<MenuItem>({name: menuItem, delivery_category: category.id} as any)
+                .then((menuItem: MenuItem) => completeCreateMenuItem(menuItem, true))
+                .catch( err => window.alert('unable to create menu item'))
+        } else {
+            completeCreateMenuItem(menuItem);
+        }
+    }
+
+    const completeCreateMenuItem = (menuItem: MenuItem, isNew: boolean = false): void => {
+        deliveryDayItemService.add<DeliveryDayItem>(
+                {
+                    delivery_day: props.deliveryDay.id,
+                    menu_item: menuItem.id,
+                    delivery_category: category.id
+                } as any
+            )
+            .then((item: DeliveryDayItem) => {
+                if (isNew) { // new menu item, go edit
+                    history.push({pathname: `/dashboard/menu/edit/${menuItem.id}/`})
+                } else { // existing menu item, no edit
+                    setMenuItem('');
+                    setCategory({
+                        ...category,
+                        delivery_day_items: [...category.delivery_day_items, item as any]
+                    })
+                }
             })
             .catch( err => window.alert('unable to add menu item'))
+            .finally(() => setCreatingMenuItem(false))
     }
 
-    const deleteMenuItem = (item: MenuCategoryItem): void => {
-        menuCategoryItemService.delete(item.id)
-            .then(() => setCategory({...category, items: category.items.filter((i: MenuCategoryItem) => i.id !== item.id)}))
+    const deleteDeliveryDayItem = (item: DeliveryDayItem): void => {
+        deliveryDayService.delete(item.id)
+            .then(() => setCategory({
+                ...category,
+                delivery_day_items: category.delivery_day_items.filter((i: DeliveryDayItem) => i.id !== item.id)
+            }))
             .catch( err => window.alert('unable to delete menu item'))
     }
-
+/*
     const updateCategory = (): void => {
         menuCategoryService.update<MenuCategory>(category)
             .then((cat: MenuCategory) => setCategory(cat))
             .catch( err => window.alert('unable to update category name'))
     }
 
-    const categoryItemUpdated = (menuItem: MenuCategoryItem): void => {
-        setCategory({...category, items: category.items.map((item: MenuCategoryItem) => item.id === menuItem.id ? menuItem : item)})
+ */
+
+    const categoryItemUpdated = (menuItem: DeliveryDayItem): void => {
+        setCategory({
+            ...category,
+            delivery_day_items: category.delivery_day_items.map((item: DeliveryDayItem) => item.id === menuItem.id ? menuItem : item)
+        })
     }
 
-    let hasSoldOut: boolean = category.items.filter((item: MenuCategoryItem) => item.sold_out).length > 0;
+    const menuItemSelected = (menuItem: MenuItem | string): void => {
+        setMenuItem(menuItem);
+    }
+
+    let hasSoldOut: boolean = category.delivery_day_items.filter((item: DeliveryDayItem) => item.sold_out).length > 0;
 
     return (
         <div className='row menu_category'>
             <div className='col-12 menu_category__inner'>
                 <div className='row'>
                     <div className='col-8 col-md-8 menu_category__name'>
-                        <input
-                            className='form-control'
-                            value={category.name}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setCategory({...category, name: e.target.value})}
-                            onBlur={updateCategory}
-                            />
+                        {category.menu_category.name}
                     </div>
                     <div className='col-4 col-md-4 menu_category__controls text-right'>
                         <button
@@ -93,11 +130,10 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
             {props.isOpen &&
                 <Fragment>
                     <div className='col-7 col-md-6 mt-1'>
-                        <input
-                            className='form-control'
+                        <SearchWidget
                             placeholder='new menu item name'
-                            value={newMenuItemName}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMenuItemName(e.target.value)}
+                            service={menuItemService}
+                            itemSelected={menuItemSelected}
                             />
                     </div>
                     <div className='col-3 col-md-3'>
@@ -110,11 +146,11 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
                         />
                     </div>
                     {
-                        category.items.map((item: MenuCategoryItem) =>
+                        category.delivery_day_items.map((item: DeliveryDayItem) =>
                             <div className='col-12 col-md-6'>
                                 <RestaurantMenuItem
                                     categoryItem={item}
-                                    deleteMenuItem={deleteMenuItem}
+                                    deleteMenuItem={deleteDeliveryDayItem}
                                     categoryItemUpdated={categoryItemUpdated}
                                 />
                             </div>

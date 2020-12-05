@@ -4,11 +4,12 @@ import { useHistory } from 'react-router-dom';
 import MenuCategoryItem from "../../models/MenuCategoryItemModel";
 import menuCategoryItemService from '../../services/MenuCategoryItemService';
 import {config} from "../../config";
+import DeliveryDayItem from "../../models/DeliveryDayItemModel";
 
 interface Props {
-    categoryItem: MenuCategoryItem,
-    deleteMenuItem: (item: MenuCategoryItem) => void,
-    categoryItemUpdated: (item: MenuCategoryItem) => void
+    categoryItem: DeliveryDayItem,
+    deleteMenuItem: (item: DeliveryDayItem) => void,
+    categoryItemUpdated: (item: DeliveryDayItem) => void
 }
 
 export const RestaurantMenuItem = (props: Props): React.ReactElement => {
@@ -22,26 +23,25 @@ export const RestaurantMenuItem = (props: Props): React.ReactElement => {
     }
 
     const soldOut = (): void => {
-        let item: MenuCategoryItem = categoryItem;
+        let item: DeliveryDayItem = categoryItem;
         if (categoryItem.sold_out) {
             item.sold_out = false;
         } else {
             if (!window.confirm(`Do you want to mark "${categoryItem.menu_item.name}" as SOLD OUT?\n\nMarking item sold out will exclude it from pick-up and delivery orders only.`)) return;
             item.sold_out = true;
         }
-
+/*
         menuCategoryItemService.update<MenuCategoryItem>(item)
-            .then((categoryItem: MenuCategoryItem) => {
+            .then((categoryItem: DeliveryDayItem) => {
                 setCategoryItem(categoryItem);
                 props.categoryItemUpdated(categoryItem);
             })
             .catch( err => window.alert('unable to update sold out status'))
+
+ */
     }
 
     const updatePrice = (): void => {
-        menuCategoryItemService.update<MenuCategoryItem>(categoryItem)
-            .then((categoryItem: MenuCategoryItem) => setCategoryItem((categoryItem)))
-            .catch( err => window.alert('unable to update price'))
     }
 
     return (

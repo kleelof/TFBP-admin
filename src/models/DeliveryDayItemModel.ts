@@ -27,7 +27,7 @@ export default class DeliveryDayItem extends ModelBase {
     public delivery_day!: DeliveryDay;
     public delivery_category!: DeliveryMenuCategory
 
-    constructor(delivery_day?: DeliveryDay, menu_item?: MenuItem, sold_out?: boolean, price?: number) {
+    constructor(delivery_day?: DeliveryDay, menu_item?: any, sold_out?: boolean, price?: number) {
         super();
 
         this.delivery_day = delivery_day || new DeliveryDay();
