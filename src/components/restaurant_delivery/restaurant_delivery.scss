@@ -1,12 +1,26 @@
+@import '../../scss_variables';
+
 .restaurant_delivery {
-    &__day {
-      & .day_name {
-        font-weight: bold;
-        font-size: 1.5em;
-      }
+  &__day {
+    & .day_name {
+      font-weight: bold;
+      font-size: 1.5em;
     }
+  }
+
+  &__window_inner {
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid rgba(0, 0, 0, .5);
+  }
 
   &__delivery_window {
 
+  }
+
+  &--disabled {
+    background-color: $danger_fill;
+    color: rgba(255, 255, 255, .9);
+    font-weight: bold;
   }
 }

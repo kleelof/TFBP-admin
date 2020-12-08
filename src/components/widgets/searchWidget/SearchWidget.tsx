@@ -7,7 +7,7 @@ import PagedResultsDTO from "../../../dto/PagedResultsDTO";
 import {SearchWidgetDefaultDisplay} from "./SearchWidgetDefaultDisplay";
 
 interface Props {
-    service: Service,
+    serviceFunction: (pageNumber?: number, text?: string) => Promise<any>,
     itemSelected: (item: any) => void,
     placeholder?: string,
     resultDisplayComponent?: React.ReactElement
@@ -44,7 +44,7 @@ export default class SearchWidget extends React.Component<Props, State> {
             return;
         }
 
-        this.props.service.pagedSearchResults(1, text)
+        this.props.serviceFunction(1, text)
             .then((dto: PagedResultsDTO) => {
                 this.setState({dto, showChoices: dto.count > 0});
                 this.props.itemSelected(text);

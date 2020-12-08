@@ -132,7 +132,7 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
                     <div className='col-7 col-md-6 mt-1'>
                         <SearchWidget
                             placeholder='new menu item name'
-                            service={menuItemService}
+                            serviceFunction={menuItemService.pagedSearchResults}
                             itemSelected={menuItemSelected}
                             />
                     </div>
@@ -149,7 +149,7 @@ export const RestaurantMenuCategory = (props: Props): React.ReactElement => {
                         category.delivery_day_items.map((item: DeliveryDayItem) =>
                             <div className='col-12 col-md-6'>
                                 <RestaurantMenuItem
-                                    categoryItem={item}
+                                    menuItem={item}
                                     deleteMenuItem={deleteDeliveryDayItem}
                                     categoryItemUpdated={categoryItemUpdated}
                                 />

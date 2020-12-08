@@ -3,7 +3,7 @@ import {LoadingIconButton} from "../widgets/loading_icon_button/LoadingIconButto
 import menuCategoryService from '../../services/MenuCategoryService';
 import {MenuCategory} from "../../models/MenuCategoryModel";
 import {RestaurantMenuCategory} from "./RestaurantMenuCategory";
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import deliveryDayService from '../../services/DeliveryDayService';
 import DeliveryDay from "../../models/DeliveryDayModel";
 import SearchWidget from "../widgets/searchWidget/SearchWidget";
@@ -13,6 +13,7 @@ export const RestaurantMenuEdit = (): React.ReactElement => {
     let timer: any;
 
     const params: any = useParams();
+    const history = useHistory();
     const [newCategory, setNewCategory] = useState<MenuCategory | string | undefined>(undefined);
     const [addingCategory, setAddingCategory] = useState(false);
     const [categories, setCategories] = useState<DeliveryDayMenuCategory[]>([]);
@@ -99,6 +100,13 @@ export const RestaurantMenuEdit = (): React.ReactElement => {
                         <hr/>
                     </div>
                     <div className='col-12'>
+                        <button
+                            className='btn btn-sm btn-outline-info'
+                            onClick={() => history.goBack()}
+                            >back</button>
+                        <hr/>
+                    </div>
+                    <div className='col-12'>
                         <div className='row'>
                             <div className='col-12 mb-2'>
                                 <input
@@ -168,7 +176,7 @@ export const RestaurantMenuEdit = (): React.ReactElement => {
                     <div className='col-9'>
                         <SearchWidget
                             placeholder='add category name'
-                            service={menuCategoryService}
+                            serviceFunction={menuCategoryService.pagedSearchResults}
                             itemSelected={categorySelected}
                             />
                     </div>

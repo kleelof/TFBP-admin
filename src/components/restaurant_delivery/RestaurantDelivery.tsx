@@ -27,10 +27,10 @@ export const RestaurantDelivery = (): React.ReactElement => {
             })
     }, [])
 
-    const createWindow = (): void => {
+    const createWindow = (day: number): void => {
         setCreatingWindow(true);
         deliveryWindowService.add<DeliveryWindow>(new DeliveryWindow(
-            -1, '', '17:00:00', '21:00:00', 0, true, null, null, 1
+            -1, '', '17:00:00', '21:00:00', day, true, null, null, 1
         ))
             .then((deliveryWindow: DeliveryWindow) => history.push({pathname: `/dashboard/delivery_window/edit/${deliveryWindow.id}/`}))
             .catch( err=> window.alert('unable to create window'))
@@ -62,7 +62,7 @@ export const RestaurantDelivery = (): React.ReactElement => {
                     {
                         pythonDays.map((day: string, index: number) =>
                             <div className='col-12' key={day}>
-                                <div className='row restaurant_delivery__day justify-content-center'>
+                                <div className='row restaurant_delivery__day'>
                                     <div className='col-6 day_name'>
                                         {day}
                                     </div>
@@ -70,35 +70,45 @@ export const RestaurantDelivery = (): React.ReactElement => {
                                         <LoadingIconButton
                                             label='add window'
                                             btnClass='btn btn-sm btn-outline-success'
-                                            onClick={createWindow}
+                                            onClick={() => createWindow(index)}
                                             busy={creatingWindow}
                                             />
                                     </div>
-                                    <div className='col-11'>
-                                        {
-                                            deliveryWindows[index].map((window: DeliveryWindow) =>
-                                                <div className='row' key={`window_${window.id}`}>
-                                                    <div className='col-3'>
+                                    {
+                                        deliveryWindows[index].map((window: DeliveryWindow) =>
+                                            <div className='col-12 col-md-6' key={`window_${window.id}`}>
+                                                <div className='row restaurant_delivery__window_inner'>
+                                                    {!window.active &&
+                                                        <div className='col-12 text-center restaurant_delivery--disabled'>
+                                                            disabled
+                                                        </div>
+                                                    }
+                                                    <div className='col-12'>
+                                                        <strong>
+                                                            {window.name || <div>&nbsp;</div>}
+                                                        </strong>
+                                                    </div>
+                                                    <div className='col-12'>
                                                         {windowTypes[window.type]}
                                                     </div>
-                                                    <div className='col-5'>
+                                                    <div className='col-12'>
                                                         {moment(window.start_time, 'HH:mm:ss').format('h:mm a')} -&nbsp;
                                                         {moment(window.end_time, 'HH:mm:ss').format('h:mm a')}
                                                     </div>
-                                                    <div className='col-3 text-right'>
+                                                    <div className='col-12 text-right'>
                                                         <button
                                                             className='btn btn-sm btn-outline-primary mr-1'
                                                             onClick={() => history.push({pathname: `/dashboard/delivery_window/edit/${window.id}/`})}
-                                                            >E</button>
+                                                            >edit</button>
                                                         <button
                                                             className='btn btn-sm btn-outline-danger'
                                                             onClick={() => deleteWindow(window)}
-                                                            >X</button>
+                                                            >delete</button>
                                                     </div>
                                                 </div>
-                                            )
-                                        }
-                                    </div>
+                                            </div>
+                                        )
+                                    }
                                     <div className='col-12'>
                                         <hr/>
                                     </div>

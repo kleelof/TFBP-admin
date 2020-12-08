@@ -4,8 +4,11 @@ import zoneService from '../../services/ZoneService';
 import LoadingOverlay from "../overlays/LoadingOverlay";
 import { ZoneTool } from './ZoneTool';
 import './zone.scss';
+import { useHistory } from 'react-router-dom';
 
 export const Zones = (): React.ReactElement => {
+
+    const history = useHistory();
     const [zones, setZones] = useState<Zone[]>([]);
     const [showLoading, setShowLoading] = useState<boolean>(true);
     const [newZone, setNewZone] = useState<string>('');
@@ -28,36 +31,51 @@ export const Zones = (): React.ReactElement => {
             .catch(() => window.alert('unable to create new zone'))
     }
 
+    const deleteZone = (zone: Zone): void => {
+        if (!window.confirm(`Are you sure you want to delete the following zone?\n\n${zone.name}`)) return;
+        zoneService.delete(zone.id)
+            .then(() => {
+                setZones(zones.filter((z: Zone) => z.id !== zone.id))
+            })
+            .catch( err => window.alert('unable to delete zone'))
+    }
+
     if (showLoading)
         return( <LoadingOverlay /> )
 
     return (
         <div className={'row zones justify-content-center'}>
-            <div className={'col-12 col-md-10'}>
+            <div className={'col-12 col-md-7'}>
                 <div className={'row'}>
                     <div className={'col-12'}>
-                        <h3>delivery zones</h3>
+                        <h3>zones</h3>
                         <hr/>
                     </div>
-                    <div className={'col-12'}>
-                        <div className='row'>
-                            <div className='col-8 col-md-10'>
-                                <input type='text' className='form-control' value={newZone} placeholder='new zone name'
-                                       onChange={(e:ChangeEvent<HTMLInputElement>) => setNewZone(e.target.value)}
-                                />
-                            </div>
-                            <div className='col-2'>
-                                <button className='btn btn-outline-success' onClick={addZone}>add zone</button>
-                            </div>
-                        </div>
+                    <div className='col-2'>
+                        <button
+                            className='btn btn-sm btn-outline-info'
+                            onClick={() => history.goBack()}
+                            >back</button>
+                    </div>
+                    <div className='col-7 col-md-5'>
+                        <input type='text' className='form-control' value={newZone} placeholder='new zone name'
+                               onChange={(e:ChangeEvent<HTMLInputElement>) => setNewZone(e.target.value)}
+                        />
+                    </div>
+                    <div className='col-2'>
+                        <button className='btn btn-outline-success' onClick={addZone}>add</button>
+                    </div>
+                    <div className='col-12'>
                         <hr/>
                     </div>
                     {
                         zones.length > 0 ?
-                            zones.map((zone: Zone) => {
+                            zones.sort(
+                                (a: Zone, b: Zone) => a.id > b.id ? -1 : a.id < b.id ? 1 : 0
+                            ).map((zone: Zone) => {
                                 return(
-                                        <div className={'col-12 col-md-6 zones__zone_wrapper'} key={`zone_${zone.id}`}>
-                                            <ZoneTool zone={zone}/>
+                                        <div className={'col-12 zones__zone_wrapper'} key={`zone_${zone.id}`}>
+                                            <ZoneTool zone={zone} deleteZone={deleteZone}/>
                                         </div>
                                     )
                             })

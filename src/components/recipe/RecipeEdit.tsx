@@ -237,7 +237,7 @@ export const RecipeEdit = (): React.ReactElement => {
                         <div className='col-12 col-md-6'>
                             <SearchWidget
                                 placeholder='ingredient name to add or create'
-                                service={ingredientService}
+                                serviceFunction={ingredientService.pagedSearchResults}
                                 itemSelected={handleSearchResult}
                                 />
                         </div>

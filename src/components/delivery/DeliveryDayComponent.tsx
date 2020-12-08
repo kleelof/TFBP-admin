@@ -120,7 +120,7 @@ export default class DeliveryDayComponent extends React.Component<Props, State> 
                     <hr/>
                 </div>
                 <div className="col-12 delivery_day_component__search_widget mb-2">
-                    <SearchWidget service={menuItemService} itemSelected={this.itemSelected} />
+                    <SearchWidget serviceFunction={menuItemService.pagedSearchResults} itemSelected={this.itemSelected} />
                 </div>
                 {
                     this.state.deliveryDay.day_items.map((item: DeliveryDayItem) => {
