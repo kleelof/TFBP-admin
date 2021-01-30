@@ -34,11 +34,12 @@ export default class MailMassMailer extends React.Component<Props, State> {
     }
 
     public componentDidMount = (): void => {
+        /*
         Promise.all([
             deliveryDayService.get<DeliveryDay[]>(),
             deliveryWindowService.get<DeliveryWindow>()
         ])
-            .then((values) => {
+            .then((values: (DeliveryDay[] | DeliveryWindow)[]) => {
                 // defaults for state
                 let who: string = 'all_customers';
                 let deliveryDate: string = '';
@@ -70,6 +71,8 @@ export default class MailMassMailer extends React.Component<Props, State> {
                     deliveryWindowId: deliveryWindow.id
                 })
             })
+
+         */
     }
 
     private goodToSend = (): boolean => {

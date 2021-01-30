@@ -47,7 +47,9 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                 setCodes([...codes, code]);
                 updateNewCode('');
             })
-            .catch(() => window.alert('unable to add code'));
+            .catch(() => window.alert('unable to add code'))
+            .finally(() => setAddingCode(0))
+
         } else {
             zoneService.import_zip_codes(
                 props.zone,
@@ -55,8 +57,9 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                 value
                 )
                 .then((cs: Zipcode[]) => setCodes([...codes, ...cs]))
+                .catch( err => window.alert('unable to import zip codes'))
+                .finally(() => setAddingCode(0))
         }
-
     }
 
     const updateZone = (): void => {
@@ -127,8 +130,8 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                         <div className='col-2'>
                             <input
                                 className='form-control'
-                                type='numeric'
-                                value={tZone.jdel_min || 0}
+                                type='number'
+                                value={tZone.jdel_min || ''}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setTZone({...tZone, jdel_min: parseFloat(e.target.value)})}
                                 />
                         </div>
@@ -255,7 +258,14 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                         <div className={'zone_tool__note'}>select code to remove</div>
                         <div className={'zone_tool__codes'}>
                             {
-                                codes.map((code: Zipcode) => <ZoneCode code={code} removeCode={removeCode} key={code.code} />)
+                                codes.sort(
+                                    (a: Zipcode, b:Zipcode) => a.code > b.code ? 1 : a.code < b.code ? -1 : 0
+                                ).map((code: Zipcode) =>
+                                    <ZoneCode
+                                        code={code}
+                                        removeCode={removeCode}
+                                        key={code.code}
+                                    />)
                             }
                         </div>
                     </div>
@@ -263,8 +273,11 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                         <fieldset disabled={addingCode !== 0}>
                             <div className='row'>
                                 <div className='col-12'>
-                                    <input className={'form-control'} placeholder={'new code'} value={newCode}
-                                           onChange={(e:ChangeEvent<HTMLInputElement>) => updateNewCode(e.target.value)}
+                                    <input
+                                        className={'form-control'}
+                                        placeholder={'new code'}
+                                        value={newCode}
+                                        onChange={(e:ChangeEvent<HTMLInputElement>) => updateNewCode(e.target.value)}
                                     />
                                     <LoadingIconButton
                                         label='add code'
@@ -283,7 +296,16 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                                         itemSelected={(item: any) => {
                                             if (typeof item !== 'string')
                                                 addCode(2, item.id)
+
                                         }}
+                                        />
+                                    <LoadingIconButton
+                                        label='remove codes'
+                                        outerClass='mt-2 mr-2'
+                                        btnClass='btn btn-sm btn-outline-danger'
+                                        onClick={() => addCode(1, newCode)}
+                                        busy={addingCode === 1}
+                                        disabled={addingCode !== 0}
                                         />
                                     <LoadingIconButton
                                         label='add codes'
@@ -312,6 +334,14 @@ export const ZoneTool = (props: Props): React.ReactElement => {
                                             )
                                         }
                                     </select>
+                                    <LoadingIconButton
+                                        label='remove codes'
+                                        outerClass='mt-2 mr-2'
+                                        btnClass='btn btn-sm btn-outline-danger'
+                                        onClick={() => addCode(1, newCode)}
+                                        busy={addingCode === 1}
+                                        disabled={newCode.length === 0 || addingCode !== 0}
+                                        />
                                     <LoadingIconButton
                                         label='add codes'
                                         outerClass='mt-2'
